@@ -33,4 +33,4 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Simplicity: remove unnecessary steps, fields, and interactions.
 
 ## Workflow
-- Work in small steps; Khang reviews and commits at each checkpoint. Run `npm run lint` and `npm run build` before each commit.
+- Work in small steps; commit at each checkpoint and **push to origin right after every commit**. Run `npm run lint` and `npm run build` before each commit.
