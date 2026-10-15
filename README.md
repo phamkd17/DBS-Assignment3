@@ -29,7 +29,7 @@ Full diagrams with all states and errors are in [flows.md](flows.md).
 ```mermaid
 flowchart LR
   subgraph First visit
-    A[Open app, nothing saved] --> B["One-tap: +30 s Shoulder / +30 s Lower body / +15 min study"]
+    A[Open app, nothing saved] --> B["One-tap: +30 s Shoulder / +60 s Lower body / +15 min study"]
   end
   subgraph Main task
     B --> C[Log on /stretch, /study, /calories]

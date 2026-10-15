@@ -34,7 +34,7 @@ flowchart TD
   B -- Storage unavailable --> X["Banner: 'Can't save on this device. Entries will be lost when you close the tab.'"]
   X --> C
   C --> D["+30 s Shoulder"]
-  C --> E["+30 s Lower body"]
+  C --> E["+60 s Lower body"]
   C --> F["+15 min FE study → pick a topic"]
   D --> G["Toast: 'Logged 30 s shoulder · Undo'"]
   E --> G
