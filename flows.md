@@ -39,7 +39,7 @@ flowchart TD
   D --> G["Toast: 'Logged 30 s shoulder · Undo'"]
   E --> G
   F --> H["/study with minutes = 15, topic focused"]
-  G --> I["Streak card: 'Shoulder streak: 1 day'"]
+  G --> I["Celebrate: '1-day shoulder streak!'"]
   I --> J[Shows what's left today: other region, study]
 ```
 

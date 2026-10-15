@@ -48,7 +48,29 @@ flowchart LR
 
 ## Onboarding research
 
-_TBD (Step 3)_
+I sent three subagents to study how similar tools welcome someone new: the first screen, what it asks for, and how soon you get something useful.
+
+| | **Duolingo** (streaks) | **Lose It!** (calorie logging) | **Bend** (stretching) |
+|---|---|---|---|
+| First screen | Mascot + one-line pitch + "Get Started" | Goal-driven setup (exact first screen unverified) | Welcome + "Get Started" |
+| Asks before value | ~6 questions: goal, daily minutes, level | Long profile: weight, goal, activity, sign-up | 16–20-step quiz, rating prompt, 2 paywalls |
+| Time to first value | ~1.5–3 min | "Within minutes"; 45–90 s per meal | ~2 min before the first stretch |
+| Sign-up | After the first lesson | Up front | After the first workout |
+| Return hook | Instant "1-day streak!", milestone celebrations, Streak Freeze | Quick Add, recent foods | Day streak + "Bendometer" consistency score |
+
+**Pattern:** the best experiences let you *do the thing* before asking anything. All three add friction to sell subscriptions; this tool has no account or paywall, so it can skip straight to logging.
+
+**What I'm using**
+- **Ask nothing first** (Duolingo, Bend): the first screen is one-tap log buttons (+30 s Shoulder, +60 s Lower body, +15 min study). No questions, no setup.
+- **Celebrate the first log** (Duolingo): the first tap immediately shows "1-day shoulder streak!", with bigger moments saved for 7 and 30 days.
+- **Calorie Quick Add** (Lose It!): just a number + optional label, with an Eaten / Burned toggle. Net is shown without a budget or "calories remaining."
+
+**What I'm not using**
+- Long questionnaires, rating prompts, paywalls (all three).
+- Streak Freeze (Duolingo): I kept the strict rule (miss a day and that region resets). "Log for yesterday" already covers forgetting to log.
+- Recent-entry chips, meal tags, consistency score: left out to keep it simple.
+
+Sources: [Duolingo blog: streak habit](https://blog.duolingo.com/how-duolingo-streak-builds-habit/) · [Duolingo blog: improving the streak](https://blog.duolingo.com/improving-the-streak/) · [Gummble: Duolingo onboarding](https://gummble.com/blog/duolingo-onboarding-flow-analysis) · [Appcues GoodUX: Duolingo](https://goodux.appcues.com/blog/duolingo-user-onboarding) · [RevenueCat: Lose It! onboarding length](https://www.revenuecat.com/blog/growth/why-your-onboarding-experience-might-be-too-short) · [Lose It! review](https://calorie-trackers.com/reviews/lose-it/) · [ScreensDesign: Bend flow](https://screensdesign.com/showcase/stretching-flexibility-bend) · [Pratt IxD: Bend critique](https://ixd.prattsi.org/2024/09/design-critique-bend/) · [Bustle: Bend review](https://www.bustle.com/wellness/bend-stretching-app-review-price-features-subscriptions)
 
 ## First-run check (agent usability feedback)
 
