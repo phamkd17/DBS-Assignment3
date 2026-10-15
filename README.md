@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Routine Tracker
 
-## Getting Started
+A daily tracker for one person's routine: **shoulder and lower-body stretching**, **FE Mechanical exam study** (time per NCEES topic), and **net calories**. It saves to the browser (localStorage), so it remembers you on the device you use.
 
-First, run the development server:
+Built for *Design, Build, Ship* (MPCS 51238), Assignment 3: Patterns & Flows.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Live:** _TBD (Vercel URL)_
+- **Stack:** Next.js, Tailwind CSS, localStorage. No database, accounts, or APIs.
+
+## Who it's for and why you come back
+
+It's built for me: I'm studying for the FE Mechanical exam and want to keep up a short daily stretching habit. The reason to come back is **streaks and visible progress**:
+
+| Routine | Daily streak | Weekly streak |
+|---|---|---|
+| Shoulder stretch | ≥30 s that day | ≥10 min, Sun–Sat |
+| Lower-body stretch | ≥30 s that day | ≥10 min, Sun–Sat |
+| FE study | ≥15 min (15 Minimum · 30 OK · 60 Gold) | n/a |
+| Calories | none: net total and trend only | n/a |
+
+**Why 10 minutes per week?** Ingram et al. (*Sports Medicine*, 2024; 189 studies) found that static-stretching flexibility gains plateau at about 4 min per session and about 10 min per week per muscle group. The daily 30-second streak builds the habit, and the weekly streak tracks the dose that actually matters.
+
+## Flows
+
+**Main task:** I log a stretch, my study minutes, and what I ate → today's streaks and weekly bars fill up → I come back tomorrow, my streaks are still alive, and my FE topic hours keep growing.
+
+Full diagrams with all states and errors are in [flows.md](flows.md).
+
+```mermaid
+flowchart LR
+  subgraph First visit
+    A[Open app, nothing saved] --> B["One-tap: +30 s Shoulder / +30 s Lower body / +15 min study"]
+  end
+  subgraph Main task
+    B --> C[Log on /stretch, /study, /calories]
+    C --> D{Valid?}
+    D -- No --> E["Error next to field, input kept"] --> C
+    D -- Yes --> F["Saved · Toast with Undo"]
+    F --> G["Streaks + weekly bars fill up"]
+  end
+  subgraph Coming back
+    G --> H["Next day: 'Welcome back'"]
+    H --> I["At-risk / broken streaks, this week's progress"]
+    I --> C
+    H --> J["/progress: streaks, FE topic hours, calorie trend"]
+  end
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Onboarding research
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+_TBD (Step 3)_
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## First-run check (agent usability feedback)
 
-## Learn More
+_TBD (Step 11)_
 
-To learn more about Next.js, take a look at the following resources:
+## Run locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev
+```
