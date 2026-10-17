@@ -35,7 +35,8 @@ export function StudyLogger() {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const amount = resolveAmount(minutes);
-    const chosenDay = resolveDay(day);
+    // Day only applies in Custom; presets always log for today.
+    const chosenDay = resolveDay(minutes.choice === "custom" ? day : INITIAL_DAY);
     const next: Errors = {};
     if (!isTopicId(topic)) next.topic = "Pick a topic.";
     if (amount === null) next.minutes = "Pick how long you studied.";
@@ -97,7 +98,7 @@ export function StudyLogger() {
         onChange={setMinutes}
         error={errors.minutes}
       />
-      <DayPicker name="study-day" value={day} onChange={setDay} error={errors.day} />
+      {minutes.choice === "custom" && <DayPicker name="study-day" value={day} onChange={setDay} error={errors.day} />}
       <div>
         <Button type="submit">Log study</Button>
       </div>
