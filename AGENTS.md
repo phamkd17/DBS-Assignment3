@@ -20,7 +20,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 ## Product rules
 - Weeks run **Sunday–Saturday** (local time). Dates are stored as local `YYYY-MM-DD`.
 - Stretch: each region (shoulder, lower body) has its own **daily streak** (≥30 s that day) and **weekly streak** (≥10 min in a Sun–Sat week). Missing a region resets only that region. Default log amount (quick-log chip + form prefill): shoulder 30 s, lower body 60 s.
-- Study: **daily streak** at ≥15 min. Day tiers: 15 = Minimum, 30 = OK, 60 = Gold. Topics are the 14 NCEES FE Mechanical knowledge areas.
+- Study: **daily streak** at ≥15 min. **Weekly goal 420 min** (60 × 7), shown as progress only, with no weekly study streak. Day tiers: 15 = Minimum, 30 = OK, 60 = Gold. Topics are the 14 NCEES FE Mechanical knowledge areas.
 - Calories: net (eaten − burned) is informational only. **No calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.
 - Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → Calendar component in app colors, max = today). No future dates.

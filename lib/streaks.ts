@@ -8,6 +8,8 @@ import type { Region, RoutineData } from "./storage";
 export const STRETCH_DAILY_SECONDS = 30;
 export const STRETCH_WEEKLY_SECONDS = 10 * 60;
 export const STUDY_DAILY_MINUTES = 15;
+/** Weekly study goal: the 60-min "Gold" pace × 7 days. Progress only, no streak. */
+export const STUDY_WEEKLY_MINUTES = 420;
 export const STUDY_TIERS = [
   { minutes: 60, label: "Gold" },
   { minutes: 30, label: "OK" },
@@ -94,6 +96,19 @@ export function studyStreak(data: RoutineData, day: DayKey): Streak {
 
 export function studyTier(minutes: number): (typeof STUDY_TIERS)[number]["label"] | null {
   return STUDY_TIERS.find((t) => minutes >= t.minutes)?.label ?? null;
+}
+
+/** Totals for the Sun–Sat week containing `day`. */
+export function weekTotals(data: RoutineData, day: DayKey): { shoulderSeconds: number; lowerSeconds: number; studyMinutes: number } {
+  const start = weekStart(day);
+  const end = addDays(start, 6);
+  const inWeek = (d: DayKey) => d >= start && d <= end;
+  const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
+  return {
+    shoulderSeconds: sum(data.stretches.filter((s) => s.region === "shoulder" && inWeek(s.date)).map((s) => s.seconds)),
+    lowerSeconds: sum(data.stretches.filter((s) => s.region === "lower" && inWeek(s.date)).map((s) => s.seconds)),
+    studyMinutes: sum(data.study.filter((s) => inWeek(s.date)).map((s) => s.minutes)),
+  };
 }
 
 export function netCalories(data: RoutineData, day: DayKey): { eaten: number; burned: number; net: number } {
