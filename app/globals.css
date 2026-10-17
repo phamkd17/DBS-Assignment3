@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Candlelit Table design tokens (from my Assignment 2 design system).
+   Contrast on ct-bg / ct-surface: text, linen, muted, accent, error, success all pass WCAG AA. */
+@theme {
+  --color-ct-bg: #1e1510; /* Espresso */
+  --color-ct-surface: #2a1e17; /* cards, panels */
+  --color-ct-raised: #36281f; /* inputs, hover */
+  --color-ct-text: #f6eee0; /* Cream */
+  --color-ct-linen: #e6d7be;
+  --color-ct-muted: #cbb89a;
+  --color-ct-border: #8c7259; /* 3.6:1 on surface */
+  --color-ct-hairline: #4a382c; /* decorative dividers only */
+  --color-ct-accent: #e3a73c; /* Saffron: primary action only, Espresso label */
+  --color-ct-accent-hover: #edb955;
+  --color-ct-accent-pressed: #c98f2a;
+  --color-ct-selected: #7a2230; /* Claret, Cream label */
+  --color-ct-selected-hover: #8e2a3a;
+  --color-ct-caramel: #d08a4c; /* links */
+  --color-ct-error: #e58a7a; /* Rose */
+  --color-ct-success: #9db86a; /* Herb, lifted for dark */
+  --color-ct-disabled: #3a2d24;
+  --shadow-ct-glow: 0 18px 40px -18px rgb(227 167 60 / 0.35), 0 0 0 1px rgb(140 114 89 / 0.35);
+  --shadow-ct-glow-strong: 0 0 0 1px rgb(227 167 60 / 0.6), 0 0 28px 2px rgb(227 167 60 / 0.35);
+  --shadow-ct-press: inset 0 2px 6px rgb(0 0 0 / 0.35);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-ct-serif: var(--font-fraunces);
+  --font-ct-sans: var(--font-figtree);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ct-bg);
+  color: var(--color-ct-text);
 }
