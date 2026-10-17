@@ -24,7 +24,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Calories: net (eaten − burned) is informational only. **No calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.
 - Forms remember your last logged choices (study topic + minutes; custom stretch region, amount, unit; calorie Eaten/Burned) in `prefs`. The day always resets to Today.
-- Day (and the calorie label) only appear after tapping Custom; preset amounts always log for today.
+- Study and stretch: Day only appears after tapping Custom; presets log for today. Calories: typed number; Label and Day sit behind an "Add label or date" toggle.
 - Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → Calendar component in app colors, max = today). No future dates.
 
 ## Design rules
