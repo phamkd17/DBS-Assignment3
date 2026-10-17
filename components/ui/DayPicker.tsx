@@ -3,9 +3,9 @@
 import { useEffect, useId, useRef } from "react";
 import { ChoiceGroup } from "./ChoiceGroup";
 import { FieldError } from "./Field";
-import { Input } from "./Input";
+import { Calendar } from "./Calendar";
 import { label as labelStyle } from "./styles";
-import { addDays, today, type DayKey } from "@/lib/dates";
+import { addDays, formatDay, today, type DayKey } from "@/lib/dates";
 
 export type DayValue = { mode: "today" | "date"; date: DayKey | "" };
 
@@ -30,19 +30,14 @@ type Props = {
 /** "Today" by default; "Pick a date" opens a calendar for logging a past day. */
 export function DayPicker({ name, value, onChange, error }: Props) {
   const id = useId();
-  const dateRef = useRef<HTMLInputElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
   const picking = value.mode === "date";
 
-  // Choosing "Pick a date" focuses the date field and opens the calendar where supported.
+  // Choosing "Pick a date" moves focus onto the selected day in the calendar.
   const wasPicking = useRef(picking);
   useEffect(() => {
     if (picking && !wasPicking.current) {
-      dateRef.current?.focus();
-      try {
-        dateRef.current?.showPicker();
-      } catch {
-        // Some browsers only allow showPicker() on a direct click; the field is still focused.
-      }
+      calendarRef.current?.querySelector<HTMLButtonElement>('button[data-day][tabindex="0"]')?.focus();
     }
     wasPicking.current = picking;
   }, [picking]);
@@ -60,21 +55,16 @@ export function DayPicker({ name, value, onChange, error }: Props) {
         ]}
       />
       {picking && (
-        <div className="flex flex-col gap-2">
-          <label htmlFor={`${id}-date`} className={labelStyle}>
-            Date
-          </label>
-          <Input
-            ref={dateRef}
-            id={`${id}-date`}
-            name={`${name}-date`}
-            type="date"
+        <div ref={calendarRef} className="flex flex-col gap-2">
+          <p id={`${id}-label`} className={labelStyle}>
+            Date{value.date && <span className="normal-case tracking-normal text-ct-text"> · {formatDay(value.date, { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>}
+          </p>
+          <Calendar
+            value={value.date || today()}
+            onChange={(date) => onChange({ ...value, date })}
             max={today()}
-            value={value.date}
-            onChange={(e) => onChange({ ...value, date: e.target.value })}
-            aria-invalid={error ? true : undefined}
-            aria-describedby={error ? `${id}-error` : undefined}
-            className="max-w-56"
+            today={today()}
+            labelledBy={`${id}-label`}
           />
           {error && <FieldError id={`${id}-error`}>{error}</FieldError>}
         </div>

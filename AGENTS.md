@@ -23,7 +23,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Study: **daily streak** at ≥15 min. Day tiers: 15 = Minimum, 30 = OK, 60 = Gold. Topics are the 14 NCEES FE Mechanical knowledge areas.
 - Calories: net (eaten − burned) is informational only. **No calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.
-- Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → native calendar, max = today). No future dates.
+- Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → Calendar component in app colors, max = today). No future dates.
 
 ## Design rules
 - Each flow step is its own route: `/`, `/stretch`, `/study`, `/calories`, `/progress`, with a shared `Nav` (`aria-current="page"`).

@@ -60,8 +60,8 @@ export function StretchLogger() {
     if (next.region || next.duration || next.day) {
       // Focus the first invalid field so keyboard and screen reader users land on it.
       const form = event.currentTarget as HTMLFormElement;
-      const selector = next.region ? 'input[name="region"]' : next.duration ? 'input[name="amount"]' : 'input[name="day-date"]';
-      const target = form.querySelector<HTMLInputElement>(selector);
+      const selector = next.region ? 'input[name="region"]' : next.duration ? 'input[name="amount"]' : 'button[data-day][tabindex="0"]';
+      const target = form.querySelector<HTMLElement>(selector);
       target?.focus();
       return;
     }
