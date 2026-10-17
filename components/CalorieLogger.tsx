@@ -36,7 +36,10 @@ export function CalorieLogger() {
     event.preventDefault();
     // Allow "1,200" in the custom field.
     const value = resolveAmount({ ...kcal, custom: kcal.custom.replace(/,/g, "") });
-    const chosenDay = resolveDay(day);
+    // Label and day only apply in Custom; presets always log for today with no label.
+    const isCustom = kcal.choice === "custom";
+    const chosenDay = resolveDay(isCustom ? day : INITIAL_DAY);
+    const entryLabel = isCustom ? label.trim() : "";
     const next: Errors = {};
     if (value === null) next.kcal = "Pick an amount, or tap Custom to type one.";
     else if (!Number.isInteger(value) || value <= 0) next.kcal = "Enter calories as a whole number, like 250.";
@@ -51,11 +54,11 @@ export function CalorieLogger() {
     }
 
     const date = chosenDay.day;
-    const id = addEntry("calories", { date, kind, kcal: value, label: label.trim() });
+    const id = addEntry("calories", { date, kind, kcal: value, label: entryLabel });
     savePrefs({ calorieKind: kind });
     const { net } = netCalories(getData(), date);
     const when = date === today() ? "today" : formatDay(date);
-    const what = label.trim() ? ` ${label.trim()}` : "";
+    const what = entryLabel ? ` ${entryLabel}` : "";
     toast(`${kind === "eaten" ? "Ate" : "Burned"} ${formatKcal(value)}${what} · Net ${when}: ${formatKcal(net)}`, () => removeEntry("calories", id));
 
     setKcal(EMPTY_AMOUNT);
@@ -86,10 +89,14 @@ export function CalorieLogger() {
         onChange={setKcal}
         error={errors.kcal}
       />
-      <Field label="Label (optional)" hint={kind === "eaten" ? "Like Oatmeal or Lunch." : "Like Run or Bike ride."}>
-        {(a11y) => <Input {...a11y} name="label" maxLength={60} autoComplete="off" value={label} onChange={(e) => setLabel(e.target.value)} />}
-      </Field>
-      <DayPicker name="calorie-day" value={day} onChange={setDay} error={errors.day} />
+      {kcal.choice === "custom" && (
+        <>
+          <Field label="Label (optional)" hint={kind === "eaten" ? "Like Oatmeal or Lunch." : "Like Run or Bike ride."}>
+            {(a11y) => <Input {...a11y} name="label" maxLength={60} autoComplete="off" value={label} onChange={(e) => setLabel(e.target.value)} />}
+          </Field>
+          <DayPicker name="calorie-day" value={day} onChange={setDay} error={errors.day} />
+        </>
+      )}
       <div>
         <Button type="submit">{kind === "eaten" ? "Add eaten" : "Add burned"}</Button>
       </div>
