@@ -9,9 +9,8 @@ import { addDays, today, type DayKey } from "@/lib/dates";
 
 export type DayValue = { mode: "today" | "date"; date: DayKey | "" };
 
-export function initialDay(): DayValue {
-  return { mode: "today", date: addDays(today(), -1) };
-}
+/** Starts on Today. The date field is filled in (with yesterday) only when someone picks a date. */
+export const INITIAL_DAY: DayValue = { mode: "today", date: "" };
 
 /** The chosen day, or an error message that says what to do next. */
 export function resolveDay(value: DayValue): { day: DayKey } | { error: string } {
@@ -54,7 +53,7 @@ export function DayPicker({ name, value, onChange, error }: Props) {
         legend="Day"
         name={name}
         value={value.mode}
-        onChange={(mode) => onChange({ ...value, mode })}
+        onChange={(mode) => onChange({ mode, date: mode === "date" && !value.date ? addDays(today(), -1) : value.date })}
         options={[
           { value: "today", label: "Today" },
           { value: "date", label: "Pick a date" },

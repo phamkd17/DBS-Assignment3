@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { ChoiceGroup } from "./ui/ChoiceGroup";
-import { DayPicker, initialDay, resolveDay, type DayValue } from "./ui/DayPicker";
+import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field } from "./ui/Field";
 import { Input } from "./ui/Input";
 import { useToast } from "./ui/Toast";
@@ -29,7 +29,7 @@ export function StretchLogger() {
   const [region, setRegion] = useState<Region | null>(null);
   const [amount, setAmount] = useState("");
   const [unit, setUnit] = useState<"seconds" | "minutes">("minutes");
-  const [day, setDay] = useState<DayValue>(initialDay);
+  const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
 
   function log(r: Region, seconds: number, date: string) {
@@ -70,7 +70,7 @@ export function StretchLogger() {
     setOpen(false);
     setRegion(null);
     setAmount("");
-    setDay(initialDay());
+    setDay(INITIAL_DAY);
   }
 
   return (
