@@ -67,7 +67,7 @@ I sent three subagents to study how similar tools welcome someone new: the first
 
 **What I'm not using**
 - Long questionnaires, rating prompts, paywalls (all three).
-- Streak Freeze (Duolingo): I kept the strict rule (miss a day and that region resets). "Log for yesterday" already covers forgetting to log.
+- Streak Freeze (Duolingo): I kept the strict rule (miss a day and that region resets). Logging for a past date (calendar picker) already covers forgetting to log.
 - Recent-entry chips, meal tags, consistency score: left out to keep it simple.
 
 Sources: [Duolingo blog: streak habit](https://blog.duolingo.com/how-duolingo-streak-builds-habit/) · [Duolingo blog: improving the streak](https://blog.duolingo.com/improving-the-streak/) · [Gummble: Duolingo onboarding](https://gummble.com/blog/duolingo-onboarding-flow-analysis) · [Appcues GoodUX: Duolingo](https://goodux.appcues.com/blog/duolingo-user-onboarding) · [RevenueCat: Lose It! onboarding length](https://www.revenuecat.com/blog/growth/why-your-onboarding-experience-might-be-too-short) · [Lose It! review](https://calorie-trackers.com/reviews/lose-it/) · [ScreensDesign: Bend flow](https://screensdesign.com/showcase/stretching-flexibility-bend) · [Pratt IxD: Bend critique](https://ixd.prattsi.org/2024/09/design-critique-bend/) · [Bustle: Bend review](https://www.bustle.com/wellness/bend-stretching-app-review-price-features-subscriptions)

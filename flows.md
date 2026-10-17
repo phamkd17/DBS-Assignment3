@@ -49,7 +49,7 @@ All three forms share the same `Field`/`Input`/`Button` components and the same 
 
 ```mermaid
 flowchart TD
-  S[Open /stretch, /study, or /calories] --> F["Fill the one-column form<br/>(date: Today or Yesterday)"]
+  S[Open /stretch, /study, or /calories] --> F["Fill the one-column form<br/>(day: Today, or Pick a date → calendar, no future dates)"]
   F --> V{Valid?}
   V -- Missing choice --> E1["Next to field: 'Pick shoulder or lower body.' / 'Pick a topic.' / 'Name what you ate, like Oatmeal.'"]
   V -- Missing or invalid number --> E2["Next to field: 'Enter minutes, like 15.' / 'Enter calories as a whole number, like 250.'"]
@@ -78,8 +78,8 @@ flowchart TD
   C -- Missed a full day --> BR["Broken: 'Lower body streak reset. Your best was 9. Start again today.'"]
   C -- Done today --> OK[Checked off]
   W --> WK["This week: shoulder 6/10 min · lower body 10/10 ✓"]
-  W --> MISS{Forgot to log yesterday?}
-  MISS -- Yes --> Y["Log with date = Yesterday → streak restored"]
+  W --> MISS{Forgot to log a day?}
+  MISS -- Yes --> Y["Pick a date → calendar → log it → streak restored"]
   AR --> Q[One-tap quick log]
   BR --> Q
   W --> PR["/progress: streaks (current + best), weekly history,<br/>minutes per FE topic, 14-day net calories"]

@@ -4,10 +4,11 @@ import { useState, type FormEvent } from "react";
 import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { ChoiceGroup } from "./ui/ChoiceGroup";
+import { DayPicker, initialDay, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field } from "./ui/Field";
 import { Input } from "./ui/Input";
 import { useToast } from "./ui/Toast";
-import { addDays, today } from "@/lib/dates";
+import { formatDay, today } from "@/lib/dates";
 import { addEntry, getData, removeEntry, type Region } from "@/lib/storage";
 import { dailyStretchStreak, formatDuration } from "@/lib/streaks";
 
@@ -19,7 +20,7 @@ const QUICK: { region: Region; seconds: number; label: string }[] = [
   { region: "lower", seconds: 60, label: "+60 s Lower body" },
 ];
 
-type Errors = { region?: string; duration?: string };
+type Errors = { region?: string; duration?: string; day?: string };
 
 /** One-tap stretch logging, plus a Custom panel for a different region, duration, or day. */
 export function StretchLogger() {
@@ -28,17 +29,18 @@ export function StretchLogger() {
   const [region, setRegion] = useState<Region | null>(null);
   const [amount, setAmount] = useState("");
   const [unit, setUnit] = useState<"seconds" | "minutes">("minutes");
-  const [day, setDay] = useState<"today" | "yesterday">("today");
+  const [day, setDay] = useState<DayValue>(initialDay);
   const [errors, setErrors] = useState<Errors>({});
 
   function log(r: Region, seconds: number, date: string) {
     const id = addEntry("stretches", { date, region: r, seconds });
     const streak = dailyStretchStreak(getData(), r, today());
     const name = REGION_NAME[r];
+    const when = date === today() ? "" : ` for ${formatDay(date)}`;
     const text =
-      streak.status === "done" && streak.current === 1 && streak.best === 1
+      streak.status === "done" && streak.current === 1 && streak.best === 1 && !when
         ? `1-day ${name} streak!`
-        : `Logged ${formatDuration(seconds)} ${name}${streak.status === "done" ? ` · ${streak.current}-day streak` : ""}`;
+        : `Logged ${formatDuration(seconds)} ${name}${when}${streak.status === "done" ? ` · ${streak.current}-day streak` : ""}`;
     toast(text, () => removeEntry("stretches", id));
   }
 
@@ -51,21 +53,24 @@ export function StretchLogger() {
     if (typed === "") next.duration = unit === "minutes" ? "Enter how long you stretched, like 1.5." : "Enter how long you stretched, like 90.";
     else if (Number.isNaN(seconds) || seconds <= 0) next.duration = unit === "minutes" ? "Enter a number of minutes, like 1.5." : "Enter a number of seconds, like 90.";
     else if (seconds > 120 * 60) next.duration = "That's over 2 hours. Check the number.";
+    const chosenDay = resolveDay(day);
+    if ("error" in chosenDay) next.day = chosenDay.error;
     setErrors(next);
 
-    if (next.region || next.duration) {
+    if (next.region || next.duration || next.day) {
       // Focus the first invalid field so keyboard and screen reader users land on it.
       const form = event.currentTarget as HTMLFormElement;
-      const target = form.querySelector<HTMLInputElement>(next.region ? 'input[name="region"]' : 'input[name="amount"]');
+      const selector = next.region ? 'input[name="region"]' : next.duration ? 'input[name="amount"]' : 'input[name="day-date"]';
+      const target = form.querySelector<HTMLInputElement>(selector);
       target?.focus();
       return;
     }
 
-    log(region!, Math.round(seconds), day === "today" ? today() : addDays(today(), -1));
+    log(region!, Math.round(seconds), (chosenDay as { day: string }).day);
     setOpen(false);
     setRegion(null);
     setAmount("");
-    setDay("today");
+    setDay(initialDay());
   }
 
   return (
@@ -120,16 +125,7 @@ export function StretchLogger() {
               ]}
             />
           </div>
-          <ChoiceGroup
-            legend="Day"
-            name="day"
-            value={day}
-            onChange={setDay}
-            options={[
-              { value: "today", label: "Today" },
-              { value: "yesterday", label: "Yesterday" },
-            ]}
-          />
+          <DayPicker name="day" value={day} onChange={setDay} error={errors.day} />
           <div>
             <Button type="submit">Log stretch</Button>
           </div>
