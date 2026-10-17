@@ -77,6 +77,11 @@ function getSnapshot(): RoutineData {
   return cachedData;
 }
 
+/** Read the current data outside React (e.g. right after saving). */
+export function getData(): RoutineData {
+  return getSnapshot();
+}
+
 function getServerSnapshot(): null {
   return null;
 }
@@ -108,14 +113,14 @@ export function updateData(update: (data: RoutineData) => RoutineData): void {
   listeners.forEach((listener) => listener());
 }
 
-export function newId(): string {
-  return crypto.randomUUID();
-}
-
 type Collection = "stretches" | "study" | "calories";
+type NewEntry<C extends Collection> = Omit<RoutineData[C][number], "id" | "createdAt">;
 
-export function addEntry<C extends Collection>(collection: C, entry: RoutineData[C][number]): void {
-  updateData((data) => ({ ...data, [collection]: [...data[collection], entry] }));
+/** Save a new entry and return its id (for Undo). */
+export function addEntry<C extends Collection>(collection: C, entry: NewEntry<C>): string {
+  const id = crypto.randomUUID();
+  updateData((data) => ({ ...data, [collection]: [...data[collection], { ...entry, id, createdAt: Date.now() }] }));
+  return id;
 }
 
 export function removeEntry(collection: Collection, id: string): void {

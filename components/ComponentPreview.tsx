@@ -6,8 +6,7 @@
 import { useState } from "react";
 import { Button } from "./ui/Button";
 import { Card } from "./ui/Card";
-import { Chip } from "./ui/Chip";
-import { ChoiceGroup } from "./ui/ChoiceGroup";
+import { StretchLogger } from "./StretchLogger";
 import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./ui/AmountPicker";
 import { Field } from "./ui/Field";
 import { Select } from "./ui/Input";
@@ -19,7 +18,6 @@ import { useRoutineData } from "@/lib/storage";
 export function ComponentPreview() {
   const toast = useToast();
   const data = useRoutineData();
-  const [region, setRegion] = useState<"shoulder" | "lower" | null>(null);
   const [minutes, setMinutes] = useState<AmountValue>(EMPTY_AMOUNT);
   const [error, setError] = useState<string>();
 
@@ -36,11 +34,8 @@ export function ComponentPreview() {
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="font-ct-serif text-2xl italic">Quick log</h2>
-        <div className="flex flex-wrap gap-2">
-          <Chip onClick={() => toast("Logged 30 s shoulder", () => toast("Undone"))}>+30 s Shoulder</Chip>
-          <Chip onClick={() => toast("Logged 60 s lower body", () => toast("Undone"))}>+60 s Lower body</Chip>
-        </div>
+        <h2 className="font-ct-serif text-2xl italic">Stretch</h2>
+        <StretchLogger />
       </Card>
 
       <Card>
@@ -59,16 +54,6 @@ export function ComponentPreview() {
             }
           }}
         >
-          <ChoiceGroup
-            legend="Region"
-            name="region"
-            value={region}
-            onChange={setRegion}
-            options={[
-              { value: "shoulder", label: "Shoulder" },
-              { value: "lower", label: "Lower body" },
-            ]}
-          />
           <Field label="Topic">
             {(a11y) => (
               <Select {...a11y} defaultValue="">
