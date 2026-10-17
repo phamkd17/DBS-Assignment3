@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./ui/AmountPicker";
 import { Button } from "./ui/Button";
 import { ChoiceGroup } from "./ui/ChoiceGroup";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
@@ -12,6 +13,12 @@ import { addEntry, getData, removeEntry, savePrefs, useRoutineData, type Calorie
 import { formatKcal, netCalories } from "@/lib/streaks";
 
 type Kind = CalorieEntry["kind"];
+
+const PRESETS = [
+  { value: 100, label: "100" },
+  { value: 250, label: "250" },
+  { value: 500, label: "500" },
+];
 type Errors = { kcal?: string; day?: string };
 
 /** Quick Add: eaten or burned, a calorie number, and an optional label. Informational only. */
@@ -20,24 +27,26 @@ export function CalorieLogger() {
   const prefs = useRoutineData()?.prefs;
   const [kindEdit, setKind] = useState<Kind | null>(null);
   const kind = kindEdit ?? prefs?.calorieKind ?? "eaten";
-  const [kcal, setKcal] = useState("");
+  const [kcal, setKcal] = useState<AmountValue>(EMPTY_AMOUNT);
   const [label, setLabel] = useState("");
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const typed = kcal.trim().replace(/,/g, "");
-    const value = Number(typed);
+    // Allow "1,200" in the custom field.
+    const value = resolveAmount({ ...kcal, custom: kcal.custom.replace(/,/g, "") });
     const chosenDay = resolveDay(day);
     const next: Errors = {};
-    if (typed === "" || !Number.isInteger(value) || value <= 0) next.kcal = "Enter calories as a whole number, like 250.";
+    if (value === null) next.kcal = "Pick an amount, or tap Custom to type one.";
+    else if (!Number.isInteger(value) || value <= 0) next.kcal = "Enter calories as a whole number, like 250.";
     else if (value > 5000) next.kcal = "That's over 5,000 kcal. Check the number.";
     if ("error" in chosenDay) next.day = chosenDay.error;
     setErrors(next);
 
-    if (next.kcal || "error" in chosenDay) {
-      event.currentTarget.querySelector<HTMLElement>(next.kcal ? 'input[name="kcal"]' : 'button[data-day][tabindex="0"]')?.focus();
+    if (next.kcal || value === null || "error" in chosenDay) {
+      const selector = next.kcal ? (kcal.choice === "custom" ? 'input[inputmode="decimal"]' : 'input[name="kcal"]') : 'button[data-day][tabindex="0"]';
+      event.currentTarget.querySelector<HTMLElement>(selector)?.focus();
       return;
     }
 
@@ -49,7 +58,7 @@ export function CalorieLogger() {
     const what = label.trim() ? ` ${label.trim()}` : "";
     toast(`${kind === "eaten" ? "Ate" : "Burned"} ${formatKcal(value)}${what} · Net ${when}: ${formatKcal(net)}`, () => removeEntry("calories", id));
 
-    setKcal("");
+    setKcal(EMPTY_AMOUNT);
     setLabel("");
     setKind(null);
     setDay(INITIAL_DAY);
@@ -67,11 +76,16 @@ export function CalorieLogger() {
           { value: "burned", label: "Burned" },
         ]}
       />
-      <Field label="Calories" error={errors.kcal}>
-        {(a11y) => (
-          <Input {...a11y} name="kcal" inputMode="numeric" autoComplete="off" placeholder="250" value={kcal} onChange={(e) => setKcal(e.target.value)} className="max-w-40" />
-        )}
-      </Field>
+      <AmountPicker
+        legend="Calories"
+        name="kcal"
+        presets={PRESETS}
+        customLabel="Custom calories"
+        customHint="A whole number, like 1,200."
+        value={kcal}
+        onChange={setKcal}
+        error={errors.kcal}
+      />
       <Field label="Label (optional)" hint={kind === "eaten" ? "Like Oatmeal or Lunch." : "Like Run or Bike ride."}>
         {(a11y) => <Input {...a11y} name="label" maxLength={60} autoComplete="off" value={label} onChange={(e) => setLabel(e.target.value)} />}
       </Field>
