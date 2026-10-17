@@ -2,7 +2,7 @@
 
 import { useId } from "react";
 import { FieldError } from "./Field";
-import { label as labelStyle } from "./styles";
+import { label as labelStyle, radioInput, radioPill } from "./styles";
 
 type Option<T extends string> = { value: T; label: string };
 
@@ -30,10 +30,10 @@ export function ChoiceGroup<T extends string>({ legend, name, options, value, on
               value={option.value}
               checked={value === option.value}
               onChange={() => onChange(option.value)}
-              className="peer absolute inset-0 cursor-pointer opacity-0"
+              className={radioInput}
             />
             <span
-              className={`inline-flex min-h-11 items-center rounded-full border px-5 font-ct-sans text-[15px] font-medium transition-colors border-ct-border bg-ct-surface text-ct-linen peer-hover:border-ct-linen peer-checked:border-ct-selected peer-checked:bg-ct-selected peer-checked:text-ct-text peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ct-accent ${error ? "border-ct-error" : ""}`}
+              className={`${radioPill} ${error ? "border-ct-error" : ""}`}
             >
               {option.label}
             </span>

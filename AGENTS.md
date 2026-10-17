@@ -26,7 +26,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 
 ## Design rules
 - Each flow step is its own route: `/`, `/stretch`, `/study`, `/calories`, `/progress`, with a shared `Nav` (`aria-current="page"`).
-- Use shared components from `components/ui/` everywhere (Button, Field, Input, Select, Chip, Card, ProgressBar, Toast). Don't hand-roll one-off inputs or buttons.
+- Use shared components from `components/ui/` everywhere (Button, Field, Input, Select, Chip, ChoiceGroup, AmountPicker, Card, ProgressBar, Toast). Amounts (minutes, durations) use AmountPicker: preset pills plus a Custom pill that opens a manual entry field. Don't hand-roll one-off inputs or buttons.
 - Forms: one column, a real `<label>` on every field, errors next to the field that say what to do next (e.g., "Enter calories as a whole number, like 250."), keep what the person typed, and focus the first invalid field.
 - First visit (nothing saved) must offer one-tap useful actions, never an empty dead end or a tour.
 - Accessibility: everything works with a keyboard, focus is visible, and text contrast meets WCAG AA (4.5:1).

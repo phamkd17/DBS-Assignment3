@@ -17,6 +17,13 @@ export const button = {
 
 export const chip = `inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 font-ct-sans text-sm font-medium transition-colors duration-200 select-none cursor-pointer ${focusRing} border-ct-border bg-ct-surface text-ct-linen hover:border-ct-linen hover:bg-ct-raised active:bg-ct-bg aria-pressed:border-ct-selected aria-pressed:bg-ct-selected aria-pressed:text-ct-text`;
 
+/** A pill that sits next to a visually hidden native radio (`peer`), used by ChoiceGroup and AmountPicker. */
+export const radioPill =
+  "inline-flex min-h-11 items-center rounded-full border px-5 font-ct-sans text-[15px] font-medium transition-colors border-ct-border bg-ct-surface text-ct-linen peer-hover:border-ct-linen peer-checked:border-ct-selected peer-checked:bg-ct-selected peer-checked:text-ct-text peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ct-accent";
+
+/** The hidden native radio under a radioPill. */
+export const radioInput = "peer absolute inset-0 cursor-pointer opacity-0";
+
 export const control =
   "h-11 w-full rounded-[10px] border bg-ct-raised px-4 font-ct-sans text-[15px] text-ct-text placeholder:text-ct-muted transition-colors duration-200 border-ct-border hover:border-ct-linen aria-invalid:border-ct-error " +
   focusRing;

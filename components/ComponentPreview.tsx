@@ -8,8 +8,9 @@ import { Button } from "./ui/Button";
 import { Card } from "./ui/Card";
 import { Chip } from "./ui/Chip";
 import { ChoiceGroup } from "./ui/ChoiceGroup";
+import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./ui/AmountPicker";
 import { Field } from "./ui/Field";
-import { Input, Select } from "./ui/Input";
+import { Select } from "./ui/Input";
 import { ProgressBar } from "./ui/ProgressBar";
 import { useToast } from "./ui/Toast";
 import { FE_TOPICS } from "@/lib/fe-topics";
@@ -19,7 +20,7 @@ export function ComponentPreview() {
   const toast = useToast();
   const data = useRoutineData();
   const [region, setRegion] = useState<"shoulder" | "lower" | null>(null);
-  const [minutes, setMinutes] = useState("");
+  const [minutes, setMinutes] = useState<AmountValue>(EMPTY_AMOUNT);
   const [error, setError] = useState<string>();
 
   return (
@@ -39,7 +40,6 @@ export function ComponentPreview() {
         <div className="flex flex-wrap gap-2">
           <Chip onClick={() => toast("Logged 30 s shoulder", () => toast("Undone"))}>+30 s Shoulder</Chip>
           <Chip onClick={() => toast("Logged 60 s lower body", () => toast("Undone"))}>+60 s Lower body</Chip>
-          <Chip aria-pressed>15 min</Chip>
         </div>
       </Card>
 
@@ -49,7 +49,14 @@ export function ComponentPreview() {
           className="flex flex-col gap-5"
           onSubmit={(e) => {
             e.preventDefault();
-            setError(minutes.trim() === "" || Number.isNaN(Number(minutes)) ? "Enter minutes, like 15." : undefined);
+            const amount = resolveAmount(minutes);
+            if (amount === null) setError("Pick how long you studied.");
+            else if (Number.isNaN(amount) || amount <= 0) setError("Enter minutes, like 45.");
+            else if (amount > 600) setError("That's over 10 hours. Check the number.");
+            else {
+              setError(undefined);
+              toast(`Logged ${amount} min`);
+            }
           }}
         >
           <ChoiceGroup
@@ -76,9 +83,20 @@ export function ComponentPreview() {
               </Select>
             )}
           </Field>
-          <Field label="Minutes" hint="Submit empty to see the error." error={error}>
-            {(a11y) => <Input {...a11y} inputMode="decimal" value={minutes} onChange={(e) => setMinutes(e.target.value)} />}
-          </Field>
+          <AmountPicker
+            legend="Minutes"
+            name="minutes"
+            presets={[
+              { value: 15, label: "15" },
+              { value: 30, label: "30" },
+              { value: 60, label: "60" },
+            ]}
+            customLabel="Custom minutes"
+            customHint="Whole or decimal minutes, like 45 or 7.5."
+            value={minutes}
+            onChange={setMinutes}
+            error={error}
+          />
           <div className="flex gap-3">
             <Button type="submit">Log it</Button>
             <Button variant="secondary">Cancel</Button>
