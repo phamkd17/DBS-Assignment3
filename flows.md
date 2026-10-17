@@ -63,7 +63,7 @@ flowchart TD
   T -- Undo --> UNDO[Remove entry] --> F
   T --> L[Entry appears in today's list, which has delete + Undo]
   L --> ST{Milestone?}
-  ST -- Study 15/30/60 --> M1["Tier reached: 'Minimum' / 'OK' / 'Gold day'"]
+  ST -- Study 15/30/60 --> M1["Tier reached: 'Bronze day' / 'Silver day' / 'Gold day'"]
   ST -- Region ≥10 min this week --> M2["Weekly goal hit: 'Shoulder weekly goal done. Anything more is bonus.'"]
   ST -- No --> P[Progress bars update]
 ```

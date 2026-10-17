@@ -12,8 +12,8 @@ export const STUDY_DAILY_MINUTES = 15;
 export const STUDY_WEEKLY_MINUTES = 420;
 export const STUDY_TIERS = [
   { minutes: 60, label: "Gold" },
-  { minutes: 30, label: "OK" },
-  { minutes: 15, label: "Minimum" },
+  { minutes: 30, label: "Silver" },
+  { minutes: 15, label: "Bronze" },
 ] as const;
 
 export type StreakStatus = "done" | "at-risk" | "broken" | "new";
