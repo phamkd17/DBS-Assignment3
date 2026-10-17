@@ -1,5 +1,18 @@
+import { CalorieLogger } from "@/components/CalorieLogger";
+import { NetCalories } from "@/components/NetCalories";
 import { PageHeader } from "@/components/PageHeader";
+import { Card } from "@/components/ui/Card";
 
 export default function CaloriesPage() {
-  return <PageHeader title="Calories">Quick-add what you ate or burned. Coming in Step 7.</PageHeader>;
+  return (
+    <>
+      <PageHeader title="Calories">Quick-add what you ate or burned. Just for tracking, with no goal.</PageHeader>
+      <Card>
+        <NetCalories />
+      </Card>
+      <Card>
+        <CalorieLogger />
+      </Card>
+    </>
+  );
 }

@@ -122,6 +122,10 @@ export function netCalories(data: RoutineData, day: DayKey): { eaten: number; bu
   return { eaten, burned, net: eaten - burned };
 }
 
+export function formatKcal(kcal: number): string {
+  return `${kcal.toLocaleString()} kcal`;
+}
+
 export function formatDuration(seconds: number): string {
   if (seconds < 60) return `${seconds} s`;
   const m = Math.floor(seconds / 60);

@@ -21,6 +21,7 @@ export type Prefs = {
   stretchRegion?: Region;
   stretchAmount?: string;
   stretchUnit?: "seconds" | "minutes";
+  calorieKind?: "eaten" | "burned";
 };
 
 export type RoutineData = {
