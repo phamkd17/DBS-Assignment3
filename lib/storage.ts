@@ -14,6 +14,15 @@ export type StretchEntry = { id: string; date: DayKey; region: Region; seconds: 
 export type StudyEntry = { id: string; date: DayKey; topic: TopicId; minutes: number; createdAt: number };
 export type CalorieEntry = { id: string; date: DayKey; kind: "eaten" | "burned"; kcal: number; label: string; createdAt: number };
 
+/** Last choices in each form, so they open where you left off. Day always resets to Today. */
+export type Prefs = {
+  studyTopic?: TopicId;
+  studyMinutes?: { choice: number | "custom" | null; custom: string };
+  stretchRegion?: Region;
+  stretchAmount?: string;
+  stretchUnit?: "seconds" | "minutes";
+};
+
 export type RoutineData = {
   version: 1;
   stretches: StretchEntry[];
@@ -21,11 +30,12 @@ export type RoutineData = {
   calories: CalorieEntry[];
   /** Day of the previous visit, used for the "Welcome back" summary. */
   lastVisit: DayKey | null;
+  prefs: Prefs;
 };
 
 const KEY = "routine:v1";
 
-export const EMPTY: RoutineData = { version: 1, stretches: [], study: [], calories: [], lastVisit: null };
+export const EMPTY: RoutineData = { version: 1, stretches: [], study: [], calories: [], lastVisit: null, prefs: {} };
 
 const listeners = new Set<() => void>();
 let cachedRaw: string | null | undefined;
@@ -62,6 +72,7 @@ function parse(raw: string | null): RoutineData {
       study: Array.isArray(data.study) ? data.study : [],
       calories: Array.isArray(data.calories) ? data.calories : [],
       lastVisit: typeof data.lastVisit === "string" ? data.lastVisit : null,
+      prefs: data.prefs && typeof data.prefs === "object" ? data.prefs : {},
     };
   } catch {
     return EMPTY;
@@ -121,6 +132,10 @@ export function addEntry<C extends Collection>(collection: C, entry: NewEntry<C>
   const id = crypto.randomUUID();
   updateData((data) => ({ ...data, [collection]: [...data[collection], { ...entry, id, createdAt: Date.now() }] }));
   return id;
+}
+
+export function savePrefs(prefs: Prefs): void {
+  updateData((data) => ({ ...data, prefs: { ...data.prefs, ...prefs } }));
 }
 
 export function removeEntry(collection: Collection, id: string): void {

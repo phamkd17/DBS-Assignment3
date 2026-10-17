@@ -9,7 +9,7 @@ import { Field } from "./ui/Field";
 import { Input } from "./ui/Input";
 import { useToast } from "./ui/Toast";
 import { formatDay, today } from "@/lib/dates";
-import { addEntry, getData, removeEntry, type Region } from "@/lib/storage";
+import { addEntry, getData, removeEntry, savePrefs, useRoutineData, type Region } from "@/lib/storage";
 import { dailyStretchStreak, formatDuration } from "@/lib/streaks";
 
 const REGION_NAME: Record<Region, string> = { shoulder: "shoulder", lower: "lower body" };
@@ -26,9 +26,14 @@ type Errors = { region?: string; duration?: string; day?: string };
 export function StretchLogger() {
   const toast = useToast();
   const [open, setOpen] = useState(false);
-  const [region, setRegion] = useState<Region | null>(null);
-  const [amount, setAmount] = useState("");
-  const [unit, setUnit] = useState<"seconds" | "minutes">("minutes");
+  const prefs = useRoutineData()?.prefs;
+  // Edits made since the last custom log; until then the panel shows your last saved choice.
+  const [regionEdit, setRegion] = useState<Region | null>(null);
+  const [amountEdit, setAmount] = useState<string | null>(null);
+  const [unitEdit, setUnit] = useState<"seconds" | "minutes" | null>(null);
+  const region = regionEdit ?? prefs?.stretchRegion ?? null;
+  const amount = amountEdit ?? prefs?.stretchAmount ?? "";
+  const unit = unitEdit ?? prefs?.stretchUnit ?? "minutes";
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
 
@@ -67,9 +72,11 @@ export function StretchLogger() {
     }
 
     log(region!, Math.round(seconds), (chosenDay as { day: string }).day);
+    savePrefs({ stretchRegion: region!, stretchAmount: amount, stretchUnit: unit });
     setOpen(false);
     setRegion(null);
-    setAmount("");
+    setAmount(null);
+    setUnit(null);
     setDay(INITIAL_DAY);
   }
 

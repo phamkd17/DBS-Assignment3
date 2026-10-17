@@ -9,7 +9,7 @@ import { Select } from "./ui/Input";
 import { useToast } from "./ui/Toast";
 import { formatDay, today } from "@/lib/dates";
 import { FE_TOPICS, isTopicId, topicName } from "@/lib/fe-topics";
-import { addEntry, getData, removeEntry } from "@/lib/storage";
+import { addEntry, getData, removeEntry, savePrefs, useRoutineData } from "@/lib/storage";
 import { studyMinutesByDay, studyStreak, studyTier } from "@/lib/streaks";
 
 const PRESETS = [
@@ -23,8 +23,12 @@ type Errors = { topic?: string; minutes?: string; day?: string };
 /** Log FE study time: topic, minutes (15 / 30 / 60 / Custom), and day. */
 export function StudyLogger() {
   const toast = useToast();
-  const [topic, setTopic] = useState("");
-  const [minutes, setMinutes] = useState<AmountValue>(EMPTY_AMOUNT);
+  const prefs = useRoutineData()?.prefs;
+  // Edits made since the last log; until then the form shows your last saved choice.
+  const [topicEdit, setTopic] = useState<string | null>(null);
+  const [minutesEdit, setMinutes] = useState<AmountValue | null>(null);
+  const topic = topicEdit ?? prefs?.studyTopic ?? "";
+  const minutes = minutesEdit ?? prefs?.studyMinutes ?? EMPTY_AMOUNT;
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
 
@@ -56,7 +60,9 @@ export function StudyLogger() {
     const extras = [tier && date === today() ? `${tier} day` : null, streak.status === "done" ? `${streak.current}-day streak` : null].filter(Boolean);
     toast(`Logged ${amount} min ${topicName(topic)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`, () => removeEntry("study", id));
 
-    setMinutes(EMPTY_AMOUNT);
+    savePrefs({ studyTopic: topic, studyMinutes: minutes });
+    setTopic(null);
+    setMinutes(null);
     setDay(INITIAL_DAY);
   }
 
