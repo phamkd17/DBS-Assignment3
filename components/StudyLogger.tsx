@@ -57,7 +57,12 @@ export function StudyLogger() {
     const tier = studyTier(dayTotal);
     const streak = studyStreak(getData(), today());
     const when = date === today() ? "" : ` for ${formatDay(date)}`;
-    const extras = [tier && date === today() ? `${tier} day` : null, streak.status === "done" ? `${streak.current}-day streak` : null].filter(Boolean);
+    const isToday = date === today();
+    const extras = [
+      isToday && dayTotal !== amount ? `${dayTotal} min today` : null,
+      tier && isToday ? `${tier} day` : null,
+      streak.status === "done" ? `${streak.current}-day streak` : null,
+    ].filter(Boolean);
     toast(`Logged ${amount} min ${topicName(topic)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`, () => removeEntry("study", id));
 
     savePrefs({ studyTopic: topic, studyMinutes: minutes });
