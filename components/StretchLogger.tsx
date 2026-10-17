@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./ui/AmountPicker";
 import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { ChoiceGroup } from "./ui/ChoiceGroup";
+import { Field } from "./ui/Field";
+import { Input } from "./ui/Input";
 import { useToast } from "./ui/Toast";
 import { addDays, today } from "@/lib/dates";
 import { addEntry, getData, removeEntry, type Region } from "@/lib/storage";
@@ -18,13 +19,6 @@ const QUICK: { region: Region; seconds: number; label: string }[] = [
   { region: "lower", seconds: 60, label: "+60 s Lower body" },
 ];
 
-const DURATIONS = [
-  { value: 30, label: "30 s" },
-  { value: 60, label: "1 min" },
-  { value: 120, label: "2 min" },
-  { value: 240, label: "4 min" },
-];
-
 type Errors = { region?: string; duration?: string };
 
 /** One-tap stretch logging, plus a Custom panel for a different region, duration, or day. */
@@ -32,7 +26,8 @@ export function StretchLogger() {
   const toast = useToast();
   const [open, setOpen] = useState(false);
   const [region, setRegion] = useState<Region | null>(null);
-  const [duration, setDuration] = useState<AmountValue>(EMPTY_AMOUNT);
+  const [amount, setAmount] = useState("");
+  const [unit, setUnit] = useState<"seconds" | "minutes">("minutes");
   const [day, setDay] = useState<"today" | "yesterday">("today");
   const [errors, setErrors] = useState<Errors>({});
 
@@ -49,27 +44,27 @@ export function StretchLogger() {
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    const seconds = resolveAmount(duration, 60);
+    const typed = amount.trim();
+    const seconds = Number(typed) * (unit === "minutes" ? 60 : 1);
     const next: Errors = {};
     if (!region) next.region = "Pick shoulder or lower body.";
-    if (seconds === null) next.duration = "Pick how long you stretched.";
-    else if (Number.isNaN(seconds) || seconds <= 0) next.duration = "Enter minutes, like 1.5.";
+    if (typed === "") next.duration = unit === "minutes" ? "Enter how long you stretched, like 1.5." : "Enter how long you stretched, like 90.";
+    else if (Number.isNaN(seconds) || seconds <= 0) next.duration = unit === "minutes" ? "Enter a number of minutes, like 1.5." : "Enter a number of seconds, like 90.";
     else if (seconds > 120 * 60) next.duration = "That's over 2 hours. Check the number.";
     setErrors(next);
 
     if (next.region || next.duration) {
       // Focus the first invalid field so keyboard and screen reader users land on it.
       const form = event.currentTarget as HTMLFormElement;
-      const selector = next.region ? 'input[name="region"]' : duration.choice === "custom" ? 'input[inputmode="decimal"]' : 'input[name="duration"]';
-      const target = form.querySelector<HTMLInputElement>(selector);
+      const target = form.querySelector<HTMLInputElement>(next.region ? 'input[name="region"]' : 'input[name="amount"]');
       target?.focus();
       return;
     }
 
-    log(region!, Math.round(seconds!), day === "today" ? today() : addDays(today(), -1));
+    log(region!, Math.round(seconds), day === "today" ? today() : addDays(today(), -1));
     setOpen(false);
     setRegion(null);
-    setDuration(EMPTY_AMOUNT);
+    setAmount("");
     setDay("today");
   }
 
@@ -99,16 +94,32 @@ export function StretchLogger() {
               { value: "lower", label: "Lower body" },
             ]}
           />
-          <AmountPicker
-            legend="Duration"
-            name="duration"
-            presets={DURATIONS}
-            customLabel="Custom minutes"
-            customHint="Like 1.5 for a minute and a half."
-            value={duration}
-            onChange={setDuration}
-            error={errors.duration}
-          />
+          <div className="flex flex-col gap-3">
+            <Field label="Duration" error={errors.duration}>
+              {(a11y) => (
+                <Input
+                  {...a11y}
+                  name="amount"
+                  inputMode="decimal"
+                  autoComplete="off"
+                  placeholder={unit === "minutes" ? "1.5" : "90"}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="max-w-40"
+                />
+              )}
+            </Field>
+            <ChoiceGroup
+              legend="Unit"
+              name="unit"
+              value={unit}
+              onChange={setUnit}
+              options={[
+                { value: "seconds", label: "Seconds" },
+                { value: "minutes", label: "Minutes" },
+              ]}
+            />
+          </div>
           <ChoiceGroup
             legend="Day"
             name="day"
