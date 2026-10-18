@@ -6,6 +6,7 @@ import { Chip } from "./ui/Chip";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field, FieldError } from "./ui/Field";
 import { Input, Select } from "./ui/Input";
+import { Switch } from "./ui/Switch";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
 import { FE_TOPICS, isTopicId, topicName, type TopicId } from "@/lib/fe-topics";
@@ -135,15 +136,14 @@ export function StudyLogger() {
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-2">
-          <Chip
-            aria-pressed={subtract}
-            onClick={() => {
-              setSubtract(!subtract);
+          <Switch
+            label="Subtract"
+            checked={subtract}
+            onChange={(on) => {
+              setSubtract(on);
               setErrors({});
             }}
-          >
-            <span aria-hidden="true">−</span> Subtract
-          </Chip>
+          />
           {QUICK_MINUTES.map((m) => (
             <Chip key={m} onClick={() => quickAdd(m)} aria-label={`${subtract ? "Subtract" : "Add"} ${m} minute${m === 1 ? "" : "s"}`}>
               {subtract ? "−" : "+"}
