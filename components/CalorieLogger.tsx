@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { BodyBurnSetting } from "./BodyBurnSetting";
 import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { ChoiceGroup } from "./ui/ChoiceGroup";
@@ -15,7 +16,7 @@ import { formatKcal, netCalories } from "@/lib/streaks";
 type Kind = CalorieEntry["kind"];
 type Errors = { kcal?: string; day?: string };
 
-/** Quick Add: eaten or burned and a typed calorie number. Custom (next to Type) adds a label or a past date. */
+/** Quick Add: eaten or burned and a typed calorie number. Custom (next to Type) adds a label, a past date, and the body-burn setting. */
 export function CalorieLogger() {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
@@ -90,6 +91,7 @@ export function CalorieLogger() {
             {(a11y) => <Input {...a11y} name="label" maxLength={60} autoComplete="off" value={label} onChange={(e) => setLabel(e.target.value)} />}
           </Field>
           <DayPicker name="calorie-day" value={day} onChange={setDay} error={errors.day} />
+          <BodyBurnSetting />
         </div>
       )}
 
