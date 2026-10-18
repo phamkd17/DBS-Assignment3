@@ -72,6 +72,7 @@ export function CalorieLogger({ customOpen = false }: Props) {
         <ChoiceGroup
           legend="Type"
           hideLegend
+          keepTypingFocus
           name="kind"
           value={kind}
           onChange={setKind}
