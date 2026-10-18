@@ -10,14 +10,18 @@ const WEEKS = 12;
 const DAYS = WEEKS * 7;
 
 // Ordinal ramp: one hue, darker → brighter on the dark card (validated with the dataviz checker).
+/** Calendar-only level below Bronze: some study (5–14 min) gets a hint of light. */
+const STARTED_MINUTES = 5;
 const TIER_FILL: Record<string, string> = {
   none: "bg-ct-raised",
-  Bronze: "bg-ct-heat-1",
-  Silver: "bg-ct-heat-2",
+  started: "bg-ct-heat-1",
+  Bronze: "bg-ct-heat-2",
+  Silver: "bg-ct-heat-3",
   Gold: "bg-ct-accent",
 };
 const LEGEND = [
-  { key: "none", label: "Under 15" },
+  { key: "none", label: "Under 5" },
+  { key: "started", label: "5–14" },
   { key: "Bronze", label: "Bronze 15+" },
   { key: "Silver", label: "Silver 30+" },
   { key: "Gold", label: "Gold 60+" },
@@ -39,7 +43,7 @@ export function StudyCalendar() {
   const cells: DayKey[] = Array.from({ length: DAYS }, (_, i) => addDays(first, i));
   const byDay = studyMinutesByDay(data);
   const minutesOn = (d: DayKey) => Math.max(0, byDay.get(d) ?? 0);
-  const tierOn = (d: DayKey) => studyTier(minutesOn(d)) ?? "none";
+  const tierOn = (d: DayKey) => studyTier(minutesOn(d)) ?? (minutesOn(d) >= STARTED_MINUTES ? "started" : "none");
   const describe = (d: DayKey) => {
     const m = minutesOn(d);
     const tier = studyTier(m);

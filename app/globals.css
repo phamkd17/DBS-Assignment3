@@ -22,8 +22,10 @@
   --color-ct-disabled: #3a2d24;
   /* Charts (validated on ct-surface with the dataviz palette checker) */
   --color-ct-chart: #c58147; /* single-series marks */
-  --color-ct-heat-1: #6b4e24; /* Bronze day (ordinal ramp, then Silver, then Gold = accent) */
-  --color-ct-heat-2: #a2772f; /* Silver day */
+  /* Study calendar ordinal ramp (one hue, validated): 5–14 min, Bronze, Silver, then Gold = accent */
+  --color-ct-heat-1: #6b4e24; /* 5–14 min: dimmest visible step */
+  --color-ct-heat-2: #8a652b; /* Bronze day */
+  --color-ct-heat-3: #b0832f; /* Silver day */
   /* Calorie breakdown, emphasis form: consumed (saffron) and active (red) are the hues that change;
      resting burn is a steady baseline, so it takes the palette's quiet taupe (3.6:1 on ct-surface)
      with the checker pattern, since taupe vs red fails CVD on color alone.
