@@ -154,6 +154,47 @@ export function restoreEntry<C extends Collection>(collection: C, entry: Routine
   updateData((data) => ({ ...data, [collection]: [...data[collection], entry] }));
 }
 
+/**
+ * Take `amount` off the newest matching entries first: entries the amount fully covers are
+ * deleted, and the next one is shortened. Returns an undo that restores the exact entries.
+ */
+export function consumeEntries<C extends "stretches" | "study">(
+  collection: C,
+  match: (entry: RoutineData[C][number]) => boolean,
+  amount: number,
+): () => void {
+  const field = (collection === "stretches" ? "seconds" : "minutes") as keyof RoutineData[C][number];
+  const value = (e: RoutineData[C][number]) => e[field] as unknown as number;
+  const originals: RoutineData[C][number][] = [];
+
+  updateData((data) => {
+    const list = data[collection] as RoutineData[C][number][];
+    const newestFirst = list.filter(match).sort((a, b) => b.createdAt - a.createdAt);
+    const replaced = new Map<string, RoutineData[C][number] | null>();
+    let left = amount;
+    for (const e of newestFirst) {
+      if (left <= 0) break;
+      originals.push(e);
+      if (value(e) <= left) {
+        left -= value(e);
+        replaced.set(e.id, null);
+      } else {
+        replaced.set(e.id, { ...e, [field]: Math.round((value(e) - left) * 100) / 100 });
+        left = 0;
+      }
+    }
+    const next = list.flatMap((e) => (replaced.has(e.id) ? (replaced.get(e.id) ? [replaced.get(e.id)!] : []) : [e]));
+    return { ...data, [collection]: next };
+  });
+
+  return () =>
+    updateData((data) => {
+      const ids = new Set(originals.map((e) => e.id));
+      const kept = (data[collection] as RoutineData[C][number][]).filter((e) => !ids.has(e.id));
+      return { ...data, [collection]: [...kept, ...originals] };
+    });
+}
+
 export function removeEntry(collection: Collection, id: string): void {
   updateData((data) => ({ ...data, [collection]: data[collection].filter((e) => e.id !== id) }));
 }

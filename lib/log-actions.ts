@@ -5,7 +5,7 @@
 
 import { formatDay, today, type DayKey } from "./dates";
 import { topicName, type TopicId } from "./fe-topics";
-import { addEntry, getData, removeEntry, type Region } from "./storage";
+import { addEntry, consumeEntries, getData, removeEntry, type Region } from "./storage";
 import { dailyStretchStreak, formatDuration, studyMinutesByDay, studyStreak, studyTier } from "./streaks";
 
 export const REGION_NAME: Record<Region, string> = { shoulder: "shoulder", lower: "lower body" };
@@ -13,7 +13,13 @@ export const REGION_NAME: Record<Region, string> = { shoulder: "shoulder", lower
 type Logged = { message: string; undo: () => void };
 
 export function logStretch(region: Region, seconds: number, date: DayKey, subtract = false): Logged {
-  const id = addEntry("stretches", { date, region, seconds: subtract ? -seconds : seconds });
+  // Subtracting takes time off that day's newest entries (deleting ones it fully covers).
+  const undo = subtract
+    ? consumeEntries("stretches", (e) => e.date === date && e.region === region, seconds)
+    : (() => {
+        const id = addEntry("stretches", { date, region, seconds });
+        return () => removeEntry("stretches", id);
+      })();
   const streak = dailyStretchStreak(getData(), region, today());
   const name = REGION_NAME[region];
   const when = date === today() ? "" : ` for ${formatDay(date)}`;
@@ -22,11 +28,17 @@ export function logStretch(region: Region, seconds: number, date: DayKey, subtra
     : streak.status === "done" && streak.current === 1 && streak.best === 1 && !when
       ? `1-day ${name} streak!`
       : `Logged ${formatDuration(seconds)} ${name}${when}${streak.status === "done" ? ` · ${streak.current}-day streak` : ""}`;
-  return { message, undo: () => removeEntry("stretches", id) };
+  return { message, undo };
 }
 
 export function logStudy(topic: TopicId, minutes: number, date: DayKey, subtract = false): Logged {
-  const id = addEntry("study", { date, topic, minutes: subtract ? -minutes : minutes });
+  // Subtracting takes time off that day's newest entries for the topic (deleting ones it fully covers).
+  const undo = subtract
+    ? consumeEntries("study", (e) => e.date === date && e.topic === topic, minutes)
+    : (() => {
+        const id = addEntry("study", { date, topic, minutes });
+        return () => removeEntry("study", id);
+      })();
   const dayTotal = studyMinutesByDay(getData()).get(date) ?? 0;
   const tier = studyTier(dayTotal);
   const streak = studyStreak(getData(), today());
@@ -38,5 +50,5 @@ export function logStudy(topic: TopicId, minutes: number, date: DayKey, subtract
     streak.status === "done" ? `${streak.current}-day streak` : null,
   ].filter(Boolean);
   const message = `${subtract ? "Removed" : "Logged"} ${minutes} min ${topicName(topic)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`;
-  return { message, undo: () => removeEntry("study", id) };
+  return { message, undo };
 }
