@@ -42,15 +42,27 @@ export function CalorieTrend() {
   const now = useNow();
   const scroller = useRef<HTMLDivElement>(null);
 
-  // Days from the first calorie log (at most six months ago) through today.
+  // Always six months of days ending today. Days before the first calorie log are blank:
+  // no data was tracked then, so no made-up resting burn.
   const end = now ? toDayKey(now) : "";
   const firstLog = data?.calories.reduce<DayKey | null>((min, c) => (min === null || c.date < min ? c.date : min), null) ?? end;
-  const earliest = now ? addDays(end, -(MAX_DAYS - 1)) : "";
-  const start = firstLog > earliest ? firstLog : earliest;
-  const count = now ? Math.min(MAX_DAYS, Math.round((fromDayKey(end).getTime() - fromDayKey(start).getTime()) / 86_400_000) + 1) : 1;
+  const start = now ? addDays(end, -(MAX_DAYS - 1)) : "";
+  const count = now ? MAX_DAYS : 1;
 
   const { shown, markProps } = useRoving(count, (key) =>
-    key === "ArrowLeft" ? -1 : key === "ArrowRight" ? 1 : key === "PageUp" ? -7 : key === "PageDown" ? 7 : key === "Home" ? -MAX_DAYS : key === "End" ? MAX_DAYS : null,
+    key === "ArrowLeft"
+      ? -1
+      : key === "ArrowRight"
+        ? 1
+        : key === "PageUp"
+          ? -7
+          : key === "PageDown"
+            ? 7
+            : key === "Home"
+              ? -MAX_DAYS
+              : key === "End"
+                ? MAX_DAYS
+                : null,
   );
 
   // Open scrolled to today.
@@ -63,11 +75,12 @@ export function CalorieTrend() {
   const days = Array.from({ length: count }, (_, i) => addDays(start, i));
   const rows = days.map((d) => {
     const n = netCalories(data, d, now);
-    return { day: d, consumed: n.eaten, resting: n.bodyBurn, active: n.exercise, net: n.net };
+    return { day: d, tracked: d >= firstLog, consumed: n.eaten, resting: n.bodyBurn, active: n.exercise, net: n.net };
   });
+  const tracked = rows.filter((r) => r.tracked);
 
-  const maxUp = Math.max(0, ...rows.map((r) => r.consumed));
-  const maxDown = Math.max(0, ...rows.map((r) => r.resting + r.active));
+  const maxUp = Math.max(0, ...tracked.map((r) => r.consumed));
+  const maxDown = Math.max(0, ...tracked.map((r) => r.resting + r.active));
   const step = niceStep(maxUp + maxDown || 1000);
   const top = Math.ceil(maxUp / step) * step;
   const bottom = -Math.ceil(maxDown / step) * step;
@@ -81,7 +94,7 @@ export function CalorieTrend() {
   return (
     <figure className="flex flex-col gap-3">
       <figcaption className="font-ct-sans text-sm text-ct-muted">
-        Calories per day: consumed above the line, burned below. Scroll back up to 6 months. Today is so far.
+        Calories per day: consumed above the line, burned below. Scroll left to go back up to 6 months. Today is so far.
       </figcaption>
 
       <ul className="flex flex-wrap gap-x-4 gap-y-1 font-ct-sans text-xs text-ct-linen" aria-label="Legend">
@@ -122,7 +135,9 @@ export function CalorieTrend() {
               {rows.map((r, i) => {
                 const restingH = px(r.resting);
                 const activeH = px(r.active);
-                const label = `${formatDay(r.day)}: consumed ${formatKcal(r.consumed)}, resting burn ${formatKcal(r.resting)}, active burn ${formatKcal(r.active)}, net ${formatKcal(r.net)}`;
+                const label = !r.tracked
+                  ? `${formatDay(r.day)}: no data yet`
+                  : `${formatDay(r.day)}: consumed ${formatKcal(r.consumed)}, resting burn ${formatKcal(r.resting)}, active burn ${formatKcal(r.active)}, net ${formatKcal(r.net)}`;
                 return (
                   <div
                     key={r.day}
@@ -131,18 +146,38 @@ export function CalorieTrend() {
                     className="group relative h-full shrink-0 rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ct-accent"
                     style={{ width: COLUMN }}
                   >
-                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 transition-[filter] group-hover:brightness-125 group-focus-visible:brightness-125" style={{ width: BAR }}>
-                      {r.consumed > 0 && <div className="absolute inset-x-0 rounded-t bg-ct-consumed" style={{ top: y(r.consumed), height: Math.max(2, zero - y(r.consumed)) }} />}
-                      {r.resting > 0 && (
-                        <div className={`absolute inset-x-0 bg-ct-resting ${activeH > 0 ? "" : "rounded-b"}`} style={{ top: zero + GAP, height: Math.max(2, restingH - GAP) }} />
-                      )}
-                      {r.active > 0 && <div className="absolute inset-x-0 rounded-b bg-ct-active" style={{ top: zero + restingH + GAP, height: Math.max(2, activeH - GAP) }} />}
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ct-text ring-2 ring-ct-surface"
-                      style={{ top: y(r.net) }}
-                    />
+                    {r.tracked && (
+                      <>
+                        <div
+                          className="absolute inset-y-0 left-1/2 -translate-x-1/2 transition-[filter] group-hover:brightness-125 group-focus-visible:brightness-125"
+                          style={{ width: BAR }}
+                        >
+                          {r.consumed > 0 && (
+                            <div
+                              className="absolute inset-x-0 rounded-t bg-ct-consumed"
+                              style={{ top: y(r.consumed), height: Math.max(2, zero - y(r.consumed)) }}
+                            />
+                          )}
+                          {r.resting > 0 && (
+                            <div
+                              className={`absolute inset-x-0 bg-ct-resting ${activeH > 0 ? "" : "rounded-b"}`}
+                              style={{ top: zero + GAP, height: Math.max(2, restingH - GAP) }}
+                            />
+                          )}
+                          {r.active > 0 && (
+                            <div
+                              className="absolute inset-x-0 rounded-b bg-ct-active"
+                              style={{ top: zero + restingH + GAP, height: Math.max(2, activeH - GAP) }}
+                            />
+                          )}
+                        </div>
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ct-text ring-2 ring-ct-surface"
+                          style={{ top: y(r.net) }}
+                        />
+                      </>
+                    )}
 
                     {shown === i && (
                       <div
@@ -151,20 +186,26 @@ export function CalorieTrend() {
                         style={{ top: 4 }}
                       >
                         <span className="block text-xs font-semibold">{formatDay(r.day)}</span>
-                        {(
-                          [
-                            ["Consumed", r.consumed, "bg-ct-consumed"],
-                            ["Resting", r.resting, "bg-ct-resting"],
-                            ["Active", r.active, "bg-ct-active"],
-                          ] as const
-                        ).map(([name, value, fill]) => (
-                          <span key={name} className="flex items-center gap-2 text-xs">
-                            <span aria-hidden="true" className={`h-0.5 w-3 rounded-full ${fill}`} />
-                            <span className="font-semibold tabular-nums">{formatKcal(value)}</span>
-                            <span>{name}</span>
-                          </span>
-                        ))}
-                        <span className="mt-1 block border-t border-ct-bg/20 pt-1 text-sm font-semibold">Net {formatKcal(r.net)}</span>
+                        {!r.tracked ? (
+                          <span className="block text-xs">No data yet</span>
+                        ) : (
+                          <>
+                            {(
+                              [
+                                ["Consumed", r.consumed, "bg-ct-consumed"],
+                                ["Resting", r.resting, "bg-ct-resting"],
+                                ["Active", r.active, "bg-ct-active"],
+                              ] as const
+                            ).map(([name, value, fill]) => (
+                              <span key={name} className="flex items-center gap-2 text-xs">
+                                <span aria-hidden="true" className={`h-0.5 w-3 rounded-full ${fill}`} />
+                                <span className="font-semibold tabular-nums">{formatKcal(value)}</span>
+                                <span>{name}</span>
+                              </span>
+                            ))}
+                            <span className="mt-1 block border-t border-ct-bg/20 pt-1 text-sm font-semibold">Net {formatKcal(r.net)}</span>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
@@ -198,15 +239,25 @@ export function CalorieTrend() {
           <table className="w-full text-left">
             <thead className="sticky top-0 bg-ct-surface">
               <tr className="border-b border-ct-hairline text-[11px] uppercase tracking-[0.18em] text-ct-muted">
-                <th scope="col" className="py-1.5 font-semibold">Day</th>
-                <th scope="col" className="py-1.5 text-right font-semibold">Consumed</th>
-                <th scope="col" className="py-1.5 text-right font-semibold">Resting</th>
-                <th scope="col" className="py-1.5 text-right font-semibold">Active</th>
-                <th scope="col" className="py-1.5 text-right font-semibold">Net</th>
+                <th scope="col" className="py-1.5 font-semibold">
+                  Day
+                </th>
+                <th scope="col" className="py-1.5 text-right font-semibold">
+                  Consumed
+                </th>
+                <th scope="col" className="py-1.5 text-right font-semibold">
+                  Resting
+                </th>
+                <th scope="col" className="py-1.5 text-right font-semibold">
+                  Active
+                </th>
+                <th scope="col" className="py-1.5 text-right font-semibold">
+                  Net
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-ct-hairline tabular-nums">
-              {[...rows].reverse().map((r) => (
+              {[...tracked].reverse().map((r) => (
                 <tr key={r.day}>
                   <td className="py-1.5 text-ct-linen">{formatDay(r.day, { month: "short", day: "numeric" })}</td>
                   <td className="py-1.5 text-right text-ct-muted">{r.consumed.toLocaleString()}</td>
