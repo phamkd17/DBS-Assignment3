@@ -16,15 +16,30 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const nextId = useRef(0);
 
+  // Hidden after 3 s, or as soon as you tap anywhere outside it. The timer pauses while the
+  // pointer or keyboard focus is on the toast, so it can't vanish as you reach for Undo.
+  const [paused, setPaused] = useState(false);
+
   const show = useCallback((text: string, onUndo?: () => void) => {
     nextId.current += 1;
+    setPaused(false); // every new toast starts its own 3 s
     setToast({ id: nextId.current, text, onUndo });
   }, []);
-
+  const toastRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!toast || paused) return;
+    const timer = window.setTimeout(() => setToast(null), 3000);
+    return () => window.clearTimeout(timer);
+  }, [toast, paused]);
   useEffect(() => {
     if (!toast) return;
-    const timer = window.setTimeout(() => setToast(null), 6000);
-    return () => window.clearTimeout(timer);
+    const onDown = (e: PointerEvent) => {
+      if (toastRef.current?.contains(e.target as Node)) return;
+      setToast(null);
+      setPaused(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
   }, [toast]);
 
   return (
@@ -32,7 +47,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div aria-live="polite" role="status" className="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4 sm:bottom-6">
         {toast && (
-          <div key={toast.id} className="pointer-events-auto flex items-center gap-3 rounded-full bg-ct-text py-1.5 pr-1.5 pl-5 font-ct-sans text-[15px] font-medium text-ct-bg shadow-ct-glow-strong">
+          <div
+            key={toast.id}
+            ref={toastRef}
+            onPointerEnter={() => setPaused(true)}
+            onPointerLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={() => setPaused(false)}
+            className="pointer-events-auto flex items-center gap-3 rounded-full bg-ct-text py-1.5 pr-1.5 pl-5 font-ct-sans text-[15px] font-medium text-ct-bg shadow-ct-glow-strong"
+          >
             <span>{toast.text}</span>
             {toast.onUndo && (
               <button
@@ -40,6 +63,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 onClick={() => {
                   toast.onUndo?.();
                   setToast(null);
+                  setPaused(false);
                 }}
                 className={`${button.ghost} bg-ct-bg text-ct-text hover:bg-ct-raised`}
               >
