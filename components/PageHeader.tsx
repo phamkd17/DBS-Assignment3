@@ -17,7 +17,7 @@ export function PageHeader({ title, action, subline, children }: Props) {
         <h1 className="font-ct-serif text-4xl italic text-ct-text">{title}</h1>
         {action}
       </div>
-      {subline}
+      {subline && <div className="-mt-1.5">{subline}</div>}
       {children && <p className="font-ct-sans text-[15px] text-ct-linen">{children}</p>}
     </header>
   );

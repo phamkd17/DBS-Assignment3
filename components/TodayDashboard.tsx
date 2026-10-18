@@ -24,7 +24,7 @@ export function TodayDashboard() {
       <WelcomeBack />
 
       <Card className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col">
           <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} />
           <StretchTimeToday />
         </div>
@@ -32,7 +32,7 @@ export function TodayDashboard() {
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col">
           <CardHeading title="FE study" href="/study" action={<SubtractSwitch pref="studySubtract" />} />
           <StudyMinutesToday />
         </div>
