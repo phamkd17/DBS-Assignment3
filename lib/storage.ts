@@ -22,6 +22,8 @@ export type Prefs = {
   stretchAmount?: string;
   stretchUnit?: "seconds" | "minutes";
   calorieKind?: "eaten" | "burned";
+  /** Calories your body burns in a full day; accrues through the day. */
+  dailyBurn?: number;
 };
 
 export type RoutineData = {

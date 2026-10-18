@@ -49,10 +49,10 @@ export function CalorieLogger() {
     const date = chosenDay.day;
     const id = addEntry("calories", { date, kind, kcal: value, label: entryLabel });
     savePrefs({ calorieKind: kind });
-    const { net } = netCalories(getData(), date);
+    const { net } = netCalories(getData(), date, new Date());
     const when = date === today() ? "today" : formatDay(date);
     const what = entryLabel ? ` ${entryLabel}` : "";
-    toast(`${kind === "eaten" ? "Ate" : "Burned"} ${formatKcal(value)}${what} · Net ${when}: ${formatKcal(net)}`, () => removeEntry("calories", id));
+    toast(`${kind === "eaten" ? "Ate" : "Burned"} ${formatKcal(value)}${what} · Net ${when === "today" ? "so far" : when}: ${formatKcal(net)}`, () => removeEntry("calories", id));
 
     setKcal("");
     setLabel("");

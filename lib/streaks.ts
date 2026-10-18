@@ -2,7 +2,7 @@
 // goal, ending today/this week if already met, otherwise ending yesterday/last week.
 // That way an unmet today is "at risk," not broken, until the day ends.
 
-import { addDays, weekStart, type DayKey } from "./dates";
+import { addDays, toDayKey, weekStart, type DayKey } from "./dates";
 import type { Region, RoutineData } from "./storage";
 
 export const STRETCH_DAILY_SECONDS = 30;
@@ -111,15 +111,32 @@ export function weekTotals(data: RoutineData, day: DayKey): { shoulderSeconds: n
   };
 }
 
-export function netCalories(data: RoutineData, day: DayKey): { eaten: number; burned: number; net: number } {
+/** Default daily body burn (resting + everyday activity), editable in prefs. */
+export const DEFAULT_DAILY_BURN = 2052;
+
+/** Fraction of `day` that has passed at `now`: 1 for past days, 0 for future days. */
+export function dayFraction(day: DayKey, now: Date): number {
+  const current = toDayKey(now);
+  if (day < current) return 1;
+  if (day > current) return 0;
+  return (now.getHours() * 60 + now.getMinutes()) / (24 * 60);
+}
+
+/**
+ * Net calories for a day: eaten − body burn so far − logged exercise.
+ * Body burn accrues evenly through the day (e.g. at noon, half of the daily burn).
+ */
+export function netCalories(data: RoutineData, day: DayKey, now: Date): { eaten: number; exercise: number; bodyBurn: number; net: number } {
   let eaten = 0;
-  let burned = 0;
+  let exercise = 0;
   for (const c of data.calories) {
     if (c.date !== day) continue;
     if (c.kind === "eaten") eaten += c.kcal;
-    else burned += c.kcal;
+    else exercise += c.kcal;
   }
-  return { eaten, burned, net: eaten - burned };
+  const dailyBurn = data.prefs.dailyBurn ?? DEFAULT_DAILY_BURN;
+  const bodyBurn = Math.round(dailyBurn * dayFraction(day, now));
+  return { eaten, exercise, bodyBurn, net: eaten - bodyBurn - exercise };
 }
 
 export function formatKcal(kcal: number): string {
