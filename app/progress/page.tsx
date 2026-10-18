@@ -14,6 +14,10 @@ export default function ProgressPage() {
     <>
       <PageHeader title="Progress">Your streaks, weeks, and FE study over time.</PageHeader>
       <Card className="flex flex-col gap-4">
+        <CardHeading title="Calorie trend" href="/calories" />
+        <CalorieTrend />
+      </Card>
+      <Card className="flex flex-col gap-4">
         <CardHeading title="Streaks" />
         <StreakBoard />
       </Card>
@@ -26,10 +30,6 @@ export default function ProgressPage() {
         <StudyTotal />
         <StudyCalendar />
         <TopicTotals />
-      </Card>
-      <Card className="flex flex-col gap-4">
-        <CardHeading title="Calorie trend" href="/calories" />
-        <CalorieTrend />
       </Card>
       <Card className="flex flex-col gap-4">
         <CardHeading title="Backup" />
