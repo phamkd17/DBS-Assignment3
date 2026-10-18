@@ -206,6 +206,29 @@ export function clearHistory(): () => void {
   return () => updateData((data) => ({ ...data, stretches, study, calories, lastVisit }));
 }
 
+/**
+ * Bring in a validated backup. "merge" adds entries whose ids aren't already here;
+ * "replace" swaps all entries (and takes the backup's settings). Returns an undo.
+ */
+export function importBackup(backup: Pick<RoutineData, "stretches" | "study" | "calories"> & { prefs: Prefs }, mode: "merge" | "replace"): { added: number; undo: () => void } {
+  const before = getSnapshot();
+  let added = 0;
+  updateData((data) => {
+    if (mode === "replace") {
+      added = backup.stretches.length + backup.study.length + backup.calories.length;
+      return { ...data, stretches: backup.stretches, study: backup.study, calories: backup.calories, prefs: { ...data.prefs, ...backup.prefs } };
+    }
+    const fresh = <T extends { id: string }>(current: T[], incoming: T[]) => {
+      const ids = new Set(current.map((e) => e.id));
+      const extra = incoming.filter((e) => !ids.has(e.id));
+      added += extra.length;
+      return [...current, ...extra];
+    };
+    return { ...data, stretches: fresh(data.stretches, backup.stretches), study: fresh(data.study, backup.study), calories: fresh(data.calories, backup.calories) };
+  });
+  return { added, undo: () => updateData(() => before) };
+}
+
 export function exportJson(): string {
   return JSON.stringify(getSnapshot(), null, 2);
 }
