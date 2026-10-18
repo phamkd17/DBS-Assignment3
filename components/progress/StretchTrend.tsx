@@ -11,7 +11,7 @@ const DAYS = 183;
 
 const SERIES: Series[] = [
   { key: "shoulder", label: "Shoulder", fill: "bg-ct-shoulder", side: "up" },
-  { key: "lower", label: "Lower body", fill: "bg-ct-lower", side: "up" },
+  { key: "lower", label: "Lower body", fill: "bg-ct-lower", pattern: "hatch-45", ink: "light", side: "up" },
 ];
 
 /** Stretch time per day for six months, one week visible: shoulder and lower body stacked. */

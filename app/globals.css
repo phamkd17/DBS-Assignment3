@@ -24,13 +24,14 @@
   --color-ct-chart: #c58147; /* single-series marks */
   --color-ct-heat-1: #6b4e24; /* Bronze day (ordinal ramp, then Silver, then Gold = accent) */
   --color-ct-heat-2: #a2772f; /* Silver day */
-  /* Calorie breakdown: 3 categorical slots, validated all-pairs (CVD + normal vision) on ct-surface */
-  --color-ct-consumed: #c98500;
-  --color-ct-resting: #9085e9;
-  --color-ct-active: #199e70;
-  /* Stretch regions: 2 categorical slots, validated all-pairs on ct-surface */
-  --color-ct-shoulder: #3987e5;
-  --color-ct-lower: #d55181;
+  /* Calorie breakdown in theme hues (saffron, claret, herb), stepped into the chart band and
+     validated on ct-surface for the stack's adjacent pairs; patterns are the second channel. */
+  --color-ct-consumed: #bd8526;
+  --color-ct-resting: #b44a5e;
+  --color-ct-active: #7f9a4e;
+  /* Stretch regions: saffron + claret, validated all-pairs on ct-surface */
+  --color-ct-shoulder: #bd8526;
+  --color-ct-lower: #b44a5e;
   --shadow-ct-glow: 0 18px 40px -18px rgb(227 167 60 / 0.35), 0 0 0 1px rgb(140 114 89 / 0.35);
   --shadow-ct-glow-strong: 0 0 0 1px rgb(227 167 60 / 0.6), 0 0 28px 2px rgb(227 167 60 / 0.35);
   --shadow-ct-press: inset 0 2px 6px rgb(0 0 0 / 0.35);
@@ -56,4 +57,13 @@ body {
 }
 .ct-no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Chart patterns: a second channel besides color, so series read apart without relying on hue.
+   Tone-on-tone stripes at 45° and 135° only (never horizontal or vertical, which read as grid). */
+.ct-hatch-45 {
+  background-image: repeating-linear-gradient(45deg, rgb(30 21 16 / 0.4) 0 2px, transparent 2px 6px);
+}
+.ct-hatch-135 {
+  background-image: repeating-linear-gradient(135deg, rgb(30 21 16 / 0.4) 0 2px, transparent 2px 6px);
 }
