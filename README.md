@@ -4,7 +4,8 @@ A daily tracker for one person's routine: **shoulder and lower-body stretching**
 
 Built for *Design, Build, Ship* (MPCS 51238), Assignment 3: Patterns & Flows.
 
-- **Live:** _TBD (Vercel URL)_
+- **Live:** https://dbs-assignment3-zeta.vercel.app
+- **Code:** https://github.com/phamkd17/DBS-Assignment3
 - **Stack:** Next.js, Tailwind CSS, localStorage. No database, accounts, or APIs.
 
 ## Who it's for and why you come back
