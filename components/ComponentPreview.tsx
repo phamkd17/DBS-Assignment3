@@ -8,7 +8,7 @@ import { CalorieLogger } from "./CalorieLogger";
 import { NetCalories } from "./NetCalories";
 import { StretchLogger } from "./StretchLogger";
 import { StudyLogger } from "./StudyLogger";
-import { StudyToday } from "./StudyToday";
+import { StudyMinutesToday } from "./StudyMinutesToday";
 import { WeekProgress } from "./WeekProgress";
 import { useRoutineData } from "@/lib/storage";
 
@@ -32,8 +32,10 @@ export function ComponentPreview() {
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="font-ct-serif text-2xl italic">FE study</h2>
-        <StudyToday />
+        <h2 className="font-ct-serif text-2xl italic">
+          FE study
+          <StudyMinutesToday />
+        </h2>
         <StudyLogger />
       </Card>
 
