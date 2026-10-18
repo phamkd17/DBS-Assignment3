@@ -33,6 +33,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Dropdowns use `Listbox` (themed ARIA listbox), not native `<select>`, whose menu the OS draws in its own colors. On phones it opens as a full-screen picker (title + ✕); on wider screens as a dropdown.
 - Forms: one column, a real `<label>` on every field, errors next to the field that say what to do next (e.g., "Enter calories as a whole number, like 250."), keep what the person typed, and focus the first invalid field.
 - First visit (nothing saved) must offer one-tap useful actions, never an empty dead end or a tour.
+- Toasts appear at the top of the screen (never over the controls you just tapped), last 1 s, close on any tap outside, and pause while touched or focused.
 - Accessibility: everything works with a keyboard, focus is visible, and text contrast meets WCAG AA (4.5:1).
 - Simplicity: remove unnecessary steps, fields, and interactions.
 
