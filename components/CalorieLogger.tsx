@@ -15,7 +15,7 @@ import { formatKcal, netCalories } from "@/lib/streaks";
 type Kind = CalorieEntry["kind"];
 type Errors = { kcal?: string; day?: string };
 
-/** Quick Add: eaten or burned and a typed calorie number. Label and day are tucked behind a toggle. */
+/** Quick Add: eaten or burned and a typed calorie number. Custom (next to Type) adds a label or a past date. */
 export function CalorieLogger() {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
@@ -32,7 +32,7 @@ export function CalorieLogger() {
     // Allow "1,200".
     const typed = kcal.trim().replace(/,/g, "");
     const value = Number(typed);
-    // Label and day only apply while "Add label or date" is open; otherwise it's today, no label.
+    // Label and day only apply while Custom is open; otherwise it's today, no label.
     const chosenDay = resolveDay(more ? day : INITIAL_DAY);
     const entryLabel = more ? label.trim() : "";
     const next: Errors = {};
@@ -63,27 +63,27 @@ export function CalorieLogger() {
 
   return (
     <form noValidate onSubmit={submit} className="flex flex-col gap-5">
-      <ChoiceGroup
-        legend="Type"
-        name="kind"
-        value={kind}
-        onChange={setKind}
-        options={[
-          { value: "eaten", label: "Eaten" },
-          { value: "burned", label: "Burned" },
-        ]}
-      />
+      <div className="flex flex-wrap items-end gap-2">
+        <ChoiceGroup
+          legend="Type"
+          name="kind"
+          value={kind}
+          onChange={setKind}
+          options={[
+            { value: "eaten", label: "Eaten" },
+            { value: "burned", label: "Burned" },
+          ]}
+        />
+        <Chip aria-expanded={more} aria-controls="calorie-more" onClick={() => setMore(!more)}>
+          Custom <span aria-hidden="true">{more ? "▴" : "▾"}</span>
+        </Chip>
+      </div>
       <Field label="Calories" error={errors.kcal}>
         {(a11y) => (
           <Input {...a11y} name="kcal" inputMode="numeric" autoComplete="off" placeholder="250" value={kcal} onChange={(e) => setKcal(e.target.value)} className="max-w-40" />
         )}
       </Field>
 
-      <div>
-        <Chip aria-expanded={more} aria-controls="calorie-more" onClick={() => setMore(!more)}>
-          Add label or date <span aria-hidden="true">{more ? "▴" : "▾"}</span>
-        </Chip>
-      </div>
       {more && (
         <div id="calorie-more" className="flex flex-col gap-5">
           <Field label="Label (optional)" hint={kind === "eaten" ? "Like Oatmeal or Lunch." : "Like Run or Bike ride."}>
