@@ -9,7 +9,7 @@ import { useNow } from "@/lib/use-now";
 type Section = "stretch" | "study" | "calories";
 
 /** This Sun–Sat week's progress toward each weekly goal. `show` limits it to some sections. */
-export function WeekProgress({ show = ["stretch", "study", "calories"] }: { show?: Section[] }) {
+export function WeekProgress({ show = ["stretch", "study", "calories"], weekLine = true }: { show?: Section[]; weekLine?: boolean }) {
   const data = useRoutineData();
   const now = useNow();
   if (!data || !now) return <div className="h-48" aria-hidden="true" />;
@@ -20,8 +20,8 @@ export function WeekProgress({ show = ["stretch", "study", "calories"] }: { show
   const goalMinutes = STRETCH_WEEKLY_SECONDS / 60;
 
   return (
-    <div className="flex flex-col gap-4">
-      <p className="font-ct-sans text-sm text-ct-muted">Week of {formatDay(weekStart(day), { month: "short", day: "numeric" })} · resets Sunday</p>
+    <div className="flex flex-col gap-3">
+      {weekLine && <p className="font-ct-sans text-sm text-ct-muted">Week of {formatDay(weekStart(day), { month: "short", day: "numeric" })} · resets Sunday</p>}
       {show.includes("stretch") && (
         <>
           <ProgressBar label="Shoulder stretch" value={week.shoulderSeconds} max={STRETCH_WEEKLY_SECONDS} valueText={`${formatDuration(week.shoulderSeconds)} / ${goalMinutes} min`} />
@@ -32,7 +32,7 @@ export function WeekProgress({ show = ["stretch", "study", "calories"] }: { show
         <ProgressBar label="FE study" value={week.studyMinutes} max={STUDY_WEEKLY_MINUTES} valueText={`${week.studyMinutes} / ${STUDY_WEEKLY_MINUTES} min`} />
       )}
       {show.includes("calories") && (
-        <div className={`flex items-baseline justify-between gap-4 font-ct-sans text-sm ${show.length > 1 ? "border-t border-ct-hairline pt-4" : ""}`}>
+        <div className={`flex items-baseline justify-between gap-4 font-ct-sans text-sm ${show.length > 1 ? "border-t border-ct-hairline pt-3" : ""}`}>
           <span className="text-ct-linen">Calories (net)</span>
           <span className="text-ct-muted">
             {formatKcal(calories.net)} · avg {calories.averagePerDay.toLocaleString()}/day
