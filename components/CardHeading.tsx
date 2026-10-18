@@ -22,7 +22,8 @@ export function CardHeading({ title, href, action }: Props) {
             className={`rounded-md text-ct-caramel underline decoration-ct-caramel/60 decoration-1 underline-offset-4 transition-colors hover:text-ct-accent hover:decoration-ct-accent ${focusRing}`}
           >
             {title}
-            <span aria-hidden="true" className="ml-1 not-italic">
+            {/* inline-block keeps the link's underline from running under the › */}
+            <span aria-hidden="true" className="ml-1 inline-block not-italic">
               ›
             </span>
           </Link>
