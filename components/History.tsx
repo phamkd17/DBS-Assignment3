@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { Button } from "./ui/Button";
 import { useToast } from "./ui/Toast";
-import { addDays, formatDay, today, type DayKey } from "@/lib/dates";
+import { addDays, formatDay, toDayKey, today, type DayKey } from "@/lib/dates";
 import { removeEntry, restoreEntry, type RoutineData } from "@/lib/storage";
 
 const DAYS_PER_PAGE = 7;
@@ -28,6 +28,13 @@ function dayHeading(day: DayKey): string {
   if (day === now) return "Today";
   if (day === addDays(now, -1)) return "Yesterday";
   return formatDay(day);
+}
+
+/** When it was logged: a time, or "added Oct 17" if it was back-filled on a later day. */
+function loggedAt(day: DayKey, createdAt: number): string {
+  const created = new Date(createdAt);
+  if (toDayKey(created) !== day) return `added ${formatDay(toDayKey(created), { month: "short", day: "numeric" })}`;
+  return created.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
 }
 
 /** Every entry, newest first, grouped by day; 7 days with entries at a time. Delete has Undo. */
@@ -59,7 +66,10 @@ export function History<C extends Collection>({ collection, entries, label, amou
             <ul className="flex flex-col divide-y divide-ct-hairline">
               {dayEntries.map((e) => (
                 <li key={e.id} className="flex items-center justify-between gap-3 py-0.5 font-ct-sans text-[15px]">
-                  <span className="min-w-0 truncate text-ct-linen">{label(e)}</span>
+                  <span className="flex min-w-0 items-baseline gap-3">
+                    <span className="w-20 shrink-0 font-ct-sans text-xs text-ct-muted/70 tabular-nums">{loggedAt(day, e.createdAt)}</span>
+                    <span className="min-w-0 truncate text-ct-linen">{label(e)}</span>
+                  </span>
                   <span className="flex shrink-0 items-center gap-1">
                     <span className="text-ct-muted">{amount(e)}</span>
                     <Button
