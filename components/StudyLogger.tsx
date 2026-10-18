@@ -13,7 +13,7 @@ import { getData, savePrefs, useRoutineData } from "@/lib/storage";
 import { logStudy } from "@/lib/log-actions";
 
 /** One-tap amounts; each logs the selected topic for today. */
-const QUICK_MINUTES = [1, 5, 15, 30, 60];
+const QUICK_MINUTES = [1, 5, 10, 15, 30, 60];
 
 type Errors = {
   topic?: string;
