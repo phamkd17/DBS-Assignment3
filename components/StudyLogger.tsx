@@ -5,7 +5,8 @@ import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field, FieldError } from "./ui/Field";
-import { Input, Select } from "./ui/Input";
+import { Input } from "./ui/Input";
+import { Listbox } from "./ui/Listbox";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
 import { FE_TOPICS, isTopicId, topicName, type TopicId } from "@/lib/fe-topics";
@@ -66,7 +67,7 @@ export function StudyLogger({ customOpen = false }: Props) {
   function quickAdd(minutes: number) {
     if (!isTopicId(topic)) {
       setErrors({ topic: "Pick a topic first." });
-      formRef.current?.querySelector<HTMLSelectElement>("select")?.focus();
+      formRef.current?.querySelector<HTMLButtonElement>('button[name="topic"]')?.focus();
       return;
     }
     const tooMuch = overSubtract(topic, minutes, today());
@@ -90,7 +91,7 @@ export function StudyLogger({ customOpen = false }: Props) {
 
     if (next.topic || next.minutes || !isTopicId(topic) || "error" in chosenDay) {
       // Focus the first invalid field so keyboard and screen reader users land on it.
-      const selector = next.topic ? "select" : next.minutes ? 'input[name="custom-minutes"]' : 'button[data-day][tabindex="0"]';
+      const selector = next.topic ? 'button[name="topic"]' : next.minutes ? 'input[name="custom-minutes"]' : 'button[data-day][tabindex="0"]';
       event.currentTarget.querySelector<HTMLElement>(selector)?.focus();
       return;
     }
@@ -105,23 +106,17 @@ export function StudyLogger({ customOpen = false }: Props) {
     <form ref={formRef} noValidate onSubmit={submit} className="flex flex-col gap-5">
       <Field label="Topic" error={errors.topic}>
         {(a11y) => (
-          <Select
+          <Listbox
             {...a11y}
+            name="topic"
             value={topic}
-            onChange={(e) => {
-              setTopic(e.target.value);
+            placeholder="Pick a topic"
+            options={FE_TOPICS.map((t) => ({ value: t.id, label: t.name }))}
+            onChange={(next) => {
+              setTopic(next);
               setErrors((prev) => ({ ...prev, topic: undefined }));
             }}
-          >
-            <option value="" disabled>
-              Pick a topic
-            </option>
-            {FE_TOPICS.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </Select>
+          />
         )}
       </Field>
 
