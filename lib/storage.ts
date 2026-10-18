@@ -20,6 +20,8 @@ export type Prefs = {
   /** The FE study Subtract switch; stays as you left it. */
   studySubtract?: boolean;
   stretchRegion?: Region;
+  /** The Stretch Subtract switch; stays as you left it. */
+  stretchSubtract?: boolean;
   stretchAmount?: string;
   stretchUnit?: "seconds" | "minutes";
   calorieKind?: "eaten" | "burned";
