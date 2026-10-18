@@ -32,7 +32,9 @@ export function StudyLogger() {
   const topic = topicEdit ?? prefs?.studyTopic ?? "";
   const [open, setOpen] = useState(false);
   // When on, amounts take time off the selected topic for that day (stored as a negative entry).
-  const [subtract, setSubtract] = useState(false);
+  // Saved, so it stays as you left it until you switch it off.
+  const subtract = prefs?.studySubtract ?? false;
+  const setSubtract = (on: boolean) => savePrefs({ studySubtract: on });
   const [custom, setCustom] = useState("");
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});

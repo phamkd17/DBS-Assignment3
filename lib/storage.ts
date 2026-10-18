@@ -17,6 +17,8 @@ export type CalorieEntry = { id: string; date: DayKey; kind: "eaten" | "burned";
 /** Last choices in each form, so they open where you left off. Day always resets to Today. */
 export type Prefs = {
   studyTopic?: TopicId;
+  /** The FE study Subtract switch; stays as you left it. */
+  studySubtract?: boolean;
   stretchRegion?: Region;
   stretchAmount?: string;
   stretchUnit?: "seconds" | "minutes";
