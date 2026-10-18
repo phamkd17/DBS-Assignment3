@@ -116,7 +116,40 @@ Placeholder hints ("e.g. 250") started at 3.6:1 because I'd asked for them dimme
 
 ## First-run check (agent usability feedback)
 
-_TBD (Step 11)_
+On Oct 17, 2026, I gave a fresh agent (no knowledge of the project or code) the live URL and this goal: *"Log a shoulder stretch, 15 minutes of Statics, and a 650-calorie lunch. Then come back tomorrow and see if it remembers me."* It used a real browser at phone size (390×844), took screenshots at each step, faked "tomorrow" by shifting saved dates back a day, and did a quick keyboard pass.
+
+**First impression (agent's words):** "Warm and readable. 'Start here' with three one-tap buttons told me what to tap first. Nothing says what the app is for, though, and a first-timer sees '−14,139 kcal' this week before logging anything, which is alarming."
+
+**What worked**
+- One tap logged a stretch: "1-day shoulder streak!" with Undo.
+- Study: "Logged 15 min Statics · Bronze day · 1-day streak".
+- Form errors sit under the field, say what to do ("Enter calories as a whole number, like 250."), keep what was typed, and move focus there. "Pick a topic first." appears when a topic is missing.
+- Detail pages have a clear "‹ Today" back link and a History with Delete.
+- **Coming back:** "Yes, it remembered me." Welcome back listed exactly what to do today ("Stretch 30 s of shoulder to keep your 1-day streak…").
+- Focus is visible on every element, and Tab order is logical.
+
+**Friction and bugs it found**
+1. **Bug: focus hidden under the bottom nav.** Tabbing down the page, the focused button sat behind the fixed nav bar.
+2. **Bug (possible): taps landing on the nav.** On /calories, a button near the bottom could sit behind the nav.
+3. **Start here vanishes after the first tap**, so the other two "wins" are gone before you can tap them.
+4. **Welcome back has no action buttons.** It says what to do, but you still have to scroll to do it.
+5. **Body burn surprises new users.** 2,052 kcal/day is subtracted without asking, and the week counts days before you started (−14,139 kcal on day one).
+6. **"Custom ▾" in Calories reads like a calorie type**, not "more options" (label, date).
+7. **Progress opens with the calorie chart**; streaks are near the bottom.
+8. Bronze/Silver/Gold isn't explained on Today. Toasts can cover content under them.
+
+**Its top 5 recommendations:** (1) keep Start here until all three wins are done, (2) add one-tap buttons to Welcome back, (3) confirm body burn and count it only from the first day used, (4) add padding so the nav never covers focused or primary buttons, (5) rename "Custom ▾" in Calories and move Streaks up on Progress.
+
+**What I changed**
+- **Fixed both nav bugs (#1, #2):** the page now scrolls focused and tapped elements clear of the fixed bottom nav (and the sticky top nav on wider screens). Re-tested: 0 of 25 focused controls are covered.
+- **Body burn starts on your first calorie log (#5):** no burn is counted before you start tracking, so day one shows your real net instead of −14,139 kcal. The week total and average only count days since you started.
+- **Explained tiers on Today (#8):** the FE study card now says "Bronze 15 · Silver 30 · Gold 60".
+- **"Custom ▾" in Calories is now "More ▾" (#6),** so it reads as more options, not a calorie type.
+
+**What I kept, and why**
+- **Start here disappears after the first tap (#3).** Its job is to get you to log *something* right away. After that, the regular cards are right there.
+- **No buttons in Welcome back (#4).** It's a quick reminder, and the quick-log chips are one card below it.
+- **Progress opens with the calorie trend (#7).** That's the chart I check most; Streaks still has its own section.
 
 ## Run locally
 

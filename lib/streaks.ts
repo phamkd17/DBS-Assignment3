@@ -122,9 +122,15 @@ export function dayFraction(day: DayKey, now: Date): number {
   return (now.getHours() * 60 + now.getMinutes()) / (24 * 60);
 }
 
+/** The first day with any calorie entry, or null if none yet. */
+export function firstCalorieDay(data: RoutineData): DayKey | null {
+  return data.calories.reduce<DayKey | null>((min, c) => (min === null || c.date < min ? c.date : min), null);
+}
+
 /**
  * Net calories for a day: eaten − body burn so far − logged exercise.
- * Body burn accrues evenly through the day (e.g. at noon, half of the daily burn).
+ * Body burn accrues evenly through the day (e.g. at noon, half of the daily burn), starting
+ * from the first day with a calorie entry.
  */
 export function netCalories(data: RoutineData, day: DayKey, now: Date): { eaten: number; exercise: number; bodyBurn: number; net: number } {
   let eaten = 0;
@@ -134,21 +140,26 @@ export function netCalories(data: RoutineData, day: DayKey, now: Date): { eaten:
     if (c.kind === "eaten") eaten += c.kcal;
     else exercise += c.kcal;
   }
+  // Body burn counts only from the first day you logged calories, so days before you
+  // started tracking don't show a made-up deficit.
+  const started = firstCalorieDay(data);
   const dailyBurn = data.prefs.dailyBurn ?? DEFAULT_DAILY_BURN;
-  const bodyBurn = Math.round(dailyBurn * dayFraction(day, now));
+  const bodyBurn = started !== null && day >= started ? Math.round(dailyBurn * dayFraction(day, now)) : 0;
   return { eaten, exercise, bodyBurn, net: eaten - bodyBurn - exercise };
 }
 
-/** Net calories for the Sun–Sat week containing `now`, from Sunday through now. */
+/** Net calories for the Sun–Sat week containing `now`, counting only days since calorie tracking began. */
 export function weekCalories(data: RoutineData, now: Date): { net: number; days: number; averagePerDay: number } {
   const current = toDayKey(now);
+  const started = firstCalorieDay(data);
   let net = 0;
   let days = 0;
   for (let day = weekStart(current); day <= current; day = addDays(day, 1)) {
+    if (started === null || day < started) continue;
     net += netCalories(data, day, now).net;
     days += 1;
   }
-  return { net, days, averagePerDay: Math.round(net / days) };
+  return { net, days, averagePerDay: days ? Math.round(net / days) : 0 };
 }
 
 /** "45 min" or "2 h 15 min". */
