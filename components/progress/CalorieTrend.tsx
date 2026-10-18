@@ -11,8 +11,8 @@ const DAYS = 183;
 
 const SERIES: Series[] = [
   { key: "consumed", label: "Consumed", fill: "bg-ct-consumed", side: "up" },
-  { key: "resting", label: "Resting burn", fill: "bg-ct-resting", pattern: "hatch-45", side: "down" },
-  { key: "active", label: "Active burn", fill: "bg-ct-active", pattern: "hatch-135", ink: "light", side: "down" },
+  { key: "resting", label: "Resting burn", fill: "bg-ct-resting", side: "down" },
+  { key: "active", label: "Active burn", fill: "bg-ct-active", ink: "light", side: "down" },
 ];
 
 const compact = (v: number) => (Math.abs(v) >= 1000 ? `${(v / 1000).toLocaleString(undefined, { maximumFractionDigits: 1 })}K` : `${v}`);

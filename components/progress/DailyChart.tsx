@@ -17,8 +17,6 @@ export type Series = {
   label: string;
   /** Tailwind background class for the mark and its legend swatch. */
   fill: string;
-  /** Optional stripe pattern, a second channel besides color. */
-  pattern?: "hatch-45" | "hatch-135";
   /** Text color for labels drawn on this fill: dark ink or white, whichever clears 4.5:1 on it. */
   ink?: "dark" | "light";
   /** Above or below the zero line. Segments stack outward in this order. */
@@ -124,7 +122,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
       return (
         <div
           key={s.key}
-          className={`absolute inset-x-0 flex items-center justify-center ${s.fill} ${s.pattern ? `ct-${s.pattern}` : ""} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`}
+          className={`absolute inset-x-0 flex items-center justify-center ${s.fill} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`}
           style={style}
         >
           {fits && (
@@ -144,7 +142,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
       <ul className="flex flex-wrap gap-x-4 gap-y-1 font-ct-sans text-xs text-ct-linen" aria-label="Legend">
         {series.map((s) => (
           <li key={s.key} className="flex items-center gap-1.5">
-            <span aria-hidden="true" className={`size-3.5 rounded-sm ${s.fill} ${s.pattern ? `ct-${s.pattern}` : ""}`} />
+            <span aria-hidden="true" className={`size-3.5 rounded-sm ${s.fill}`} />
             {s.label}
           </li>
         ))}

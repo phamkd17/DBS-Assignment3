@@ -26,7 +26,7 @@
   --color-ct-heat-2: #a2772f; /* Silver day */
   /* Calorie breakdown, emphasis form: consumed (saffron) and active (red) are the hues that change;
      resting burn is a steady baseline, so it takes the palette's quiet taupe (3.6:1 on ct-surface).
-     Saffron/red validated all-pairs on ct-surface; stripes are the second channel. */
+     Saffron/red validated all-pairs on ct-surface. */
   --color-ct-consumed: #bd8526;
   --color-ct-resting: #8c7259;
   --color-ct-active: #c63d4a;
@@ -58,13 +58,4 @@ body {
 }
 .ct-no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-/* Chart patterns: a second channel besides color, so series read apart without relying on hue.
-   Tone-on-tone stripes at 45° and 135° only (never horizontal or vertical, which read as grid). */
-.ct-hatch-45 {
-  background-image: repeating-linear-gradient(45deg, rgb(30 21 16 / 0.4) 0 2px, transparent 2px 6px);
-}
-.ct-hatch-135 {
-  background-image: repeating-linear-gradient(135deg, rgb(30 21 16 / 0.4) 0 2px, transparent 2px 6px);
 }
