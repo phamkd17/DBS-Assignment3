@@ -71,6 +71,11 @@ export function AmountPicker({ legend, name, presets, customLabel, customHint, v
               className={`${radioPill} ${error && !isCustom ? "border-ct-error" : ""}`}
             >
               {option.label}
+              {option.choice === "custom" && (
+                <span aria-hidden="true" className="ml-1.5">
+                  {isCustom ? "▴" : "▾"}
+                </span>
+              )}
             </span>
           </label>
         ))}
