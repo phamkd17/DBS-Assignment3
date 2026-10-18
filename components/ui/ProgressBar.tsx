@@ -26,7 +26,7 @@ export function ProgressBar({ label, value, max, valueText }: Props) {
         aria-valuemax={max}
         aria-valuenow={Math.min(value, max)}
         aria-valuetext={valueText}
-        className="h-2 overflow-hidden rounded-full bg-ct-raised"
+        className="h-1.5 overflow-hidden rounded-full bg-ct-raised sm:h-2"
       >
         <div
           className={`h-full rounded-full transition-[width] duration-500 ${complete ? "bg-ct-success" : "bg-ct-accent"}`}

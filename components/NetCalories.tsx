@@ -14,8 +14,11 @@ export function NetCalories() {
   const { eaten, exercise, bodyBurn, net } = netCalories(data, toDayKey(now), now);
   return (
     <div className="flex flex-col gap-0.5">
-      <p className="font-ct-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ct-muted">Net so far today</p>
-      <p className="font-ct-serif text-3xl leading-tight italic text-ct-text sm:text-5xl">{formatKcal(net)}</p>
+      {/* Phones: number and label share a line; wider screens stack them. */}
+      <div className="flex flex-row-reverse items-baseline justify-end gap-3 sm:flex-col sm:items-start sm:gap-0.5">
+        <p className="font-ct-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ct-muted">Net so far today</p>
+        <p className="font-ct-serif text-3xl leading-tight italic text-ct-text sm:text-5xl">{formatKcal(net)}</p>
+      </div>
       <p className="font-ct-sans text-xs text-ct-muted/70">
         {formatKcal(eaten)} eaten − {formatKcal(bodyBurn)} body burn − {formatKcal(exercise)} exercise
       </p>
