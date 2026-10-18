@@ -25,14 +25,16 @@
   --color-ct-heat-1: #6b4e24; /* Bronze day (ordinal ramp, then Silver, then Gold = accent) */
   --color-ct-heat-2: #a2772f; /* Silver day */
   /* Calorie breakdown, emphasis form: consumed (saffron) and active (red) are the hues that change;
-     resting burn is a steady baseline, so it takes the palette's quiet taupe (3.6:1 on ct-surface).
+     resting burn is a steady baseline, so it takes the palette's quiet taupe (3.6:1 on ct-surface)
+     with the checker pattern, since taupe vs red fails CVD on color alone.
      Saffron/red validated all-pairs on ct-surface. */
   --color-ct-consumed: #bd8526;
   --color-ct-resting: #8c7259;
   --color-ct-active: #c63d4a;
-  /* Stretch regions: saffron + claret, validated all-pairs on ct-surface */
+  /* Stretch regions: saffron + taupe. Taupe sits too close to warm hues for color alone,
+     so taupe segments always carry the checker pattern (.ct-checker). */
   --color-ct-shoulder: #bd8526;
-  --color-ct-lower: #b44a5e;
+  --color-ct-lower: #8c7259;
   --shadow-ct-glow: 0 18px 40px -18px rgb(227 167 60 / 0.35), 0 0 0 1px rgb(140 114 89 / 0.35);
   --shadow-ct-glow-strong: 0 0 0 1px rgb(227 167 60 / 0.6), 0 0 28px 2px rgb(227 167 60 / 0.35);
   --shadow-ct-press: inset 0 2px 6px rgb(0 0 0 / 0.35);
@@ -58,4 +60,11 @@ body {
 }
 .ct-no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Checker pattern: the second channel for taupe series, which can't rely on color alone next to
+   saffron or red. Small tone-on-tone squares so it reads as texture, not as gridlines. */
+.ct-checker {
+  background-image: repeating-conic-gradient(rgb(30 21 16 / 0.38) 0 25%, transparent 0 50%);
+  background-size: 6px 6px;
 }

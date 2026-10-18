@@ -11,7 +11,7 @@ const DAYS = 183;
 
 const SERIES: Series[] = [
   { key: "consumed", label: "Consumed", fill: "bg-ct-consumed", side: "up" },
-  { key: "resting", label: "Resting burn", fill: "bg-ct-resting", side: "down" },
+  { key: "resting", label: "Resting burn", fill: "bg-ct-resting", checker: true, side: "down" },
   { key: "active", label: "Active burn", fill: "bg-ct-active", ink: "light", side: "down" },
 ];
 
