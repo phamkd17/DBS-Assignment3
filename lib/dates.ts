@@ -1,4 +1,4 @@
-// Local-time day keys ("YYYY-MM-DD"). Weeks run Sunday–Saturday.
+// Local-time day keys ("YYYY-MM-DD"). Weeks run Monday–Sunday.
 
 export type DayKey = string;
 
@@ -24,10 +24,15 @@ export function addDays(key: DayKey, days: number): DayKey {
   return toDayKey(date);
 }
 
-/** The Sunday that starts the week containing `key`. */
+/** Position in a Monday-first week: Monday 0 … Sunday 6. */
+export function weekdayIndex(key: DayKey): number {
+  return (fromDayKey(key).getDay() + 6) % 7;
+}
+
+/** The Monday that starts the week containing `key`. */
 export function weekStart(key: DayKey): DayKey {
   const date = fromDayKey(key);
-  return addDays(key, -date.getDay());
+  return addDays(key, -((date.getDay() + 6) % 7));
 }
 
 export function formatDay(key: DayKey, options: Intl.DateTimeFormatOptions = { weekday: "short", month: "short", day: "numeric" }): string {

@@ -22,7 +22,7 @@ function Cell({ value, goal, text }: { value: number; goal: number; text: string
   );
 }
 
-/** The last 8 Sun–Sat weeks against each weekly goal: 10 min per stretch region, 420 min of FE study. */
+/** The last 8 Mon–Sun weeks against each weekly goal: 10 min per stretch region, 420 min of FE study. */
 export function WeeklyHistory() {
   const data = useRoutineData();
   if (!data) return <div className="h-80" aria-hidden="true" />;

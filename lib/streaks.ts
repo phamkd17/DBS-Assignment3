@@ -1,4 +1,4 @@
-// Pure streak math. A streak counts consecutive days (or Sun–Sat weeks) that met their
+// Pure streak math. A streak counts consecutive days (or Mon–Sun weeks) that met their
 // goal, ending today/this week if already met, otherwise ending yesterday/last week.
 // That way an unmet today is "at risk," not broken, until the day ends.
 
@@ -98,7 +98,7 @@ export function studyTier(minutes: number): (typeof STUDY_TIERS)[number]["label"
   return STUDY_TIERS.find((t) => minutes >= t.minutes)?.label ?? null;
 }
 
-/** Totals for the Sun–Sat week containing `day`. */
+/** Totals for the Mon–Sun week containing `day`. */
 export function weekTotals(data: RoutineData, day: DayKey): { shoulderSeconds: number; lowerSeconds: number; studyMinutes: number } {
   const start = weekStart(day);
   const end = addDays(start, 6);
@@ -148,7 +148,7 @@ export function netCalories(data: RoutineData, day: DayKey, now: Date): { eaten:
   return { eaten, exercise, bodyBurn, net: eaten - bodyBurn - exercise };
 }
 
-/** Net calories for the Sun–Sat week containing `now`, counting only days since calorie tracking began. */
+/** Net calories for the Mon–Sun week containing `now`, counting only days since calorie tracking began. */
 export function weekCalories(data: RoutineData, now: Date): { net: number; days: number; averagePerDay: number } {
   const current = toDayKey(now);
   const started = firstCalorieDay(data);

@@ -1,6 +1,6 @@
 "use client";
 
-import { addDays, formatDay, fromDayKey, toDayKey, weekStart, type DayKey } from "@/lib/dates";
+import { addDays, formatDay, fromDayKey, toDayKey, weekStart, weekdayIndex, type DayKey } from "@/lib/dates";
 import { useRoutineData } from "@/lib/storage";
 import { formatMinutes, studyMinutesByDay, studyTier } from "@/lib/streaks";
 import { useNow } from "@/lib/use-now";
@@ -26,15 +26,15 @@ const LEGEND = [
   { key: "Silver", label: "Silver 30" },
   { key: "Gold", label: "Gold 60" },
 ];
-const ROW_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
+const ROW_LABELS = ["M", "T", "W", "T", "F", "S", "S"];
 
-/** Last 12 Sun–Sat weeks of FE study, one cell per day, colored by that day's tier. */
+/** Last 12 Mon–Sun weeks of FE study, one cell per day, colored by that day's tier. */
 export function StudyCalendar() {
   const data = useRoutineData();
   const now = useNow();
   // Cells are in column order (week by week, Sun→Sat); left/right jump a week, up/down a day.
   // Only days up to today are marks, so the tab stop starts on (and arrows stop at) today.
-  const todayIndex = now ? (WEEKS - 1) * 7 + fromDayKey(toDayKey(now)).getDay() : DAYS - 1;
+  const todayIndex = now ? (WEEKS - 1) * 7 + weekdayIndex(toDayKey(now)) : DAYS - 1;
   const { shown, markProps } = useRoving(todayIndex + 1, (key) => ({ ArrowUp: -1, ArrowDown: 1, ArrowLeft: -7, ArrowRight: 7 })[key] ?? null);
   if (!data || !now) return <div className="h-52" aria-hidden="true" />;
 
@@ -66,7 +66,7 @@ export function StudyCalendar() {
         <div className="flex flex-col gap-1 pt-5 font-ct-sans text-[11px] text-ct-muted" aria-hidden="true">
           {ROW_LABELS.map((l, i) => (
             <span key={i} className="flex h-5 items-center">
-              {i % 2 === 1 ? l : ""}
+              {i % 2 === 0 && i < 6 ? l : ""}
             </span>
           ))}
         </div>

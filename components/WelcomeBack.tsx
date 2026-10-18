@@ -2,7 +2,7 @@
 
 import { Button } from "./ui/Button";
 import { Card } from "./ui/Card";
-import { fromDayKey, today } from "@/lib/dates";
+import { today , weekdayIndex } from "@/lib/dates";
 import { markVisited, useRoutineData } from "@/lib/storage";
 import { STRETCH_WEEKLY_SECONDS, STUDY_WEEKLY_MINUTES, dailyStretchStreak, formatDuration, studyStreak, weekTotals } from "@/lib/streaks";
 
@@ -27,7 +27,7 @@ export function WelcomeBack() {
   if (study.status === "at-risk") atRisk.push(`Study 15 min to keep your ${study.current}-day FE streak.`);
 
   const week = weekTotals(data, day);
-  const daysLeft = 7 - fromDayKey(day).getDay();
+  const daysLeft = 7 - weekdayIndex(day);
   const needs = [
     week.shoulderSeconds < STRETCH_WEEKLY_SECONDS ? `shoulder ${formatDuration(STRETCH_WEEKLY_SECONDS - week.shoulderSeconds)}` : null,
     week.lowerSeconds < STRETCH_WEEKLY_SECONDS ? `lower body ${formatDuration(STRETCH_WEEKLY_SECONDS - week.lowerSeconds)}` : null,

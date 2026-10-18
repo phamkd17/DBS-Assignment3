@@ -225,13 +225,13 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
                 })}
               </div>
 
-              {/* X axis: one label per day, centered under its column. Sundays show the date. */}
+              {/* X axis: one label per day, centered under its column. Mondays (week starts) show the date. */}
               <div aria-hidden="true" className="absolute inset-x-0 flex font-ct-sans text-[11px] text-ct-muted" style={{ top: PLOT_HEIGHT + 6 }}>
                 {rows.map((r, i) => (
                   <span key={r.day} className="shrink-0 text-center whitespace-nowrap" style={{ width: column }}>
                     {i === last
                       ? "Today"
-                      : fromDayKey(r.day).getDay() === 0
+                      : fromDayKey(r.day).getDay() === 1
                         ? formatDay(r.day, { month: "short", day: "numeric" })
                         : formatDay(r.day, { weekday: "short" })}
                   </span>

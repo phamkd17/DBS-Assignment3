@@ -24,7 +24,7 @@ export function TodayDashboard() {
       <WelcomeBack />
 
       <Card className="flex flex-col gap-2 sm:gap-3">
-        <CardHeading title="This week" href="/progress" action={<span className="font-ct-sans text-xs text-ct-muted/70">Resets Sunday</span>} />
+        <CardHeading title="This week" href="/progress" action={<span className="font-ct-sans text-xs text-ct-muted/70">Resets Monday</span>} />
         <WeekProgress weekLine={false} />
       </Card>
 

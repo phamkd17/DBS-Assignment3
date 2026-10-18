@@ -8,7 +8,7 @@ import { useNow } from "@/lib/use-now";
 
 type Section = "stretch" | "study" | "calories";
 
-/** This Sun–Sat week's progress toward each weekly goal. `show` limits it to some sections. */
+/** This Mon–Sun week's progress toward each weekly goal. `show` limits it to some sections. */
 export function WeekProgress({ show = ["stretch", "study", "calories"], weekLine = true }: { show?: Section[]; weekLine?: boolean }) {
   const data = useRoutineData();
   const now = useNow();
@@ -21,7 +21,7 @@ export function WeekProgress({ show = ["stretch", "study", "calories"], weekLine
 
   return (
     <div className="flex flex-col gap-2 sm:gap-3">
-      {weekLine && <p className="font-ct-sans text-sm text-ct-muted">Week of {formatDay(weekStart(day), { month: "short", day: "numeric" })} · resets Sunday</p>}
+      {weekLine && <p className="font-ct-sans text-sm text-ct-muted">Week of {formatDay(weekStart(day), { month: "short", day: "numeric" })} · resets Monday</p>}
       {show.includes("stretch") && (
         <>
           <ProgressBar label="Shoulder stretch" value={week.shoulderSeconds} max={STRETCH_WEEKLY_SECONDS} valueText={`${formatDuration(week.shoulderSeconds)} / ${goalMinutes} min`} />

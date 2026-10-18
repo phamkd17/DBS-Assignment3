@@ -18,8 +18,8 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Charts are plain SVG, with no chart library.
 
 ## Product rules
-- Weeks run **Sunday–Saturday** (local time). Dates are stored as local `YYYY-MM-DD`.
-- Stretch: each region (shoulder, lower body) has its own **daily streak** (≥30 s that day) and **weekly streak** (≥10 min in a Sun–Sat week). Missing a region resets only that region. Default log amount (quick-log chip + form prefill): shoulder 30 s, lower body 60 s.
+- Weeks run **Monday–Sunday** (local time). Dates are stored as local `YYYY-MM-DD`.
+- Stretch: each region (shoulder, lower body) has its own **daily streak** (≥30 s that day) and **weekly streak** (≥10 min in a Mon–Sun week). Missing a region resets only that region. Default log amount (quick-log chip + form prefill): shoulder 30 s, lower body 60 s.
 - Study: **daily streak** at ≥15 min. **Weekly goal 420 min** (60 × 7), shown as progress only, with no weekly study streak. Day tiers: 15 = Bronze, 30 = Silver, 60 = Gold (shown in the log toast, e.g. "Silver day"). Topics are the 14 NCEES FE Mechanical knowledge areas.
 - Calories: net = eaten − body burn so far − logged exercise. Body burn defaults to **2,052 kcal/day** (editable, `prefs.dailyBurn`) and accrues evenly through the day, starting from the first day with a calorie entry (no burn before that); past days count the full amount. Informational only: **no calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.

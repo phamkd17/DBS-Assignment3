@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { addDays, formatDay, fromDayKey, toDayKey, weekStart, type DayKey } from "@/lib/dates";
 import { focusRing } from "./styles";
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function monthStart(key: DayKey): DayKey {
   return `${key.slice(0, 7)}-01`;

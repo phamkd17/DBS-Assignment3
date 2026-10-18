@@ -14,9 +14,9 @@ It's built for me: I'm studying for the FE Mechanical exam and want to keep up a
 
 | Routine | Daily streak | Weekly streak |
 |---|---|---|
-| Shoulder stretch | ≥30 s that day | ≥10 min, Sun–Sat |
-| Lower-body stretch | ≥30 s that day | ≥10 min, Sun–Sat |
-| FE study | ≥15 min (15 Bronze · 30 Silver · 60 Gold) | Goal: 420 min, Sun–Sat (progress bar, no streak) |
+| Shoulder stretch | ≥30 s that day | ≥10 min, Mon–Sun |
+| Lower-body stretch | ≥30 s that day | ≥10 min, Mon–Sun |
+| FE study | ≥15 min (15 Bronze · 30 Silver · 60 Gold) | Goal: 420 min, Mon–Sun (progress bar, no streak) |
 | Calories | none: net total and trend only | n/a |
 
 **Why 10 minutes per week?** Ingram et al. (*Sports Medicine*, 2024; 189 studies) found that static-stretching flexibility gains plateau at about 4 min per session and about 10 min per week per muscle group. The daily 30-second streak builds the habit, and the weekly streak tracks the dose that actually matters.
