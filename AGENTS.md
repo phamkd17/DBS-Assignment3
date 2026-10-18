@@ -23,13 +23,13 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Study: **daily streak** at ≥15 min. **Weekly goal 420 min** (60 × 7), shown as progress only, with no weekly study streak. Day tiers: 15 = Bronze, 30 = Silver, 60 = Gold (shown in the log toast, e.g. "Silver day"). Topics are the 14 NCEES FE Mechanical knowledge areas.
 - Calories: net = eaten − body burn so far − logged exercise. Body burn defaults to **2,052 kcal/day** (editable, `prefs.dailyBurn`) and accrues evenly through the day; past days count the full amount. Informational only: **no calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.
-- Forms remember your last logged choices (study topic + minutes; custom stretch region, amount, unit; calorie Eaten/Burned) in `prefs`. The day always resets to Today.
-- Study and stretch: Day only appears after tapping Custom; presets log for today. Calories: typed number; Label and Day sit behind a "Custom" toggle in the Type row.
+- Forms remember your last logged choices (study topic; custom stretch region, amount, unit; calorie Eaten/Burned) in `prefs`. The day always resets to Today.
+- Study and stretch: quick-add chips log instantly for today; Day only appears under Custom. Calories: typed number; Label and Day sit behind a "Custom" toggle in the Type row.
 - Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → Calendar component in app colors, max = today). No future dates.
 
 ## Design rules
 - Each flow step is its own route: `/`, `/stretch`, `/study`, `/calories`, `/progress`, with a shared `Nav` (`aria-current="page"`).
-- Use shared components from `components/ui/` everywhere (Button, Field, Input, Select, Chip, ChoiceGroup, AmountPicker, DayPicker, Card, ProgressBar, Toast). Amounts (minutes, durations) use AmountPicker: preset pills plus a Custom pill that opens a manual entry field. Don't hand-roll one-off inputs or buttons.
+- Use shared components from `components/ui/` everywhere (Button, Field, Input, Select, Chip, ChoiceGroup, DayPicker, Calendar, Card, ProgressBar, Toast). Stretch and study use one-tap quick-add chips (+30 s, +60 s; +1/+5/+15/+30/+60 min) plus a "Custom ▾" chip that opens a typed amount and Day. Don't hand-roll one-off inputs or buttons.
 - Forms: one column, a real `<label>` on every field, errors next to the field that say what to do next (e.g., "Enter calories as a whole number, like 250."), keep what the person typed, and focus the first invalid field.
 - First visit (nothing saved) must offer one-tap useful actions, never an empty dead end or a tour.
 - Accessibility: everything works with a keyboard, focus is visible, and text contrast meets WCAG AA (4.5:1).

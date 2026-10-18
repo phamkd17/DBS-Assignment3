@@ -1,35 +1,31 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./ui/AmountPicker";
 import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field } from "./ui/Field";
-import { Select } from "./ui/Input";
+import { Input, Select } from "./ui/Input";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
 import { FE_TOPICS, isTopicId, topicName, type TopicId } from "@/lib/fe-topics";
 import { addEntry, getData, removeEntry, savePrefs, useRoutineData } from "@/lib/storage";
 import { studyMinutesByDay, studyStreak, studyTier } from "@/lib/streaks";
 
-const PRESETS = [
-  { value: 15, label: "15" },
-  { value: 30, label: "30" },
-  { value: 60, label: "60" },
-];
+/** One-tap amounts; each logs the selected topic for today. */
+const QUICK_MINUTES = [1, 5, 15, 30, 60];
 
 type Errors = { topic?: string; minutes?: string; day?: string };
 
-/** Log FE study time: topic, minutes (15 / 30 / 60 / Custom), and day. */
+/** FE study logging: pick a topic, then one tap logs it. Custom opens minutes + day. */
 export function StudyLogger() {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
-  // Edits made since the last log; until then the form shows your last saved choice.
+  // Until you pick a topic, the form shows the one you last logged.
   const [topicEdit, setTopic] = useState<string | null>(null);
-  const [minutesEdit, setMinutes] = useState<AmountValue | null>(null);
   const topic = topicEdit ?? prefs?.studyTopic ?? "";
-  const minutes = minutesEdit ?? prefs?.studyMinutes ?? EMPTY_AMOUNT;
+  const [open, setOpen] = useState(false);
+  const [custom, setCustom] = useState("");
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
   const formRef = useRef<HTMLFormElement>(null);
@@ -37,6 +33,8 @@ export function StudyLogger() {
   /** Save a session and confirm it with today's total, tier, and streak. */
   function log(topicId: TopicId, amount: number, date: DayKey) {
     const id = addEntry("study", { date, topic: topicId, minutes: amount });
+    savePrefs({ studyTopic: topicId });
+    setTopic(null);
     const dayTotal = studyMinutesByDay(getData()).get(date) ?? 0;
     const tier = studyTier(dayTotal);
     const streak = studyStreak(getData(), today());
@@ -50,43 +48,38 @@ export function StudyLogger() {
     toast(`Logged ${amount} min ${topicName(topicId)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`, () => removeEntry("study", id));
   }
 
-  /** "+1 min": logs one minute of the selected topic for today, no other choices needed. */
-  function quickAdd() {
+  function quickAdd(minutes: number) {
     if (!isTopicId(topic)) {
       setErrors({ topic: "Pick a topic first." });
       formRef.current?.querySelector<HTMLSelectElement>("select")?.focus();
       return;
     }
     setErrors({});
-    log(topic, 1, today());
-    savePrefs({ studyTopic: topic });
-    setTopic(null);
+    log(topic, minutes, today());
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const amount = resolveAmount(minutes);
-    // Day only applies in Custom; presets always log for today.
-    const chosenDay = resolveDay(minutes.choice === "custom" ? day : INITIAL_DAY);
+    const typed = custom.trim();
+    const amount = Number(typed);
+    const chosenDay = resolveDay(day);
     const next: Errors = {};
-    if (!isTopicId(topic)) next.topic = "Pick a topic.";
-    if (amount === null) next.minutes = "Pick how long you studied.";
-    else if (Number.isNaN(amount) || amount <= 0) next.minutes = "Enter minutes, like 45.";
+    if (!isTopicId(topic)) next.topic = "Pick a topic first.";
+    if (typed === "" || Number.isNaN(amount) || amount <= 0) next.minutes = "Enter minutes, like 45.";
     else if (amount > 600) next.minutes = "That's over 10 hours. Check the number.";
     if ("error" in chosenDay) next.day = chosenDay.error;
     setErrors(next);
 
-    if (next.topic || next.minutes || next.day || !isTopicId(topic) || amount === null || "error" in chosenDay) {
+    if (next.topic || next.minutes || !isTopicId(topic) || "error" in chosenDay) {
       // Focus the first invalid field so keyboard and screen reader users land on it.
-      const selector = next.topic ? "select" : next.minutes ? (minutes.choice === "custom" ? 'input[inputmode="decimal"]' : 'input[name="minutes"]') : 'button[data-day][tabindex="0"]';
+      const selector = next.topic ? "select" : next.minutes ? 'input[name="custom-minutes"]' : 'button[data-day][tabindex="0"]';
       event.currentTarget.querySelector<HTMLElement>(selector)?.focus();
       return;
     }
 
     log(topic, amount, chosenDay.day);
-    savePrefs({ studyTopic: topic, studyMinutes: minutes });
-    setTopic(null);
-    setMinutes(null);
+    setOpen(false);
+    setCustom("");
     setDay(INITIAL_DAY);
   }
 
@@ -94,7 +87,14 @@ export function StudyLogger() {
     <form ref={formRef} noValidate onSubmit={submit} className="flex flex-col gap-5">
       <Field label="Topic" error={errors.topic}>
         {(a11y) => (
-          <Select {...a11y} value={topic} onChange={(e) => setTopic(e.target.value)}>
+          <Select
+            {...a11y}
+            value={topic}
+            onChange={(e) => {
+              setTopic(e.target.value);
+              setErrors((prev) => ({ ...prev, topic: undefined }));
+            }}
+          >
             <option value="" disabled>
               Pick a topic
             </option>
@@ -106,25 +106,41 @@ export function StudyLogger() {
           </Select>
         )}
       </Field>
-      <AmountPicker
-        legend="Minutes"
-        name="minutes"
-        presets={PRESETS}
-        customLabel="Custom minutes"
-        customHint="Whole or decimal minutes, like 45 or 7.5."
-        value={minutes}
-        onChange={setMinutes}
-        error={errors.minutes}
-        extra={
-          <Chip onClick={quickAdd} aria-label="Quick add 1 minute">
-            +1 min
+
+      <div className="flex flex-wrap gap-2">
+        {QUICK_MINUTES.map((m) => (
+          <Chip key={m} onClick={() => quickAdd(m)}>
+            +{m} min
           </Chip>
-        }
-      />
-      {minutes.choice === "custom" && <DayPicker name="study-day" value={day} onChange={setDay} error={errors.day} />}
-      <div>
-        <Button type="submit">Log study</Button>
+        ))}
+        <Chip aria-expanded={open} aria-controls="study-custom" onClick={() => setOpen(!open)}>
+          Custom <span aria-hidden="true">{open ? "▴" : "▾"}</span>
+        </Chip>
       </div>
+
+      {open && (
+        <div id="study-custom" className="flex flex-col gap-5 rounded-xl border border-ct-hairline p-4">
+          <Field label="Custom minutes" hint="Whole or decimal minutes, like 45 or 7.5." error={errors.minutes}>
+            {(a11y) => (
+              <Input
+                {...a11y}
+                autoFocus
+                name="custom-minutes"
+                inputMode="decimal"
+                autoComplete="off"
+                placeholder="e.g. 45"
+                value={custom}
+                onChange={(e) => setCustom(e.target.value)}
+                className="max-w-40"
+              />
+            )}
+          </Field>
+          <DayPicker name="study-day" value={day} onChange={setDay} error={errors.day} />
+          <div>
+            <Button type="submit">Log study</Button>
+          </div>
+        </div>
+      )}
     </form>
   );
 }
