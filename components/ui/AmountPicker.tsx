@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { FieldError } from "./Field";
 import { Input } from "./Input";
 import { label as labelStyle, radioInput, radioPill } from "./styles";
@@ -31,10 +31,12 @@ type Props = {
   value: AmountValue;
   onChange: (value: AmountValue) => void;
   error?: string;
+  /** Extra controls shown at the end of the pill row (e.g. a quick-add chip). */
+  extra?: ReactNode;
 };
 
 /** Preset amounts as pills, plus a "Custom" pill that opens a manual entry field. */
-export function AmountPicker({ legend, name, presets, customLabel, customHint, value, onChange, error }: Props) {
+export function AmountPicker({ legend, name, presets, customLabel, customHint, value, onChange, error, extra }: Props) {
   const id = useId();
   const customRef = useRef<HTMLInputElement>(null);
   const errorId = `${id}-error`;
@@ -79,6 +81,7 @@ export function AmountPicker({ legend, name, presets, customLabel, customHint, v
             </span>
           </label>
         ))}
+        {extra}
       </div>
 
       {isCustom && (

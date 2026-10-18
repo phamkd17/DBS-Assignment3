@@ -5,7 +5,6 @@ import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./u
 import { Button } from "./ui/Button";
 import { Chip } from "./ui/Chip";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
-import { label as labelStyle } from "./ui/styles";
 import { Field } from "./ui/Field";
 import { Select } from "./ui/Input";
 import { useToast } from "./ui/Toast";
@@ -107,12 +106,6 @@ export function StudyLogger() {
           </Select>
         )}
       </Field>
-      <div className="flex flex-col gap-2">
-        <p className={labelStyle}>Quick add</p>
-        <div>
-          <Chip onClick={quickAdd}>+1 min</Chip>
-        </div>
-      </div>
       <AmountPicker
         legend="Minutes"
         name="minutes"
@@ -122,6 +115,11 @@ export function StudyLogger() {
         value={minutes}
         onChange={setMinutes}
         error={errors.minutes}
+        extra={
+          <Chip onClick={quickAdd} aria-label="Quick add 1 minute">
+            +1 min
+          </Chip>
+        }
       />
       {minutes.choice === "custom" && <DayPicker name="study-day" value={day} onChange={setDay} error={errors.day} />}
       <div>
