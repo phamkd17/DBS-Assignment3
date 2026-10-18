@@ -128,7 +128,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
           style={style}
         >
           {fits && (
-            <span aria-hidden="true" className={`rounded-sm px-0.5 font-ct-sans leading-none font-semibold tabular-nums ${s.ink === "light" ? "bg-ct-bg/75 text-ct-text" : `${s.fill} text-ct-bg`}`} style={{ fontSize: size }}>
+            <span aria-hidden="true" className={`font-ct-sans leading-none font-semibold ${s.ink === "light" ? "rounded-full bg-ct-raised/90 px-1 py-px text-ct-text ring-1 ring-ct-border/60" : "text-ct-bg"}`} style={{ fontSize: size }}>
               {text}
             </span>
           )}
@@ -211,7 +211,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
                             // Above the dot for a positive value, below for a negative one; a surface pill keeps it legible over bars.
                             <span
                               aria-hidden="true"
-                              className={`absolute left-1/2 -translate-x-1/2 rounded-sm bg-ct-surface/90 px-1 font-ct-sans text-[10px] leading-tight font-semibold whitespace-nowrap text-ct-text tabular-nums ${r.dot >= 0 ? "-translate-y-full" : ""}`}
+                              className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-ct-raised/90 px-1.5 py-px font-ct-sans text-[10px] leading-tight font-semibold whitespace-nowrap text-ct-text ring-1 ring-ct-border/60 ${r.dot >= 0 ? "-translate-y-full" : ""}`}
                               style={{ top: r.dot >= 0 ? y(r.dot) - 6 : y(r.dot) + 6 }}
                             >
                               {dotText(r.dot)}
@@ -253,7 +253,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
                   {series.map((s) => (
                     <span key={s.key} className="flex items-center gap-2 text-xs">
                       <span aria-hidden="true" className={`h-0.5 w-3 rounded-full ${s.fill}`} />
-                      <span className="font-semibold tabular-nums">{format(tipRow.values[s.key] ?? 0)}</span>
+                      <span className="font-semibold">{format(tipRow.values[s.key] ?? 0)}</span>
                       <span>{s.label}</span>
                     </span>
                   ))}
