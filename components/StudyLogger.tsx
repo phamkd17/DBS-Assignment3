@@ -42,8 +42,6 @@ export function StudyLogger() {
   function log(topicId: TopicId, amount: number, date: DayKey) {
     const signed = subtract ? -amount : amount;
     const id = addEntry("study", { date, topic: topicId, minutes: signed });
-    // Subtract switches back off after one use, so the next tap adds as usual.
-    setSubtract(false);
     savePrefs({ studyTopic: topicId });
     setTopic(null);
     const dayTotal = studyMinutesByDay(getData()).get(date) ?? 0;
