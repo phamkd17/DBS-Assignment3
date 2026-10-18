@@ -128,7 +128,7 @@ export function StudyLogger({ customOpen = false }: Props) {
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-2">
           {QUICK_MINUTES.map((m) => (
-            <Chip key={m} onClick={() => quickAdd(m)} aria-label={`${subtract ? "Subtract" : "Add"} ${m} minute${m === 1 ? "" : "s"}`}>
+            <Chip key={m} onClick={() => quickAdd(m)}>
               {subtract ? "−" : "+"}
               {m} min
             </Chip>

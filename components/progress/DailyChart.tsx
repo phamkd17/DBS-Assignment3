@@ -187,6 +187,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
                     <div
                       key={r.day}
                       {...markProps(i)}
+                      role="img"
                       aria-label={label}
                       className="group relative h-full shrink-0 rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ct-accent"
                       style={{ width: column, scrollSnapAlign: i % VISIBLE_DAYS === last % VISIBLE_DAYS ? "end" : undefined }}
@@ -276,7 +277,7 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
         {tracked.length === 0 ? (
           <p className="mt-3 text-ct-muted">Nothing logged yet.</p>
         ) : (
-          <div className="mt-3 max-h-96 overflow-y-auto">
+          <div tabIndex={0} role="region" aria-label={`${groupLabel.split(".")[0]}, table`} className="mt-3 max-h-96 overflow-y-auto rounded-sm focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ct-accent">
             <table className="w-full text-left">
               <thead className="sticky top-0 bg-ct-surface">
                 <tr className="border-b border-ct-hairline text-[11px] uppercase tracking-[0.18em] text-ct-muted">

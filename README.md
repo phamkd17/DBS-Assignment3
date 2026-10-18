@@ -72,6 +72,47 @@ I sent three subagents to study how similar tools welcome someone new: the first
 
 Sources: [Duolingo blog: streak habit](https://blog.duolingo.com/how-duolingo-streak-builds-habit/) · [Duolingo blog: improving the streak](https://blog.duolingo.com/improving-the-streak/) · [Gummble: Duolingo onboarding](https://gummble.com/blog/duolingo-onboarding-flow-analysis) · [Appcues GoodUX: Duolingo](https://goodux.appcues.com/blog/duolingo-user-onboarding) · [RevenueCat: Lose It! onboarding length](https://www.revenuecat.com/blog/growth/why-your-onboarding-experience-might-be-too-short) · [Lose It! review](https://calorie-trackers.com/reviews/lose-it/) · [ScreensDesign: Bend flow](https://screensdesign.com/showcase/stretching-flexibility-bend) · [Pratt IxD: Bend critique](https://ixd.prattsi.org/2024/09/design-critique-bend/) · [Bustle: Bend review](https://www.bustle.com/wellness/bend-stretching-app-review-price-features-subscriptions)
 
+## Accessibility check
+
+Checked with my agent on Oct 17, 2026, against WCAG 2.1 AA.
+
+**Automated scan (axe-core):** all 5 pages, both empty (first visit) and with 30 days of data, with every collapsible section open. The first run found 3 issues, all fixed; the final run is **0 violations on all 10 page states**.
+- Study quick-add chips had an accessible name ("Add 1 minute") that didn't match the visible text ("+1 min"). Removed the extra label.
+- Chart day columns used `aria-label` without a role. They now use `role="img"`.
+- "Show as table" scroll areas couldn't be reached by keyboard. They're now focusable, named regions.
+
+**Keyboard:** I tabbed through every page in a real browser. Every control is reachable in a logical order, and every stop shows a visible saffron focus ring.
+- "Skip to content" is the first stop.
+- Pill choices (Eaten/Burned, Region, Day) are native radio groups: one Tab stop, then arrow keys.
+- Each chart is one Tab stop: arrow keys move a day, Page Up/Down a week, and the tooltip shows on focus as well as hover.
+- The calendar date picker works with arrows, Home/End, and Page Up/Down.
+- Collapsible sections use native `<details>`.
+
+**Labels:** every input has a real `<label>`; pill groups use `<fieldset>` + `<legend>`. Errors are tied to their fields with `aria-describedby` and `aria-invalid`, and focus moves to the first invalid field.
+
+**Text contrast** (computed, including semi-transparent text blended onto its background):
+
+| Pair | Ratio | Needs |
+|---|---|---|
+| Body text (cream) on card | 14.1:1 | 4.5:1 |
+| Secondary text (linen) on card | 11.4:1 | 4.5:1 |
+| Hints / muted text on card | 8.4:1 | 4.5:1 |
+| Small muted 70% text (12px) | 4.8:1 | 4.5:1 |
+| Link (caramel) on card | 5.7:1 | 4.5:1 |
+| Error text (rose) on card | 6.4:1 | 4.5:1 |
+| Primary button (espresso on saffron) | 8.4:1 | 4.5:1 |
+| Selected pill (cream on claret) | 8.7:1 | 4.5:1 |
+| Chart label (dark ink on saffron) | 5.6:1 | 4.5:1 |
+| Input border vs card (UI) | 3.6:1 | 3:1 |
+| Focus ring vs page (UI) | 8.4:1 | 3:1 |
+| Placeholder example text (muted 60%) | 3.6:1 | 4.5:1, see note |
+
+Placeholder note: the "e.g. 250" hints were dimmed on purpose, so they read as examples, not values. Every field also has a visible label, so the placeholder never carries required information.
+
+**Charts:** colors were checked with a palette validator for colorblind (protan/deutan) and normal-vision separation on the dark card. Taupe can't be told apart by color alone, so taupe series always get a checker pattern. Every chart has a "Show as table" view, so no value depends on color or hover.
+
+**Also:** respects "reduce motion"; warns when the browser blocks storage (private mode), so entries aren't silently lost.
+
 ## First-run check (agent usability feedback)
 
 _TBD (Step 11)_

@@ -82,6 +82,7 @@ export function StudyCalendar() {
                 <div
                   key={d}
                   {...markProps(i)}
+                  role="img"
                   aria-label={describe(d)}
                   className={`relative size-5 rounded outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-ct-text hover:ring-2 hover:ring-ct-linen/60 ${TIER_FILL[tierOn(d)]} ${d === today ? "ring-1 ring-ct-linen" : ""}`}
                 >
