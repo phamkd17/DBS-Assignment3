@@ -32,11 +32,12 @@ export function StretchTrend() {
 
   return (
     <DailyChart
-      caption="Stretch time per day, one week at a time: shoulder and lower body stacked. Scroll left to go back up to 6 months."
+      caption="Stretch time per day, one week at a time: shoulder and lower body stacked. Numbers inside the bars are seconds. Scroll left to go back up to 6 months."
       series={SERIES}
       rows={rows}
       format={(minutes) => formatDuration(Math.round(minutes * 60))}
       formatTick={(minutes) => `${minutes}m`}
+      segmentLabel={(minutes) => `${Math.round(minutes * 60)}`}
       groupLabel="Stretch time by day. Use arrow keys to move between days, Page Up and Page Down to jump a week."
     />
   );

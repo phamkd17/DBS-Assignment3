@@ -40,6 +40,8 @@ type Props = {
   format: (value: number) => string;
   /** Format an axis tick, e.g. "1K" or "2 min". */
   formatTick: (value: number) => string;
+  /** Optional short label drawn inside a segment when it fits (e.g. seconds). */
+  segmentLabel?: (value: number) => string;
   /** Accessible name for the group of days. */
   groupLabel: string;
 };
@@ -57,7 +59,7 @@ function niceStep(range: number, ticks = 4): number {
  * below zero; an optional dot marks a per-day total. One tab stop: arrows move a day, Page Up /
  * Page Down a week. Tooltips show on hover and focus, and "Show as table" lists every tracked day.
  */
-export function DailyChart({ caption, series, rows, dotLabel, format, formatTick, groupLabel }: Props) {
+export function DailyChart({ caption, series, rows, dotLabel, format, formatTick, segmentLabel, groupLabel }: Props) {
   const scroller = useRef<HTMLDivElement>(null);
   const count = rows.length;
   const { shown, markProps } = useRoving(count, (key) => ({ ArrowLeft: -1, ArrowRight: 1, PageUp: -7, PageDown: 7, Home: -count, End: count })[key] ?? null);
@@ -109,7 +111,18 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
       const gap = i === 0 && side === "up" ? 0 : GAP;
       const style = side === "up" ? { top: zero - offset - h, height: Math.max(2, h - gap) } : { top: zero + offset + GAP, height: Math.max(2, h - GAP) };
       offset += h;
-      return <div key={s.key} className={`absolute inset-x-0 ${s.fill} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`} style={style} />;
+      const text = segmentLabel?.(r.values[s.key]);
+      // Only label inside when it fits with padding: ~5px per character + 6px, and 14px tall.
+      const fits = text !== undefined && style.height >= 14 && bar >= text.length * 5 + 6;
+      return (
+        <div key={s.key} className={`absolute inset-x-0 flex items-center justify-center ${s.fill} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`} style={style}>
+          {fits && (
+            <span aria-hidden="true" className="font-ct-sans text-[10px] leading-none font-semibold text-ct-bg tabular-nums">
+              {text}
+            </span>
+          )}
+        </div>
+      );
     });
   }
 
