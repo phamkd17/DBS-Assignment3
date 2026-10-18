@@ -25,8 +25,9 @@ type Props = {
 export function CalorieLogger({ customOpen = false }: Props) {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
-  const [kindEdit, setKind] = useState<Kind | null>(null);
-  const kind = kindEdit ?? prefs?.calorieKind ?? "eaten";
+  // Eaten / Burned is saved the moment you pick it, so it's remembered even if you don't log.
+  const kind = prefs?.calorieKind ?? "eaten";
+  const setKind = (next: Kind) => savePrefs({ calorieKind: next });
   const [kcal, setKcal] = useState("");
   const [more, setMore] = useState(customOpen);
   const [label, setLabel] = useState("");
@@ -54,7 +55,6 @@ export function CalorieLogger({ customOpen = false }: Props) {
 
     const date = chosenDay.day;
     const id = addEntry("calories", { date, kind, kcal: value, label: entryLabel });
-    savePrefs({ calorieKind: kind });
     const { net } = netCalories(getData(), date, new Date());
     const when = date === today() ? "today" : formatDay(date);
     const what = entryLabel ? ` ${entryLabel}` : "";
@@ -63,7 +63,6 @@ export function CalorieLogger({ customOpen = false }: Props) {
     setKcal("");
     setLabel("");
     setMore(customOpen);
-    setKind(null);
     setDay(INITIAL_DAY);
   }
 

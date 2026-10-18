@@ -31,9 +31,11 @@ type Props = {
 export function StudyLogger({ customOpen = false }: Props) {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
-  // Until you pick a topic, the form shows the one you last logged.
-  const [topicEdit, setTopic] = useState<string | null>(null);
-  const topic = topicEdit ?? prefs?.studyTopic ?? "";
+  // The topic is saved the moment you pick it, so it's remembered even if you don't log.
+  const topic = prefs?.studyTopic ?? "";
+  const setTopic = (next: string) => {
+    if (isTopicId(next)) savePrefs({ studyTopic: next });
+  };
   const [open, setOpen] = useState(customOpen);
   // When on, amounts take time off the selected topic for that day (stored as a negative entry).
   // Saved, so it stays as you left it until you switch it off.
@@ -46,8 +48,6 @@ export function StudyLogger({ customOpen = false }: Props) {
   /** Save a session and confirm it with today's total, tier, and streak. */
   function log(topicId: TopicId, amount: number, date: DayKey) {
     const { message, undo } = logStudy(topicId, amount, date, subtract);
-    savePrefs({ studyTopic: topicId });
-    setTopic(null);
     toast(message, undo);
   }
 

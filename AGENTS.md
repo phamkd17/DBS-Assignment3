@@ -23,7 +23,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Study: **daily streak** at ≥15 min. **Weekly goal 420 min** (60 × 7), shown as progress only, with no weekly study streak. Day tiers: 15 = Bronze, 30 = Silver, 60 = Gold (shown in the log toast, e.g. "Silver day"). Topics are the 14 NCEES FE Mechanical knowledge areas.
 - Calories: net = eaten − body burn so far − logged exercise. Body burn defaults to **2,052 kcal/day** (editable, `prefs.dailyBurn`) and accrues evenly through the day, starting from the first day with a calorie entry (no burn before that); past days count the full amount. Informational only: **no calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.
-- Forms remember your last logged choices (study topic; custom stretch region, amount, unit; calorie Eaten/Burned) in `prefs`. The day always resets to Today.
+- Forms remember choices in `prefs`: study topic and calorie Eaten/Burned are saved the moment you pick them; custom stretch region, amount, and unit are saved when you log. The day always resets to Today.
 - Study and stretch: quick-add chips log instantly for today; Day only appears under Custom. Calories: typed number with the Add button beside it (moves below when More is open); Label and Day sit behind a ▾ toggle (aria-label "More calorie options") in the Type row, whose "Type" legend is visually hidden (still announced).
 - Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → Calendar component in app colors, max = today). No future dates.
 
