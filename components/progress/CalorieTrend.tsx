@@ -133,7 +133,7 @@ export function CalorieTrend() {
           ))}
         </div>
 
-        <div ref={scroller} className="ct-scroll min-w-0 flex-1 snap-x snap-mandatory overflow-x-auto pb-3">
+        <div ref={scroller} className="ct-no-scrollbar min-w-0 flex-1 snap-x snap-mandatory overflow-x-auto">
           <div className="relative" style={{ width: count * column, height: PLOT_HEIGHT + 22 }}>
             {ticks.map((t) => (
               <div key={t} aria-hidden="true" className={`absolute inset-x-0 h-px ${t === 0 ? "bg-ct-border" : "bg-ct-hairline"}`} style={{ top: y(t) }} />
