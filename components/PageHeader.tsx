@@ -14,7 +14,7 @@ export function PageHeader({ title, action, subline, children }: Props) {
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-ct-serif text-3xl italic text-ct-text sm:text-4xl">{title}</h1>
+        <h1 className="font-ct-serif text-3xl leading-tight italic text-ct-text sm:text-4xl">{title}</h1>
         {action}
       </div>
       {subline && <div className="-mt-1.5">{subline}</div>}
