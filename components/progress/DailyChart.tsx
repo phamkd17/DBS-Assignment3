@@ -6,7 +6,7 @@ import { useRoving } from "@/lib/use-roving";
 
 /** Days visible at once; the rest is a scroll (or arrow key) away. */
 const VISIBLE_DAYS = 7;
-const PLOT_HEIGHT = 200;
+const PLOT_HEIGHT = 160;
 /** Bars cap at 24px wide; the rest of each column is air. */
 const MAX_BAR = 24;
 /** Surface gap between stacked segments. */
@@ -138,8 +138,8 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
   }
 
   return (
-    <figure className="flex flex-col gap-3">
-      <figcaption className="font-ct-sans text-sm text-ct-muted">{caption}</figcaption>
+    <figure className="flex flex-col gap-2 sm:gap-3">
+      <figcaption className="font-ct-sans text-xs text-ct-muted sm:text-sm">{caption}</figcaption>
 
       <ul className="flex flex-wrap gap-x-4 gap-y-1 font-ct-sans text-xs text-ct-linen" aria-label="Legend">
         {series.map((s) => (

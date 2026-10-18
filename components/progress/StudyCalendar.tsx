@@ -59,8 +59,8 @@ export function StudyCalendar() {
   const studied = cells.filter((d) => d <= today && minutesOn(d) > 0);
 
   return (
-    <figure className="flex flex-col gap-3">
-      <figcaption className="font-ct-sans text-sm text-ct-muted">Each square is a day: brighter means more FE study.</figcaption>
+    <figure className="flex flex-col gap-2 sm:gap-3">
+      <figcaption className="font-ct-sans text-xs text-ct-muted sm:text-sm">Each square is a day: brighter means more FE study.</figcaption>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1">
         <div className="flex flex-col gap-1 pt-5 font-ct-sans text-[11px] text-ct-muted" aria-hidden="true">

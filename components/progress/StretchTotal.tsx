@@ -25,7 +25,7 @@ export function StretchTotal() {
   const weeks = first ? Math.round((fromDayKey(weekStart(today())).getTime() - fromDayKey(weekStart(first)).getTime()) / (7 * 86_400_000)) + 1 : 1;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2.5 sm:gap-4">
       <ul className="flex flex-col divide-y divide-ct-hairline font-ct-sans">
         {REGIONS.map(({ region, label }) => {
           const entries = data.stretches.filter((s) => s.region === region);
@@ -34,7 +34,7 @@ export function StretchTotal() {
           const perWeek = Math.round(seconds / weeks);
           const onPace = perWeek >= STRETCH_WEEKLY_SECONDS;
           return (
-            <li key={region} className="flex flex-col gap-0.5 py-2.5">
+            <li key={region} className="flex flex-col gap-0.5 py-1.5 sm:py-2.5">
               <div className="flex items-baseline justify-between gap-3">
                 <span className="text-[15px] text-ct-linen">{label}</span>
                 <span className="text-[15px] font-semibold text-ct-text">{formatTotal(seconds)}</span>

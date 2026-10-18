@@ -171,6 +171,22 @@ export function formatMinutes(minutes: number): string {
   return m === 0 ? `${h} h` : `${h} h ${m} min`;
 }
 
+/** Compact durations for tight table cells: "45s", "10m 30s", "4h 28m". */
+export function formatCompactSeconds(seconds: number): string {
+  if (seconds < 60) return `${Math.round(seconds)}s`;
+  const m = Math.floor(seconds / 60);
+  const s = Math.round(seconds % 60);
+  return s ? `${m}m ${s}s` : `${m}m`;
+}
+
+export function formatCompactMinutes(minutes: number): string {
+  const total = Math.round(minutes);
+  if (total < 60) return `${total}m`;
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
+}
+
 export function formatKcal(kcal: number): string {
   return `${kcal.toLocaleString()} kcal`;
 }

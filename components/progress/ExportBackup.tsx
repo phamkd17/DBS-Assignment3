@@ -25,7 +25,7 @@ export function ExportBackup() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-3 sm:gap-5">
       <p className="font-ct-sans text-[15px] text-ct-linen">Your data lives only in this browser. Download a copy so clearing the browser doesn&apos;t erase your history.</p>
       <div>
         <Button variant="secondary" onClick={download}>
@@ -33,7 +33,7 @@ export function ExportBackup() {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-ct-hairline pt-5">
+      <div className="flex flex-col gap-3 border-t border-ct-hairline pt-3 sm:pt-5">
         {!confirming ? (
           <div>
             <Button ref={clearRef} variant="danger" disabled={count === 0} onClick={() => setConfirming(true)}>
