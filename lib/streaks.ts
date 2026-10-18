@@ -139,6 +139,18 @@ export function netCalories(data: RoutineData, day: DayKey, now: Date): { eaten:
   return { eaten, exercise, bodyBurn, net: eaten - bodyBurn - exercise };
 }
 
+/** Net calories for the Sun–Sat week containing `now`, from Sunday through now. */
+export function weekCalories(data: RoutineData, now: Date): { net: number; days: number; averagePerDay: number } {
+  const current = toDayKey(now);
+  let net = 0;
+  let days = 0;
+  for (let day = weekStart(current); day <= current; day = addDays(day, 1)) {
+    net += netCalories(data, day, now).net;
+    days += 1;
+  }
+  return { net, days, averagePerDay: Math.round(net / days) };
+}
+
 export function formatKcal(kcal: number): string {
   return `${kcal.toLocaleString()} kcal`;
 }
