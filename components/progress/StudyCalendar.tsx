@@ -20,11 +20,11 @@ const TIER_FILL: Record<string, string> = {
   Gold: "bg-ct-accent",
 };
 const LEGEND = [
-  { key: "none", label: "Under 5" },
+  { key: "none", label: "<5" },
   { key: "started", label: "5–14" },
-  { key: "Bronze", label: "Bronze 15+" },
-  { key: "Silver", label: "Silver 30+" },
-  { key: "Gold", label: "Gold 60+" },
+  { key: "Bronze", label: "Bronze 15" },
+  { key: "Silver", label: "Silver 30" },
+  { key: "Gold", label: "Gold 60" },
 ];
 const ROW_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
@@ -109,10 +109,10 @@ export function StudyCalendar() {
         </div>
       </div>
 
-      <ul className="flex flex-wrap gap-x-4 gap-y-1 font-ct-sans text-xs text-ct-muted" aria-label="Legend">
+      <ul className="flex flex-nowrap items-center gap-x-2.5 font-ct-sans text-[11px] whitespace-nowrap text-ct-muted" aria-label="Legend, minutes per day">
         {LEGEND.map((l) => (
-          <li key={l.key} className="flex items-center gap-1.5">
-            <span aria-hidden="true" className={`size-3 rounded-sm ${TIER_FILL[l.key]}`} />
+          <li key={l.key} className="flex items-center gap-1">
+            <span aria-hidden="true" className={`size-3 shrink-0 rounded-sm ${TIER_FILL[l.key]}`} />
             {l.label}
           </li>
         ))}
