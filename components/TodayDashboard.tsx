@@ -5,6 +5,7 @@ import { CardHeading } from "./CardHeading";
 import { NetCalories } from "./NetCalories";
 import { StartCard } from "./StartCard";
 import { StretchLogger } from "./StretchLogger";
+import { StretchTimeToday } from "./StretchTimeToday";
 import { StudyLogger } from "./StudyLogger";
 import { StudyMinutesToday } from "./StudyMinutesToday";
 import { SubtractSwitch } from "./SubtractSwitch";
@@ -23,7 +24,7 @@ export function TodayDashboard() {
       <WelcomeBack />
 
       <Card className="flex flex-col gap-4">
-        <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} />
+        <CardHeading title="Stretch" href="/stretch" aside={<StretchTimeToday />} action={<SubtractSwitch pref="stretchSubtract" />} />
         <StretchLogger />
       </Card>
 
