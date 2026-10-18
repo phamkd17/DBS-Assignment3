@@ -141,6 +141,11 @@ export function savePrefs(prefs: Prefs): void {
   updateData((data) => ({ ...data, prefs: { ...data.prefs, ...prefs } }));
 }
 
+/** Put back a deleted entry exactly as it was (for Undo). */
+export function restoreEntry<C extends Collection>(collection: C, entry: RoutineData[C][number]): void {
+  updateData((data) => ({ ...data, [collection]: [...data[collection], entry] }));
+}
+
 export function removeEntry(collection: Collection, id: string): void {
   updateData((data) => ({ ...data, [collection]: data[collection].filter((e) => e.id !== id) }));
 }
