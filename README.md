@@ -105,9 +105,9 @@ Checked with my agent on Oct 17, 2026, against WCAG 2.1 AA.
 | Chart label (dark ink on saffron) | 5.6:1 | 4.5:1 |
 | Input border vs card (UI) | 3.6:1 | 3:1 |
 | Focus ring vs page (UI) | 8.4:1 | 3:1 |
-| Placeholder example text (muted 60%) | 3.6:1 | 4.5:1, see note |
+| Placeholder example text (muted 75%) | 4.8:1 | 4.5:1 |
 
-Placeholder note: the "e.g. 250" hints were dimmed on purpose, so they read as examples, not values. Every field also has a visible label, so the placeholder never carries required information.
+Placeholder hints ("e.g. 250") started at 3.6:1 because I'd asked for them dimmer. I raised them to 4.8:1 so they pass AA and still read lighter than typed text (12.3:1).
 
 **Charts:** colors were checked with a palette validator for colorblind (protan/deutan) and normal-vision separation on the dark card. Taupe can't be told apart by color alone, so taupe series always get a checker pattern. Every chart has a "Show as table" view, so no value depends on color or hover.
 

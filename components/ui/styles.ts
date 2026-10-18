@@ -25,7 +25,7 @@ export const radioPill =
 export const radioInput = "peer absolute inset-0 cursor-pointer opacity-0";
 
 export const control =
-  "h-11 w-full rounded-[10px] border bg-ct-raised px-4 font-ct-sans text-[15px] text-ct-text placeholder:text-ct-muted/60 transition-colors duration-200 border-ct-border hover:border-ct-linen aria-invalid:border-ct-error " +
+  "h-11 w-full rounded-[10px] border bg-ct-raised px-4 font-ct-sans text-[15px] text-ct-text placeholder:text-ct-muted/75 transition-colors duration-200 border-ct-border hover:border-ct-linen aria-invalid:border-ct-error " +
   focusRing;
 
 export const link = `rounded-sm font-ct-sans font-medium text-ct-caramel underline decoration-ct-caramel/50 underline-offset-4 transition-colors hover:text-ct-accent hover:decoration-ct-accent ${focusRing}`;
