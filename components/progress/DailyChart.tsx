@@ -42,6 +42,8 @@ type Props = {
   formatTick: (value: number) => string;
   /** Optional short label drawn inside a segment when it fits (e.g. seconds). */
   segmentLabel?: (value: number) => string;
+  /** Optional short label beside the dot (e.g. signed net calories). */
+  dotText?: (value: number) => string;
   /** Accessible name for the group of days. */
   groupLabel: string;
 };
@@ -59,7 +61,7 @@ function niceStep(range: number, ticks = 4): number {
  * below zero; an optional dot marks a per-day total. One tab stop: arrows move a day, Page Up /
  * Page Down a week. Tooltips show on hover and focus, and "Show as table" lists every tracked day.
  */
-export function DailyChart({ caption, series, rows, dotLabel, format, formatTick, segmentLabel, groupLabel }: Props) {
+export function DailyChart({ caption, series, rows, dotLabel, format, formatTick, segmentLabel, dotText, groupLabel }: Props) {
   const scroller = useRef<HTMLDivElement>(null);
   const count = rows.length;
   const { shown, markProps } = useRoving(count, (key) => ({ ArrowLeft: -1, ArrowRight: 1, PageUp: -7, PageDown: 7, Home: -count, End: count })[key] ?? null);
@@ -116,7 +118,11 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
       const size = text && text.length >= 4 ? 9 : 10;
       const fits = text !== undefined && style.height >= 14 && bar >= text.length * size * 0.56 + 3;
       return (
-        <div key={s.key} className={`absolute inset-x-0 flex items-center justify-center ${s.fill} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`} style={style}>
+        <div
+          key={s.key}
+          className={`absolute inset-x-0 flex items-center justify-center ${s.fill} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`}
+          style={style}
+        >
           {fits && (
             <span aria-hidden="true" className="font-ct-sans leading-none font-semibold text-ct-bg tabular-nums" style={{ fontSize: size }}>
               {text}
@@ -196,6 +202,16 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
                               className="absolute left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ct-text ring-2 ring-ct-surface"
                               style={{ top: y(r.dot) }}
                             />
+                          )}
+                          {r.dot !== undefined && dotText && (
+                            // Above the dot for a positive value, below for a negative one; a surface pill keeps it legible over bars.
+                            <span
+                              aria-hidden="true"
+                              className={`absolute left-1/2 -translate-x-1/2 rounded-sm bg-ct-surface/90 px-1 font-ct-sans text-[10px] leading-tight font-semibold whitespace-nowrap text-ct-text tabular-nums ${r.dot >= 0 ? "-translate-y-full" : ""}`}
+                              style={{ top: r.dot >= 0 ? y(r.dot) - 6 : y(r.dot) + 6 }}
+                            >
+                              {dotText(r.dot)}
+                            </span>
                           )}
                         </>
                       )}
