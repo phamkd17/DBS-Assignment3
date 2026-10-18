@@ -112,7 +112,21 @@ export function StudyLogger() {
 
   return (
     <form ref={formRef} noValidate onSubmit={submit} className="flex flex-col gap-5">
-      <Field label="Topic" error={errors.topic}>
+      <Field
+        label="Topic"
+        error={errors.topic}
+        labelAside={
+          <Switch
+            label="Subtract"
+            labelFirst
+            checked={subtract}
+            onChange={(on) => {
+              setSubtract(on);
+              setErrors({});
+            }}
+          />
+        }
+      >
         {(a11y) => (
           <Select
             {...a11y}
@@ -136,14 +150,6 @@ export function StudyLogger() {
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-2">
-          <Switch
-            label="Subtract"
-            checked={subtract}
-            onChange={(on) => {
-              setSubtract(on);
-              setErrors({});
-            }}
-          />
           {QUICK_MINUTES.map((m) => (
             <Chip key={m} onClick={() => quickAdd(m)} aria-label={`${subtract ? "Subtract" : "Add"} ${m} minute${m === 1 ? "" : "s"}`}>
               {subtract ? "−" : "+"}

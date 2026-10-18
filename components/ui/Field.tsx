@@ -14,11 +14,13 @@ type Props = {
   hint?: string;
   /** Says what to do next, e.g. "Enter minutes, like 15." Shown right under the control. */
   error?: string;
+  /** Extra control on the right of the label row (e.g. a Switch). */
+  labelAside?: ReactNode;
   children: (control: FieldControlProps) => ReactNode;
 };
 
 /** A labelled form field. The control is wired to its label, hint, and error for screen readers. */
-export function Field({ label, hint, error, children }: Props) {
+export function Field({ label, hint, error, labelAside, children }: Props) {
   const id = useId();
   const hintId = hint ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
@@ -26,9 +28,12 @@ export function Field({ label, hint, error, children }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className={labelStyle}>
-        {label}
-      </label>
+      <div className="flex items-center justify-between gap-4">
+        <label htmlFor={id} className={labelStyle}>
+          {label}
+        </label>
+        {labelAside}
+      </div>
       {hint && (
         <p id={hintId} className="font-ct-sans text-sm text-ct-muted">
           {hint}

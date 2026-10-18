@@ -4,18 +4,21 @@ type Props = {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  /** Put the text before the track instead of after it. */
+  labelFirst?: boolean;
 };
 
 /** A small on/off switch. The whole row (track + label) is one button with role="switch". */
-export function Switch({ label, checked, onChange }: Props) {
+export function Switch({ label, checked, onChange, labelFirst = false }: Props) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className={`group inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full pr-2 font-ct-sans text-sm font-medium text-ct-linen ${focusRing}`}
+      className={`group inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-2 font-ct-sans text-sm font-medium text-ct-linen ${focusRing}`}
     >
+      {labelFirst && label}
       <span
         aria-hidden="true"
         className={`relative inline-flex h-6 w-10 shrink-0 items-center rounded-full border transition-colors duration-200 ${
@@ -26,7 +29,7 @@ export function Switch({ label, checked, onChange }: Props) {
           className={`absolute size-4 rounded-full transition-[left,background-color] duration-200 ${checked ? "left-5 bg-ct-text" : "left-1 bg-ct-muted"}`}
         />
       </span>
-      {label}
+      {!labelFirst && label}
     </button>
   );
 }
