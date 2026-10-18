@@ -4,6 +4,7 @@ import { TopicTotals } from "@/components/TopicTotals";
 import { CalorieTrend } from "@/components/progress/CalorieTrend";
 import { ExportBackup } from "@/components/progress/ExportBackup";
 import { StreakBoard } from "@/components/progress/StreakBoard";
+import { StretchTotal } from "@/components/progress/StretchTotal";
 import { StudyCalendar } from "@/components/progress/StudyCalendar";
 import { StudyTotal } from "@/components/progress/StudyTotal";
 import { WeeklyHistory } from "@/components/progress/WeeklyHistory";
@@ -22,6 +23,10 @@ export default function ProgressPage() {
         <StudyTotal />
         <StudyCalendar />
         <TopicTotals />
+      </Card>
+      <Card className="flex flex-col gap-4">
+        <CardHeading title="Stretch" href="/stretch" />
+        <StretchTotal />
       </Card>
       <Card className="flex flex-col gap-4">
         <CardHeading title="Streaks" />
