@@ -25,23 +25,23 @@ flowchart LR
 
 ## 2. First visit: useful right away
 
-Nothing is saved yet. Instead of an empty screen or a tour, Today offers one-tap actions, and the first tap starts a streak.
+Nothing is saved yet. Instead of an empty screen or a tour, Today opens with a **Start here** card of three one-tap wins. The first tap starts a streak, and the card goes away.
 
 ```mermaid
 flowchart TD
   A[Open app] --> B{Anything in localStorage?}
-  B -- No --> C["Today: 'Track your stretching, FE study, and calories. Start with 30 seconds.'"]
+  B -- No --> C["Today + 'Start here' card:<br/>'Three small wins to begin.'"]
   B -- Yes --> R[[Return visit, flow 4]]
   B -- Storage unavailable --> X["Banner: 'Can't save on this device. Entries will be lost when you close the tab.'"]
   X --> C
   C --> D["+30 s Shoulder"]
   C --> E["+60 s Lower body"]
-  C --> F["+15 min FE study → pick a topic"]
-  D --> G["Toast: 'Logged 30 s shoulder · Undo'"]
+  C --> F["+15 min Statics"]
+  D --> G["Toast: '1-day shoulder streak!' · Undo"]
   E --> G
-  F --> H["/study with minutes = 15, topic focused"]
-  G --> I["Celebrate: '1-day shoulder streak!'"]
-  I --> J[Shows what's left today: other region, study]
+  F --> G
+  G --> H["Start card disappears"]
+  H --> I["Cards show streak lines:<br/>'Shoulder 1-day ✓ · Lower body no streak yet'"]
 ```
 
 ## 3. Main task: log an entry (form + errors)
@@ -73,16 +73,15 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  O[Open app on a later day] --> W["Today: 'Welcome back.'<br/>Yesterday's summary"]
-  W --> C{Each streak}
-  C -- Done yesterday, not today --> AR["At risk: 'Shoulder streak 6. Stretch 30 s to keep it.'"]
-  C -- Missed a full day --> BR["Broken: 'Lower body streak reset. Your best was 9. Start again today.'"]
-  C -- Done today --> OK[Checked off]
-  W --> WK["This week: shoulder 6/10 min · lower body 10/10 ✓"]
-  W --> MISS{Forgot to log a day?}
-  MISS -- Yes --> Y["Pick a date → calendar → log it → streak restored"]
-  AR --> Q[One-tap quick log]
-  BR --> Q
-  W --> PR["/progress: streaks (current + best), weekly history,<br/>minutes per FE topic, 14-day net calories"]
+  O[Open app on a later day] --> W{"History saved, nothing logged today,<br/>banner not dismissed?"}
+  W -- Yes --> WB["Welcome back."]
+  WB --> AR["At risk: 'Stretch 30 s of shoulder to keep your 6-day streak.'"]
+  WB --> WK["Weekly nudge: '3 days left this week: shoulder 4 min, FE study 180 min to go.'"]
+  WB --> GOT["Got it, or log anything → banner hides for today"]
+  W -- No --> CARDS
+  GOT --> CARDS["Cards: streak lines per routine<br/>'Shoulder 6-day ✓ · Lower body reset · best 9'"]
+  CARDS --> MISS{Forgot to log a day?}
+  MISS -- Yes --> Y["Custom → Pick a date → log it → streak restored"]
+  CARDS --> PR["This week › → /progress: streaks, weekly history,<br/>minutes per FE topic, calorie trend"]
   PR --> EX[Export backup .json]
 ```

@@ -140,6 +140,11 @@ export function addEntry<C extends Collection>(collection: C, entry: NewEntry<C>
   return id;
 }
 
+/** Remember that you've seen today's Welcome back. */
+export function markVisited(day: DayKey): void {
+  updateData((data) => ({ ...data, lastVisit: day }));
+}
+
 export function savePrefs(prefs: Prefs): void {
   updateData((data) => ({ ...data, prefs: { ...data.prefs, ...prefs } }));
 }

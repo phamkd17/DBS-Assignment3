@@ -9,10 +9,9 @@ import { Field, FieldError } from "./ui/Field";
 import { Input } from "./ui/Input";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
-import { addEntry, getData, removeEntry, savePrefs, useRoutineData, type Region } from "@/lib/storage";
-import { dailyStretchStreak, formatDuration } from "@/lib/streaks";
-
-const REGION_NAME: Record<Region, string> = { shoulder: "shoulder", lower: "lower body" };
+import { getData, savePrefs, useRoutineData, type Region } from "@/lib/storage";
+import { REGION_NAME, logStretch } from "@/lib/log-actions";
+import { formatDuration } from "@/lib/streaks";
 
 /** Default one-tap amounts: shoulder 30 s, lower body 60 s. */
 const QUICK: { region: Region; seconds: number; label: string }[] = [
@@ -63,17 +62,10 @@ export function StretchLogger({ customOpen = false }: Props) {
   }
 
   function log(r: Region, seconds: number, date: string) {
-    const id = addEntry("stretches", { date, region: r, seconds: subtract ? -seconds : seconds });
-    const streak = dailyStretchStreak(getData(), r, today());
-    const name = REGION_NAME[r];
-    const when = date === today() ? "" : ` for ${formatDay(date)}`;
-    const text = subtract
-      ? `Removed ${formatDuration(seconds)} ${name}${when}`
-      : streak.status === "done" && streak.current === 1 && streak.best === 1 && !when
-        ? `1-day ${name} streak!`
-        : `Logged ${formatDuration(seconds)} ${name}${when}${streak.status === "done" ? ` · ${streak.current}-day streak` : ""}`;
-    toast(text, () => removeEntry("stretches", id));
+    const { message, undo } = logStretch(r, seconds, date, subtract);
+    toast(message, undo);
   }
+
 
   function submit(event: FormEvent) {
     event.preventDefault();

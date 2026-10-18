@@ -9,8 +9,8 @@ import { Input, Select } from "./ui/Input";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
 import { FE_TOPICS, isTopicId, topicName, type TopicId } from "@/lib/fe-topics";
-import { addEntry, getData, removeEntry, savePrefs, useRoutineData } from "@/lib/storage";
-import { studyMinutesByDay, studyStreak, studyTier } from "@/lib/streaks";
+import { getData, savePrefs, useRoutineData } from "@/lib/storage";
+import { logStudy } from "@/lib/log-actions";
 
 /** One-tap amounts; each logs the selected topic for today. */
 const QUICK_MINUTES = [1, 5, 15, 30, 60];
@@ -45,24 +45,12 @@ export function StudyLogger({ customOpen = false }: Props) {
 
   /** Save a session and confirm it with today's total, tier, and streak. */
   function log(topicId: TopicId, amount: number, date: DayKey) {
-    const signed = subtract ? -amount : amount;
-    const id = addEntry("study", { date, topic: topicId, minutes: signed });
+    const { message, undo } = logStudy(topicId, amount, date, subtract);
     savePrefs({ studyTopic: topicId });
     setTopic(null);
-    const dayTotal = studyMinutesByDay(getData()).get(date) ?? 0;
-    const tier = studyTier(dayTotal);
-    const streak = studyStreak(getData(), today());
-    const isToday = date === today();
-    const when = isToday ? "" : ` for ${formatDay(date)}`;
-    const extras = [
-      isToday && (subtract || dayTotal !== amount) ? `${dayTotal} min today` : null,
-      tier && isToday ? `${tier} day` : null,
-      streak.status === "done" ? `${streak.current}-day streak` : null,
-    ].filter(Boolean);
-    toast(`${subtract ? "Removed" : "Logged"} ${amount} min ${topicName(topicId)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`, () =>
-      removeEntry("study", id),
-    );
+    toast(message, undo);
   }
+
 
   /** When subtracting, you can't take off more than that topic has on that day. */
   function overSubtract(topicId: TopicId, amount: number, date: DayKey): string | undefined {
