@@ -14,7 +14,7 @@ type Props = {
 export function CardHeading({ title, href, action }: Props) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <h2 className="font-ct-serif text-2xl italic text-ct-text">
+      <h2 className="font-ct-serif text-xl italic text-ct-text sm:text-2xl">
         {href ? (
           <Link href={href} className={`rounded-md decoration-ct-accent underline-offset-4 hover:underline ${focusRing}`}>
             {title}{" "}

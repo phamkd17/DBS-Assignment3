@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <ToastProvider>
           <Nav />
-          <main id="main" className="mx-auto flex max-w-2xl flex-col gap-3 px-4 pt-1 pb-32 sm:pt-8 sm:px-6 sm:pb-16">
+          <main id="main" className="mx-auto flex max-w-2xl flex-col gap-2 px-3 pt-1 pb-32 sm:gap-3 sm:px-6 sm:pt-8 sm:px-6 sm:pb-16">
             <StorageWarning />
             {children}
           </main>

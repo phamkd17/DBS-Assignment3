@@ -25,7 +25,7 @@ export function Field({ label, hint, error, children }: Props) {
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1 sm:gap-1.5">
       <label htmlFor={id} className={labelStyle}>
         {label}
       </label>

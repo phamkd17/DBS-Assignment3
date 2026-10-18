@@ -23,18 +23,18 @@ export function TodayDashboard() {
       <StartCard />
       <WelcomeBack />
 
-      <Card className="flex flex-col gap-3">
+      <Card className="flex flex-col gap-2 sm:gap-3">
         <CardHeading title="This week" href="/progress" action={<span className="font-ct-sans text-xs text-ct-muted/70">Resets Sunday</span>} />
         <WeekProgress weekLine={false} />
       </Card>
 
-      <Card className="flex flex-col gap-3">
+      <Card className="flex flex-col gap-2 sm:gap-3">
         <CardHeading title="Calories" href="/calories" />
         <NetCalories />
         <CalorieLogger />
       </Card>
 
-      <Card className="flex flex-col gap-3">
+      <Card className="flex flex-col gap-2 sm:gap-3">
         <div className="flex flex-col">
           <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} />
           <StretchTimeToday />
@@ -42,7 +42,7 @@ export function TodayDashboard() {
         <StretchLogger />
       </Card>
 
-      <Card className="flex flex-col gap-3">
+      <Card className="flex flex-col gap-2 sm:gap-3">
         <div className="flex flex-col">
           <CardHeading title="FE study" href="/study" action={<SubtractSwitch pref="studySubtract" />} />
           <StudyMinutesToday />

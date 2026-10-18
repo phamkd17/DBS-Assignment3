@@ -20,7 +20,7 @@ export function WeekProgress({ show = ["stretch", "study", "calories"], weekLine
   const goalMinutes = STRETCH_WEEKLY_SECONDS / 60;
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2 sm:gap-3">
       {weekLine && <p className="font-ct-sans text-sm text-ct-muted">Week of {formatDay(weekStart(day), { month: "short", day: "numeric" })} · resets Sunday</p>}
       {show.includes("stretch") && (
         <>
@@ -32,7 +32,7 @@ export function WeekProgress({ show = ["stretch", "study", "calories"], weekLine
         <ProgressBar label="FE study" value={week.studyMinutes} max={STUDY_WEEKLY_MINUTES} valueText={`${week.studyMinutes} / ${STUDY_WEEKLY_MINUTES} min`} />
       )}
       {show.includes("calories") && (
-        <div className={`flex items-baseline justify-between gap-4 font-ct-sans text-sm ${show.length > 1 ? "border-t border-ct-hairline pt-3" : ""}`}>
+        <div className={`flex items-baseline justify-between gap-4 font-ct-sans text-sm ${show.length > 1 ? "border-t border-ct-hairline pt-2 sm:pt-3" : ""}`}>
           <span className="text-ct-linen">Calories (net)</span>
           <span className="text-ct-muted">
             {formatKcal(calories.net)} · avg {calories.averagePerDay.toLocaleString()}/day

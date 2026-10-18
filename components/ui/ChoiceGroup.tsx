@@ -20,7 +20,7 @@ export function ChoiceGroup<T extends string>({ legend, name, options, value, on
   const errorId = useId();
   return (
     <fieldset className="flex flex-col gap-2" aria-describedby={error ? errorId : undefined}>
-      <legend className={`${labelStyle} mb-1.5`}>{legend}</legend>
+      <legend className={`${labelStyle} mb-1 sm:mb-1.5`}>{legend}</legend>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => (
           <label key={option.value} className="relative">

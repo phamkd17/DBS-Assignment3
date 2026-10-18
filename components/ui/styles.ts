@@ -31,4 +31,4 @@ export const control =
 
 export const link = `rounded-sm font-ct-sans font-medium text-ct-caramel underline decoration-ct-caramel/50 underline-offset-4 transition-colors hover:text-ct-accent hover:decoration-ct-accent ${focusRing}`;
 
-export const card = "rounded-xl bg-ct-surface p-4 shadow-ct-glow sm:p-5";
+export const card = "rounded-xl bg-ct-surface px-4 py-3 shadow-ct-glow sm:p-5";

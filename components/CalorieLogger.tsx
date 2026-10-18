@@ -68,7 +68,7 @@ export function CalorieLogger({ customOpen = false }: Props) {
   }
 
   return (
-    <form noValidate onSubmit={submit} className="flex flex-col gap-3.5">
+    <form noValidate onSubmit={submit} className="flex flex-col gap-2.5 sm:gap-3.5">
       <div className="flex flex-wrap items-end gap-2">
         <ChoiceGroup
           legend="Type"
