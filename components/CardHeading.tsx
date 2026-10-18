@@ -14,7 +14,7 @@ type Props = {
 export function CardHeading({ title, href, action }: Props) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <h2 className="font-ct-serif text-lg italic text-ct-text sm:text-2xl">
+      <h2 className="font-ct-serif text-2xl leading-tight italic text-ct-text sm:text-3xl">
         {href ? (
           // Always styled as a link (caramel + underline + ›) so it's clear the title opens a page.
           <Link
