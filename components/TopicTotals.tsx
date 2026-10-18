@@ -4,7 +4,10 @@ import { FE_TOPICS } from "@/lib/fe-topics";
 import { useRoutineData } from "@/lib/storage";
 import { formatMinutes } from "@/lib/streaks";
 
-/** All-time minutes per FE topic, in exam order. The least-studied topic(s) are flagged. */
+/**
+ * All-time minutes per FE topic, in exam order. Topics with no time say "Not started";
+ * among topics you've begun, the lowest is flagged "Least studied".
+ */
 export function TopicTotals() {
   const data = useRoutineData();
   if (!data) return <div className="h-96" aria-hidden="true" />;
@@ -13,19 +16,21 @@ export function TopicTotals() {
   for (const s of data.study) totals.set(s.topic, (totals.get(s.topic) ?? 0) + s.minutes);
   const values = FE_TOPICS.map((t) => Math.max(0, totals.get(t.id) ?? 0));
   const max = Math.max(...values, 1);
-  const least = Math.min(...values);
+  const started = values.filter((v) => v > 0);
+  const least = started.length > 1 ? Math.min(...started) : null;
 
   return (
     <ul className="flex flex-col gap-3">
       {FE_TOPICS.map((t, i) => {
         const minutes = values[i];
-        const isLeast = minutes === least;
+        const isLeast = least !== null && minutes === least;
         return (
           <li key={t.id} className="flex flex-col gap-1">
             <div className="flex items-baseline justify-between gap-3 font-ct-sans text-sm">
               <span className="text-ct-linen">
                 {t.name}
                 {isLeast && <span className="ml-2 text-xs font-semibold text-ct-accent">Least studied</span>}
+                {minutes === 0 && <span className="ml-2 text-xs text-ct-muted/70">Not started</span>}
               </span>
               <span className="shrink-0 text-ct-muted">{formatMinutes(minutes)}</span>
             </div>

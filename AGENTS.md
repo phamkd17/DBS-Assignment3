@@ -35,5 +35,10 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Accessibility: everything works with a keyboard, focus is visible, and text contrast meets WCAG AA (4.5:1).
 - Simplicity: remove unnecessary steps, fields, and interactions.
 
+## Progress page
+- Sections: Streaks (all 5, current + best + status), Weekly goals (last 8 weeks as a table with meters), FE study (all-time total, 12-week calendar heatmap Bronze/Silver/Gold, minutes per topic), Calorie trend (14-day net, one series above/below zero, no goal line), Backup (download .json).
+- Charts are plain HTML/CSS, no library. Follow the dataviz rules: chart colors are tokens validated with the palette checker (`ct-chart`, `ct-heat-1`, `ct-heat-2`, accent); one tab stop per chart with arrow-key navigation (`useRoving`); tooltips show on hover and focus; every chart has a "Show as table" view.
+- Tailwind 4: a focus outline needs `outline-solid` along with `outline-2`, or it won't draw.
+
 ## Workflow
 - Work in small steps; commit at each checkpoint and **push to origin right after every commit**. Run `npm run lint` and `npm run build` before each commit.
