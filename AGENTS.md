@@ -29,7 +29,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 
 ## Design rules
 - Each flow step is its own route: `/`, `/stretch`, `/study`, `/calories`, `/progress`, with a shared `Nav` (`aria-current="page"`).
-- Use shared components from `components/ui/` everywhere (Button, Field, Input, Select, Chip, ChoiceGroup, DayPicker, Calendar, Card, ProgressBar, Toast). Stretch and study use one-tap quick-add chips (+30 s, +60 s; +1/+5/+15/+30/+60 min) plus a "Custom ▾" chip that opens a typed amount and Day. Don't hand-roll one-off inputs or buttons.
+- Use shared components from `components/ui/` everywhere (Button, Field, Input, Select, Chip, ChoiceGroup, DayPicker, Calendar, Card, ProgressBar, Toast). Stretch and study use one-tap quick-add chips (+30 s, +60 s; +1/+5/+15/+30/+60 min) plus a "Custom ▾" chip that opens a typed amount and Day. Study also has a "− Subtract" toggle (negative entry, capped at that topic's time that day; turns off after one use). Don't hand-roll one-off inputs or buttons.
 - Forms: one column, a real `<label>` on every field, errors next to the field that say what to do next (e.g., "Enter calories as a whole number, like 250."), keep what the person typed, and focus the first invalid field.
 - First visit (nothing saved) must offer one-tap useful actions, never an empty dead end or a tour.
 - Accessibility: everything works with a keyboard, focus is visible, and text contrast meets WCAG AA (4.5:1).
