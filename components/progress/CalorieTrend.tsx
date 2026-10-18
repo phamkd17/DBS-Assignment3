@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addDays, formatDay, fromDayKey, toDayKey, type DayKey } from "@/lib/dates";
 import { useRoutineData } from "@/lib/storage";
 import { formatKcal, netCalories } from "@/lib/streaks";
@@ -10,9 +10,10 @@ import { useRoving } from "@/lib/use-roving";
 /** About six months of days. */
 const MAX_DAYS = 183;
 const PLOT_HEIGHT = 200;
-/** Column pitch: a bar up to 14px plus air, so ~14 days fit on a phone before scrolling. */
-const COLUMN = 22;
-const BAR = 14;
+/** Days visible at once; the rest of the six months is a scroll away. */
+const VISIBLE_DAYS = 7;
+/** Bars cap at 24px wide; the rest of each column is air. */
+const MAX_BAR = 24;
 /** Surface gap between stacked segments. */
 const GAP = 2;
 
@@ -65,10 +66,22 @@ export function CalorieTrend() {
                 : null,
   );
 
+  // Size columns so exactly one week fills the visible width, and keep it on resize.
+  const [column, setColumn] = useState(40);
+  const ready = now !== null && data !== null;
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => setColumn(Math.max(24, el.clientWidth / VISIBLE_DAYS)));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ready]);
+  const bar = Math.min(MAX_BAR, Math.round(column * 0.55));
+
   // Open scrolled to today.
   useEffect(() => {
     if (scroller.current) scroller.current.scrollLeft = scroller.current.scrollWidth;
-  }, [count]);
+  }, [count, column]);
 
   if (!data || !now) return <div style={{ height: PLOT_HEIGHT + 96 }} aria-hidden="true" />;
 
@@ -94,7 +107,7 @@ export function CalorieTrend() {
   return (
     <figure className="flex flex-col gap-3">
       <figcaption className="font-ct-sans text-sm text-ct-muted">
-        Calories per day: consumed above the line, burned below. Scroll left to go back up to 6 months. Today is so far.
+        Calories per day, one week at a time: consumed above the line, burned below. Scroll left to go back up to 6 months. Today is so far.
       </figcaption>
 
       <ul className="flex flex-wrap gap-x-4 gap-y-1 font-ct-sans text-xs text-ct-linen" aria-label="Legend">
@@ -120,8 +133,8 @@ export function CalorieTrend() {
           ))}
         </div>
 
-        <div ref={scroller} className="min-w-0 flex-1 overflow-x-auto pb-1">
-          <div className="relative" style={{ width: count * COLUMN, height: PLOT_HEIGHT + 22 }}>
+        <div ref={scroller} className="ct-scroll min-w-0 flex-1 snap-x snap-mandatory overflow-x-auto pb-3">
+          <div className="relative" style={{ width: count * column, height: PLOT_HEIGHT + 22 }}>
             {ticks.map((t) => (
               <div key={t} aria-hidden="true" className={`absolute inset-x-0 h-px ${t === 0 ? "bg-ct-border" : "bg-ct-hairline"}`} style={{ top: y(t) }} />
             ))}
@@ -144,13 +157,13 @@ export function CalorieTrend() {
                     {...markProps(i)}
                     aria-label={label}
                     className="group relative h-full shrink-0 rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ct-accent"
-                    style={{ width: COLUMN }}
+                    style={{ width: column, scrollSnapAlign: i % VISIBLE_DAYS === (count - 1) % VISIBLE_DAYS ? "end" : undefined }}
                   >
                     {r.tracked && (
                       <>
                         <div
                           className="absolute inset-y-0 left-1/2 -translate-x-1/2 transition-[filter] group-hover:brightness-125 group-focus-visible:brightness-125"
-                          style={{ width: BAR }}
+                          style={{ width: bar }}
                         >
                           {r.consumed > 0 && (
                             <div
@@ -213,19 +226,13 @@ export function CalorieTrend() {
               })}
             </div>
 
-            {/* X axis: each Sunday, plus today. */}
-            <div aria-hidden="true" className="absolute inset-x-0 font-ct-sans text-[11px] text-ct-muted" style={{ top: PLOT_HEIGHT + 6 }}>
-              {rows.map((r, i) =>
-                i === count - 1 ? (
-                  <span key={r.day} className="absolute right-0 whitespace-nowrap">
-                    Today
-                  </span>
-                ) : fromDayKey(r.day).getDay() === 0 && i < count - 3 ? (
-                  <span key={r.day} className="absolute whitespace-nowrap" style={{ left: i * COLUMN }}>
-                    {formatDay(r.day, { month: "short", day: "numeric" })}
-                  </span>
-                ) : null,
-              )}
+            {/* X axis: one label per day, centered under its column. Sundays show the date. */}
+            <div aria-hidden="true" className="absolute inset-x-0 flex font-ct-sans text-[11px] text-ct-muted" style={{ top: PLOT_HEIGHT + 6 }}>
+              {rows.map((r, i) => (
+                <span key={r.day} className="shrink-0 text-center whitespace-nowrap" style={{ width: column }}>
+                  {i === count - 1 ? "Today" : fromDayKey(r.day).getDay() === 0 ? formatDay(r.day, { month: "short", day: "numeric" }) : formatDay(r.day, { weekday: "short" })}
+                </span>
+              ))}
             </div>
           </div>
         </div>

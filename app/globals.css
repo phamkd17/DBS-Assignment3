@@ -46,3 +46,26 @@ body {
   background: var(--color-ct-bg);
   color: var(--color-ct-text);
 }
+
+/* Scrollbars in the Candlelit Table palette: thin tan thumb on a dark track. */
+.ct-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ct-border) var(--color-ct-raised);
+}
+.ct-scroll:hover {
+  scrollbar-color: var(--color-ct-linen) var(--color-ct-raised);
+}
+.ct-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.ct-scroll::-webkit-scrollbar-track {
+  background: var(--color-ct-raised);
+  border-radius: 9999px;
+}
+.ct-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-ct-border);
+  border-radius: 9999px;
+}
+.ct-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ct-linen);
+}
