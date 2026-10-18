@@ -16,19 +16,19 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const nextId = useRef(0);
 
-  // Shown at the top (away from what you tap), hidden after 1 s or as soon as you tap anywhere outside it. The timer pauses while the
+  // Shown at the top (away from what you tap), hidden after 2 s or as soon as you tap anywhere outside it. The timer pauses while the
   // pointer or keyboard focus is on the toast, so it can't vanish as you reach for Undo.
   const [paused, setPaused] = useState(false);
 
   const show = useCallback((text: string, onUndo?: () => void) => {
     nextId.current += 1;
-    setPaused(false); // every new toast starts its own 1 s
+    setPaused(false); // every new toast starts its own 2 s
     setToast({ id: nextId.current, text, onUndo });
   }, []);
   const toastRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!toast || paused) return;
-    const timer = window.setTimeout(() => setToast(null), 1000);
+    const timer = window.setTimeout(() => setToast(null), 2000);
     return () => window.clearTimeout(timer);
   }, [toast, paused]);
   useEffect(() => {
