@@ -13,7 +13,7 @@ export default function CaloriesPage() {
         <NetCalories />
       </Card>
       <Card>
-        <CalorieLogger />
+        <CalorieLogger customOpen />
       </Card>
     </>
   );

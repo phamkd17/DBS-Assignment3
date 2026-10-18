@@ -16,14 +16,19 @@ import { formatKcal, netCalories } from "@/lib/streaks";
 type Kind = CalorieEntry["kind"];
 type Errors = { kcal?: string; day?: string };
 
+type Props = {
+  /** Start with the Custom panel open and keep it open after logging (used on detail pages). */
+  customOpen?: boolean;
+};
+
 /** Quick Add: eaten or burned and a typed calorie number. Custom (next to Type) adds a label, a past date, and the body-burn setting. */
-export function CalorieLogger() {
+export function CalorieLogger({ customOpen = false }: Props) {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
   const [kindEdit, setKind] = useState<Kind | null>(null);
   const kind = kindEdit ?? prefs?.calorieKind ?? "eaten";
   const [kcal, setKcal] = useState("");
-  const [more, setMore] = useState(false);
+  const [more, setMore] = useState(customOpen);
   const [label, setLabel] = useState("");
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
@@ -57,7 +62,7 @@ export function CalorieLogger() {
 
     setKcal("");
     setLabel("");
-    setMore(false);
+    setMore(customOpen);
     setKind(null);
     setDay(INITIAL_DAY);
   }

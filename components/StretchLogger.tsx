@@ -22,10 +22,15 @@ const QUICK: { region: Region; seconds: number; label: string }[] = [
 
 type Errors = { region?: string; duration?: string; day?: string; quick?: string };
 
+type Props = {
+  /** Start with the Custom panel open and keep it open after logging (used on detail pages). */
+  customOpen?: boolean;
+};
+
 /** One-tap stretch logging, plus a Custom panel for a different region, duration, or day. */
-export function StretchLogger() {
+export function StretchLogger({ customOpen = false }: Props) {
   const toast = useToast();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(customOpen);
   const prefs = useRoutineData()?.prefs;
   // Edits made since the last custom log; until then the panel shows your last saved choice.
   const [regionEdit, setRegion] = useState<Region | null>(null);
@@ -95,7 +100,7 @@ export function StretchLogger() {
 
     log(region!, Math.round(seconds), (chosenDay as { day: string }).day);
     savePrefs({ stretchRegion: region!, stretchAmount: amount, stretchUnit: unit });
-    setOpen(false);
+    setOpen(customOpen);
     setRegion(null);
     setAmount(null);
     setUnit(null);

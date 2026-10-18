@@ -22,14 +22,19 @@ type Errors = {
   quick?: string;
 };
 
+type Props = {
+  /** Start with the Custom panel open and keep it open after logging (used on detail pages). */
+  customOpen?: boolean;
+};
+
 /** FE study logging: pick a topic, then one tap logs it. Custom opens minutes + day. */
-export function StudyLogger() {
+export function StudyLogger({ customOpen = false }: Props) {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
   // Until you pick a topic, the form shows the one you last logged.
   const [topicEdit, setTopic] = useState<string | null>(null);
   const topic = topicEdit ?? prefs?.studyTopic ?? "";
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(customOpen);
   // When on, amounts take time off the selected topic for that day (stored as a negative entry).
   // Saved, so it stays as you left it until you switch it off.
   const subtract = prefs?.studySubtract ?? false;
@@ -103,7 +108,7 @@ export function StudyLogger() {
     }
 
     log(topic, amount, chosenDay.day);
-    setOpen(false);
+    setOpen(customOpen);
     setCustom("");
     setDay(INITIAL_DAY);
   }
@@ -153,7 +158,7 @@ export function StudyLogger() {
             {(a11y) => (
               <Input
                 {...a11y}
-                autoFocus
+                autoFocus={!customOpen}
                 name="custom-minutes"
                 inputMode="decimal"
                 autoComplete="off"

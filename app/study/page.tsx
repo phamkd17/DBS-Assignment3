@@ -13,7 +13,7 @@ export default function StudyPage() {
         Log each session: 15 min Bronze, 30 Silver, 60 Gold.
       </PageHeader>
       <Card>
-        <StudyLogger />
+        <StudyLogger customOpen />
       </Card>
     </>
   );
