@@ -109,8 +109,8 @@ export function StretchLogger({ customOpen = false }: Props) {
               {q.label}
             </Chip>
           ))}
-          <Chip aria-expanded={open} aria-controls="stretch-custom" onClick={() => setOpen(!open)}>
-            Custom <span aria-hidden="true">{open ? "▴" : "▾"}</span>
+          <Chip aria-label="More stretch options" aria-expanded={open} aria-controls="stretch-custom" onClick={() => setOpen(!open)} className="min-w-11 justify-center px-3 text-base">
+            <span aria-hidden="true">{open ? "▴" : "▾"}</span>
           </Chip>
         </div>
         {errors.quick && <FieldError>{errors.quick}</FieldError>}

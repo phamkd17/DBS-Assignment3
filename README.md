@@ -144,7 +144,7 @@ On Oct 17, 2026, I gave a fresh agent (no knowledge of the project or code) the 
 - **Fixed both nav bugs (#1, #2):** the page now scrolls focused and tapped elements clear of the fixed bottom nav (and the sticky top nav on wider screens). Re-tested: 0 of 25 focused controls are covered.
 - **Body burn starts on your first calorie log (#5):** no burn is counted before you start tracking, so day one shows your real net instead of −14,139 kcal. The week total and average only count days since you started.
 - **Explained tiers on Today (#8):** the FE study card now says "Bronze 15 · Silver 30 · Gold 60".
-- **"Custom ▾" in Calories is now "More ▾" (#6),** so it reads as more options, not a calorie type.
+- **"Custom ▾" in Calories became an options toggle (#6),** later simplified to a ▾ button (named "More calorie options" for screen readers), so it no longer reads like a calorie type.
 
 **What I kept, and why**
 - **Start here disappears after the first tap (#3).** Its job is to get you to log *something* right away. After that, the regular cards are right there.

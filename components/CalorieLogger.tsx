@@ -17,11 +17,11 @@ type Kind = CalorieEntry["kind"];
 type Errors = { kcal?: string; day?: string };
 
 type Props = {
-  /** Start with the More panel open and keep it open after logging (used on detail pages). */
+  /** Start with the ▾ panel open and keep it open after logging (used on detail pages). */
   customOpen?: boolean;
 };
 
-/** Quick Add: eaten or burned and a typed calorie number. "More" (next to Type) adds a label, a past date, and the body-burn setting. */
+/** Quick Add: eaten or burned and a typed calorie number. The ▾ button (next to Type) adds a label, a past date, and the body-burn setting. */
 export function CalorieLogger({ customOpen = false }: Props) {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
@@ -38,7 +38,7 @@ export function CalorieLogger({ customOpen = false }: Props) {
     // Allow "1,200".
     const typed = kcal.trim().replace(/,/g, "");
     const value = Number(typed);
-    // Label and day only apply while More is open; otherwise it's today, no label.
+    // Label and day only apply while the ▾ panel is open; otherwise it's today, no label.
     const chosenDay = resolveDay(more ? day : INITIAL_DAY);
     const entryLabel = more ? label.trim() : "";
     const next: Errors = {};
@@ -81,8 +81,8 @@ export function CalorieLogger({ customOpen = false }: Props) {
             { value: "burned", label: "Burned" },
           ]}
         />
-        <Chip aria-expanded={more} aria-controls="calorie-more" onClick={() => setMore(!more)}>
-          More <span aria-hidden="true">{more ? "▴" : "▾"}</span>
+        <Chip aria-label="More calorie options" aria-expanded={more} aria-controls="calorie-more" onClick={() => setMore(!more)} className="min-w-11 justify-center px-3 text-base">
+          <span aria-hidden="true">{more ? "▴" : "▾"}</span>
         </Chip>
       </div>
       {/* With More closed, the submit button sits beside the one field (saves a row on phones). */}

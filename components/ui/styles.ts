@@ -16,7 +16,7 @@ export const button = {
   ghost: `inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-3 font-ct-sans text-sm font-medium text-ct-linen transition-colors hover:bg-ct-raised hover:text-ct-text cursor-pointer ${focusRing}`,
 };
 
-export const chip = `inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 font-ct-sans text-sm font-medium transition-colors duration-200 select-none cursor-pointer ${focusRing} border-ct-border bg-ct-surface text-ct-linen hover:border-ct-linen hover:bg-ct-raised active:bg-ct-bg aria-pressed:border-ct-selected aria-pressed:bg-ct-selected aria-pressed:text-ct-text`;
+export const chip = `inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 font-ct-sans text-sm sm:px-4 font-medium transition-colors duration-200 select-none cursor-pointer ${focusRing} border-ct-border bg-ct-surface text-ct-linen hover:border-ct-linen hover:bg-ct-raised active:bg-ct-bg aria-pressed:border-ct-selected aria-pressed:bg-ct-selected aria-pressed:text-ct-text`;
 
 /** A pill that sits next to a visually hidden native radio (`peer`), used by ChoiceGroup. */
 export const radioPill =

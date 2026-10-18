@@ -27,7 +27,7 @@ type Props = {
   customOpen?: boolean;
 };
 
-/** FE study logging: pick a topic, then one tap logs it. Custom opens minutes + day. */
+/** FE study logging: pick a topic, then one tap logs it. The ▾ button opens custom minutes + day. */
 export function StudyLogger({ customOpen = false }: Props) {
   const toast = useToast();
   const prefs = useRoutineData()?.prefs;
@@ -133,8 +133,8 @@ export function StudyLogger({ customOpen = false }: Props) {
               {m} min
             </Chip>
           ))}
-          <Chip aria-expanded={open} aria-controls="study-custom" onClick={() => setOpen(!open)}>
-            Custom <span aria-hidden="true">{open ? "▴" : "▾"}</span>
+          <Chip aria-label="More study options" aria-expanded={open} aria-controls="study-custom" onClick={() => setOpen(!open)} className="min-w-11 justify-center px-3 text-base">
+            <span aria-hidden="true">{open ? "▴" : "▾"}</span>
           </Chip>
         </div>
         {errors.quick && <FieldError>{errors.quick}</FieldError>}
