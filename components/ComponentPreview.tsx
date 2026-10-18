@@ -4,6 +4,7 @@
 // Replaced by the real Today page in Step 6.
 
 import { Card } from "./ui/Card";
+import { CardHeading } from "./CardHeading";
 import { CalorieLogger } from "./CalorieLogger";
 import { NetCalories } from "./NetCalories";
 import { StretchLogger } from "./StretchLogger";
@@ -23,31 +24,22 @@ export function ComponentPreview() {
       </p>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="font-ct-serif text-2xl italic">This week</h2>
+        <CardHeading title="This week" href="/progress" />
         <WeekProgress />
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="font-ct-serif text-2xl italic">Stretch</h2>
-          <SubtractSwitch pref="stretchSubtract" />
-        </div>
+        <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} />
         <StretchLogger />
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="font-ct-serif text-2xl italic">
-            FE study
-            <StudyMinutesToday />
-          </h2>
-          <SubtractSwitch pref="studySubtract" />
-        </div>
+        <CardHeading title="FE study" href="/study" aside={<StudyMinutesToday />} action={<SubtractSwitch pref="studySubtract" />} />
         <StudyLogger />
       </Card>
 
       <Card className="flex flex-col gap-5">
-        <h2 className="font-ct-serif text-2xl italic">Calories</h2>
+        <CardHeading title="Calories" href="/calories" />
         <NetCalories />
         <CalorieLogger />
       </Card>

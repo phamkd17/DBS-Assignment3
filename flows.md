@@ -6,19 +6,20 @@
 
 ## 1. Map: pages and shared navigation
 
-Every page is a route and shares the same nav, so you can always get back to Today.
+The nav has two tabs, **Today** and **Progress**. All logging happens on Today. Each Today card's heading opens a detail page for that routine, and every detail page has a "‹ Today" link back.
 
 ```mermaid
 flowchart LR
-  Nav{{Shared nav}}
-  Nav --> Today["/ Today"]
-  Nav --> Stretch["/stretch"]
-  Nav --> Study["/study"]
-  Nav --> Calories["/calories"]
+  Nav{{"Shared nav: Today · Progress"}}
+  Nav --> Today["/ Today<br/>log stretch, study, calories"]
   Nav --> Progress["/progress"]
-  Today -- quick-log chip --> Stretch
-  Today -- quick-log chip --> Study
-  Today -- quick-log chip --> Calories
+  Today -- "Stretch ›" --> Stretch["/stretch"]
+  Today -- "FE study ›" --> Study["/study"]
+  Today -- "Calories ›" --> Calories["/calories"]
+  Today -- "This week ›" --> Progress
+  Stretch -- "‹ Today" --> Today
+  Study -- "‹ Today" --> Today
+  Calories -- "‹ Today" --> Today
   Progress -- export --> JSON[(Backup .json)]
 ```
 
@@ -49,7 +50,7 @@ All three forms share the same `Field`/`Input`/`Button` components and the same 
 
 ```mermaid
 flowchart TD
-  S[Open /stretch, /study, or /calories] --> F["Fill the one-column form<br/>(day: Today, or Pick a date → calendar, no future dates)"]
+  S[Log on Today, or a detail page] --> F["Fill the one-column form<br/>(day: Today, or Pick a date → calendar, no future dates)"]
   F --> V{Valid?}
   V -- Missing choice --> E1["Next to field: 'Pick shoulder or lower body.' / 'Pick a topic.' / 'Name what you ate, like Oatmeal.'"]
   V -- Missing or invalid number --> E2["Next to field: 'Enter minutes, like 15.' / 'Enter calories as a whole number, like 250.'"]

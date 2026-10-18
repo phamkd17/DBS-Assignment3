@@ -32,7 +32,7 @@ flowchart LR
     A[Open app, nothing saved] --> B["One-tap: +30 s Shoulder / +60 s Lower body / +15 min study"]
   end
   subgraph Main task
-    B --> C[Log on /stretch, /study, /calories]
+    B --> C[Log on Today: stretch, study, calories]
     C --> D{Valid?}
     D -- No --> E["Error next to field, input kept"] --> C
     D -- Yes --> F["Saved · Toast with Undo"]
