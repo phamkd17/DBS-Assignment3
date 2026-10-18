@@ -16,7 +16,7 @@ export function NetCalories() {
     <div className="flex flex-col gap-1">
       <p className="font-ct-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ct-muted">Net so far today</p>
       <p className="font-ct-serif text-5xl italic text-ct-text">{formatKcal(net)}</p>
-      <p className="font-ct-sans text-sm text-ct-muted">
+      <p className="font-ct-sans text-sm text-ct-muted/70">
         {formatKcal(eaten)} eaten − {formatKcal(bodyBurn)} body burn − {formatKcal(exercise)} exercise
       </p>
     </div>
