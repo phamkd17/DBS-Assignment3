@@ -13,7 +13,7 @@ export function StretchTimeToday() {
   const day = toDayKey(now);
   const total = (region: Region) => data.stretches.filter((s) => s.date === day && s.region === region).reduce((sum, s) => sum + s.seconds, 0);
   return (
-    <p className="font-ct-sans text-sm text-ct-muted">
+    <p className="font-ct-sans text-xs text-ct-muted/70">
       Shoulder {formatDuration(total("shoulder"))} · Lower body {formatDuration(total("lower"))} today
     </p>
   );

@@ -11,5 +11,5 @@ export function StudyMinutesToday() {
   const now = useNow();
   if (!data || !now) return null;
   const minutes = studyMinutesByDay(data).get(toDayKey(now)) ?? 0;
-  return <p className="font-ct-sans text-sm text-ct-muted">{minutes} min today</p>;
+  return <p className="font-ct-sans text-xs text-ct-muted/70">{minutes} min today</p>;
 }
