@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { AmountPicker, EMPTY_AMOUNT, resolveAmount, type AmountValue } from "./ui/AmountPicker";
 import { Button } from "./ui/Button";
+import { Chip } from "./ui/Chip";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
+import { label as labelStyle } from "./ui/styles";
 import { Field } from "./ui/Field";
 import { Select } from "./ui/Input";
 import { useToast } from "./ui/Toast";
-import { formatDay, today } from "@/lib/dates";
-import { FE_TOPICS, isTopicId, topicName } from "@/lib/fe-topics";
+import { formatDay, today, type DayKey } from "@/lib/dates";
+import { FE_TOPICS, isTopicId, topicName, type TopicId } from "@/lib/fe-topics";
 import { addEntry, getData, removeEntry, savePrefs, useRoutineData } from "@/lib/storage";
 import { studyMinutesByDay, studyStreak, studyTier } from "@/lib/streaks";
 
@@ -31,6 +33,36 @@ export function StudyLogger() {
   const minutes = minutesEdit ?? prefs?.studyMinutes ?? EMPTY_AMOUNT;
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
+  const formRef = useRef<HTMLFormElement>(null);
+
+  /** Save a session and confirm it with today's total, tier, and streak. */
+  function log(topicId: TopicId, amount: number, date: DayKey) {
+    const id = addEntry("study", { date, topic: topicId, minutes: amount });
+    const dayTotal = studyMinutesByDay(getData()).get(date) ?? 0;
+    const tier = studyTier(dayTotal);
+    const streak = studyStreak(getData(), today());
+    const isToday = date === today();
+    const when = isToday ? "" : ` for ${formatDay(date)}`;
+    const extras = [
+      isToday && dayTotal !== amount ? `${dayTotal} min today` : null,
+      tier && isToday ? `${tier} day` : null,
+      streak.status === "done" ? `${streak.current}-day streak` : null,
+    ].filter(Boolean);
+    toast(`Logged ${amount} min ${topicName(topicId)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`, () => removeEntry("study", id));
+  }
+
+  /** "+1 min": logs one minute of the selected topic for today, no other choices needed. */
+  function quickAdd() {
+    if (!isTopicId(topic)) {
+      setErrors({ topic: "Pick a topic first." });
+      formRef.current?.querySelector<HTMLSelectElement>("select")?.focus();
+      return;
+    }
+    setErrors({});
+    log(topic, 1, today());
+    savePrefs({ studyTopic: topic });
+    setTopic(null);
+  }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -52,20 +84,7 @@ export function StudyLogger() {
       return;
     }
 
-    const date = chosenDay.day;
-    const id = addEntry("study", { date, topic, minutes: amount });
-    const dayTotal = studyMinutesByDay(getData()).get(date) ?? 0;
-    const tier = studyTier(dayTotal);
-    const streak = studyStreak(getData(), today());
-    const when = date === today() ? "" : ` for ${formatDay(date)}`;
-    const isToday = date === today();
-    const extras = [
-      isToday && dayTotal !== amount ? `${dayTotal} min today` : null,
-      tier && isToday ? `${tier} day` : null,
-      streak.status === "done" ? `${streak.current}-day streak` : null,
-    ].filter(Boolean);
-    toast(`Logged ${amount} min ${topicName(topic)}${when}${extras.length ? ` · ${extras.join(" · ")}` : ""}`, () => removeEntry("study", id));
-
+    log(topic, amount, chosenDay.day);
     savePrefs({ studyTopic: topic, studyMinutes: minutes });
     setTopic(null);
     setMinutes(null);
@@ -73,7 +92,7 @@ export function StudyLogger() {
   }
 
   return (
-    <form noValidate onSubmit={submit} className="flex flex-col gap-5">
+    <form ref={formRef} noValidate onSubmit={submit} className="flex flex-col gap-5">
       <Field label="Topic" error={errors.topic}>
         {(a11y) => (
           <Select {...a11y} value={topic} onChange={(e) => setTopic(e.target.value)}>
@@ -88,6 +107,12 @@ export function StudyLogger() {
           </Select>
         )}
       </Field>
+      <div className="flex flex-col gap-2">
+        <p className={labelStyle}>Quick add</p>
+        <div>
+          <Chip onClick={quickAdd}>+1 min</Chip>
+        </div>
+      </div>
       <AmountPicker
         legend="Minutes"
         name="minutes"
