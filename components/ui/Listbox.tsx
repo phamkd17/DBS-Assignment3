@@ -15,6 +15,8 @@ type Props = {
   onChange: (value: string) => void;
   options: Option[];
   placeholder: string;
+  /** Heading for the full-screen picker on phones (e.g. "Pick a topic"). Defaults to the placeholder. */
+  title?: string;
   name?: string;
 };
 
@@ -24,7 +26,7 @@ type Props = {
  * a button opens a listbox; ↑/↓ move, Home/End jump, Enter/Space choose, Esc closes, typing a
  * letter jumps to the next option starting with it.
  */
-export function Listbox({ id, value, onChange, options, placeholder, name, ...aria }: Props) {
+export function Listbox({ id, value, onChange, options, placeholder, title, name, ...aria }: Props) {
   const listId = useId();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -50,7 +52,12 @@ export function Listbox({ id, value, onChange, options, placeholder, name, ...ar
   }, [open, active]);
 
   function openList() {
-    setActive(Math.max(0, options.findIndex((o) => o.value === value)));
+    setActive(
+      Math.max(
+        0,
+        options.findIndex((o) => o.value === value),
+      ),
+    );
     setOpen(true);
   }
 
@@ -120,37 +127,55 @@ export function Listbox({ id, value, onChange, options, placeholder, name, ...ar
       </button>
 
       {open && (
-        <ul
-          ref={listRef}
-          id={listId}
-          role="listbox"
-          tabIndex={-1}
-          aria-labelledby={id}
-          aria-activedescendant={`${listId}-${active}`}
-          onKeyDown={onListKey}
-          className="absolute inset-x-0 top-full z-30 mt-1 max-h-72 overflow-y-auto rounded-xl border border-ct-border bg-ct-raised p-1 shadow-ct-glow-strong outline-none"
-        >
-          {options.map((o, i) => {
-            const isSelected = o.value === value;
-            return (
-              <li
-                key={o.value}
-                id={`${listId}-${i}`}
-                data-index={i}
-                role="option"
-                aria-selected={isSelected}
-                onPointerEnter={() => setActive(i)}
-                onClick={() => choose(i)}
-                className={`flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-lg px-3 font-ct-sans text-[15px] ${
-                  isSelected ? "bg-ct-selected text-ct-text" : i === active ? "bg-ct-surface text-ct-text" : "text-ct-linen"
-                } ${i === active ? "outline-2 outline-solid outline-offset-[-2px] outline-ct-accent" : ""}`}
-              >
-                <span>{o.label}</span>
-                {isSelected && <span aria-hidden="true">✓</span>}
-              </li>
-            );
-          })}
-        </ul>
+        // Phones: a full-screen picker (nothing clipped by the card or hidden under the nav).
+        // Wider screens: a dropdown under the field.
+        <div className="fixed inset-0 z-[60] flex flex-col bg-ct-bg pt-[env(safe-area-inset-top)] sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:left-0 sm:z-30 sm:mt-1 sm:block sm:bg-transparent sm:pt-0">
+          <div className="flex items-center justify-between gap-3 border-b border-ct-hairline px-4 py-2 sm:hidden">
+            <p className="font-ct-serif text-2xl italic text-ct-text">{title ?? placeholder}</p>
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={() => {
+                setOpen(false);
+                buttonRef.current?.focus();
+              }}
+              className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-xl text-ct-linen hover:bg-ct-raised focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ct-accent"
+            >
+              <span aria-hidden="true">✕</span>
+            </button>
+          </div>
+          <ul
+            ref={listRef}
+            id={listId}
+            role="listbox"
+            tabIndex={-1}
+            aria-labelledby={id}
+            aria-activedescendant={`${listId}-${active}`}
+            onKeyDown={onListKey}
+            className="min-h-0 flex-1 overflow-y-auto px-3 pb-6 outline-none sm:max-h-72 sm:flex-none sm:rounded-xl sm:border sm:border-ct-border sm:bg-ct-raised sm:p-1 sm:shadow-ct-glow-strong"
+          >
+            {options.map((o, i) => {
+              const isSelected = o.value === value;
+              return (
+                <li
+                  key={o.value}
+                  id={`${listId}-${i}`}
+                  data-index={i}
+                  role="option"
+                  aria-selected={isSelected}
+                  onPointerEnter={() => setActive(i)}
+                  onClick={() => choose(i)}
+                  className={`flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-lg px-3 font-ct-sans text-[15px] ${
+                    isSelected ? "bg-ct-selected text-ct-text" : i === active ? "bg-ct-surface text-ct-text" : "text-ct-linen"
+                  } ${i === active ? "outline-2 outline-solid outline-offset-[-2px] outline-ct-accent" : ""}`}
+                >
+                  <span>{o.label}</span>
+                  {isSelected && <span aria-hidden="true">✓</span>}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );

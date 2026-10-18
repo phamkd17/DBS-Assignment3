@@ -111,6 +111,7 @@ export function StudyLogger({ customOpen = false }: Props) {
             name="topic"
             value={topic}
             placeholder="Pick a topic"
+            title="Pick a topic"
             options={FE_TOPICS.map((t) => ({ value: t.id, label: t.name }))}
             onChange={(next) => {
               setTopic(next);
