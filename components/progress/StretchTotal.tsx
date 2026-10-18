@@ -1,5 +1,6 @@
 "use client";
 
+import { StretchTrend } from "./StretchTrend";
 import { fromDayKey, today, weekStart } from "@/lib/dates";
 import { useRoutineData, type Region } from "@/lib/storage";
 import { STRETCH_WEEKLY_SECONDS, formatDuration, formatMinutes } from "@/lib/streaks";
@@ -12,14 +13,12 @@ const REGIONS: { region: Region; label: string }[] = [
   { region: "lower", label: "Lower body" },
 ];
 
-/** All-time stretching: one total, then per region: time, days, and average per week vs the 10-min goal. */
+/** Cumulative stretching per region: total time, days, and average per week vs the 10-min goal, then the daily chart. */
 export function StretchTotal() {
   const data = useRoutineData();
   if (!data) return <div className="h-40" aria-hidden="true" />;
 
   const positive = data.stretches.filter((s) => s.seconds > 0);
-  const total = Math.max(0, data.stretches.reduce((sum, s) => sum + s.seconds, 0));
-  const days = new Set(positive.map((s) => s.date)).size;
 
   // Weeks since the first stretch, counting this week.
   const first = positive.reduce<string | null>((min, s) => (min === null || s.date < min ? s.date : min), null);
@@ -27,14 +26,7 @@ export function StretchTotal() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <p className="font-ct-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ct-muted">Stretch, all time</p>
-        <p className="font-ct-sans text-5xl font-semibold text-ct-text">{formatTotal(total)}</p>
-        <p className="font-ct-sans text-xs text-ct-muted/70">
-          Across {days} {days === 1 ? "day" : "days"}
-        </p>
-      </div>
-      <ul className="flex flex-col divide-y divide-ct-hairline border-t border-ct-hairline font-ct-sans">
+      <ul className="flex flex-col divide-y divide-ct-hairline font-ct-sans">
         {REGIONS.map(({ region, label }) => {
           const entries = data.stretches.filter((s) => s.region === region);
           const seconds = Math.max(0, entries.reduce((sum, s) => sum + s.seconds, 0));
@@ -58,6 +50,7 @@ export function StretchTotal() {
           );
         })}
       </ul>
+      <StretchTrend />
     </div>
   );
 }
