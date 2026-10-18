@@ -12,6 +12,7 @@ const pill =
 export const button = {
   primary: `${pill} ${focusRing} bg-ct-accent text-ct-bg enabled:hover:bg-ct-accent-hover enabled:hover:shadow-ct-glow-strong enabled:active:bg-ct-accent-pressed enabled:active:shadow-ct-press disabled:cursor-not-allowed disabled:bg-ct-disabled disabled:text-ct-muted/70`,
   secondary: `${pill} ${focusRing} border border-ct-border text-ct-text enabled:hover:border-ct-linen enabled:hover:bg-ct-raised enabled:active:bg-ct-bg enabled:active:shadow-ct-press disabled:cursor-not-allowed disabled:border-ct-hairline disabled:text-ct-muted/60`,
+  danger: `${pill} ${focusRing} border border-ct-error text-ct-error enabled:hover:bg-ct-error enabled:hover:text-ct-bg enabled:active:shadow-ct-press disabled:cursor-not-allowed disabled:border-ct-hairline disabled:text-ct-muted/60`,
   ghost: `inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-3 font-ct-sans text-sm font-medium text-ct-linen transition-colors hover:bg-ct-raised hover:text-ct-text cursor-pointer ${focusRing}`,
 };
 

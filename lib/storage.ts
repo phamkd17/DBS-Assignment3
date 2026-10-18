@@ -199,6 +199,13 @@ export function removeEntry(collection: Collection, id: string): void {
   updateData((data) => ({ ...data, [collection]: data[collection].filter((e) => e.id !== id) }));
 }
 
+/** Delete every entry (keeps settings). Returns an undo that puts them all back. */
+export function clearHistory(): () => void {
+  const { stretches, study, calories, lastVisit } = getSnapshot();
+  updateData((data) => ({ ...data, stretches: [], study: [], calories: [], lastVisit: null }));
+  return () => updateData((data) => ({ ...data, stretches, study, calories, lastVisit }));
+}
+
 export function exportJson(): string {
   return JSON.stringify(getSnapshot(), null, 2);
 }

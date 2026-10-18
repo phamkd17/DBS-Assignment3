@@ -37,7 +37,7 @@ export default function ProgressPage() {
         <WeeklyHistory />
       </Card>
       <Card className="flex flex-col gap-4">
-        <CardHeading title="Backup" />
+        <CardHeading title="Backup and reset" />
         <ExportBackup />
       </Card>
     </>
