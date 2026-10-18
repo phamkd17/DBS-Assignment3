@@ -25,8 +25,7 @@ export default function StudyPage() {
         <CardHeading title="This week" />
         <WeekProgress show={["study"]} />
       </Card>
-      <Card className="flex flex-col gap-4">
-        <CardHeading title="Minutes per topic" />
+      <Card>
         <TopicTotals />
       </Card>
       <Card className="flex flex-col gap-4">
