@@ -1,5 +1,6 @@
 import { BackLink } from "@/components/BackLink";
 import { PageHeader } from "@/components/PageHeader";
+import { StreakLine } from "@/components/StreakLine";
 import { StudyLogger } from "@/components/StudyLogger";
 import { StudyMinutesToday } from "@/components/StudyMinutesToday";
 import { SubtractSwitch } from "@/components/SubtractSwitch";
@@ -12,7 +13,8 @@ export default function StudyPage() {
       <PageHeader title="FE study" aside={<StudyMinutesToday />} action={<SubtractSwitch pref="studySubtract" />}>
         Log each session: 15 min Bronze, 30 Silver, 60 Gold.
       </PageHeader>
-      <Card>
+      <Card className="flex flex-col gap-5">
+        <StreakLine kind="study" />
         <StudyLogger customOpen />
       </Card>
     </>

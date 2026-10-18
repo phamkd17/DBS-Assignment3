@@ -41,7 +41,7 @@ flowchart TD
   E --> G
   F --> G
   G --> H["Start card disappears"]
-  H --> I["Cards show streak lines:<br/>'Shoulder 1-day ✓ · Lower body no streak yet'"]
+  H --> I["Stretch › detail page shows streaks:<br/>'Shoulder 1-day ✓ · Lower body no streak yet'"]
 ```
 
 ## 3. Main task: log an entry (form + errors)
@@ -79,7 +79,7 @@ flowchart TD
   WB --> WK["Weekly nudge: '3 days left this week: shoulder 4 min, FE study 180 min to go.'"]
   WB --> GOT["Got it, or log anything → banner hides for today"]
   W -- No --> CARDS
-  GOT --> CARDS["Cards: streak lines per routine<br/>'Shoulder 6-day ✓ · Lower body reset · best 9'"]
+  GOT --> CARDS["Today cards → detail pages show streaks<br/>'Shoulder 6-day ✓ · Lower body reset · best 9'"]
   CARDS --> MISS{Forgot to log a day?}
   MISS -- Yes --> Y["Custom → Pick a date → log it → streak restored"]
   CARDS --> PR["This week › → /progress: streaks, weekly history,<br/>minutes per FE topic, calorie trend"]

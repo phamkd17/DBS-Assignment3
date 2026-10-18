@@ -10,31 +10,26 @@ type Props = {
   aside?: ReactNode;
   /** A control at the right end of the row (e.g. a switch). */
   action?: ReactNode;
-  /** A small line under the title (e.g. streaks). */
-  subline?: ReactNode;
 };
 
 /** A card's heading row. Linked titles show a › so it's clear they open a page. */
-export function CardHeading({ title, href, aside, action, subline }: Props) {
+export function CardHeading({ title, href, aside, action }: Props) {
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="font-ct-serif text-2xl italic text-ct-text">
-          {href ? (
-            <Link href={href} className={`rounded-md decoration-ct-accent underline-offset-4 hover:underline ${focusRing}`}>
-              {title}{" "}
-              <span aria-hidden="true" className="not-italic text-ct-muted">
-                ›
-              </span>
-            </Link>
-          ) : (
-            title
-          )}
-          {aside}
-        </h2>
-        {action}
-      </div>
-      {subline}
+    <div className="flex items-center justify-between gap-4">
+      <h2 className="font-ct-serif text-2xl italic text-ct-text">
+        {href ? (
+          <Link href={href} className={`rounded-md decoration-ct-accent underline-offset-4 hover:underline ${focusRing}`}>
+            {title}{" "}
+            <span aria-hidden="true" className="not-italic text-ct-muted">
+              ›
+            </span>
+          </Link>
+        ) : (
+          title
+        )}
+        {aside}
+      </h2>
+      {action}
     </div>
   );
 }

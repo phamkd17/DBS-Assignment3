@@ -4,7 +4,6 @@ import { CalorieLogger } from "./CalorieLogger";
 import { CardHeading } from "./CardHeading";
 import { NetCalories } from "./NetCalories";
 import { StartCard } from "./StartCard";
-import { StreakLine } from "./StreakLine";
 import { StretchLogger } from "./StretchLogger";
 import { StudyLogger } from "./StudyLogger";
 import { StudyMinutesToday } from "./StudyMinutesToday";
@@ -24,18 +23,12 @@ export function TodayDashboard() {
       <WelcomeBack />
 
       <Card className="flex flex-col gap-4">
-        <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} subline={<StreakLine kind="stretch" />} />
+        <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} />
         <StretchLogger />
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <CardHeading
-          title="FE study"
-          href="/study"
-          aside={<StudyMinutesToday />}
-          action={<SubtractSwitch pref="studySubtract" />}
-          subline={<StreakLine kind="study" />}
-        />
+        <CardHeading title="FE study" href="/study" aside={<StudyMinutesToday />} action={<SubtractSwitch pref="studySubtract" />} />
         <StudyLogger />
       </Card>
 
