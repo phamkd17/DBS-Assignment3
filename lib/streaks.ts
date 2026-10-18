@@ -151,6 +151,15 @@ export function weekCalories(data: RoutineData, now: Date): { net: number; days:
   return { net, days, averagePerDay: Math.round(net / days) };
 }
 
+/** "45 min" or "2 h 15 min". */
+export function formatMinutes(minutes: number): string {
+  const rounded = Math.round(minutes * 10) / 10;
+  if (Math.abs(rounded) < 60) return `${rounded} min`;
+  const h = Math.trunc(rounded / 60);
+  const m = Math.round(Math.abs(rounded) % 60);
+  return m === 0 ? `${h} h` : `${h} h ${m} min`;
+}
+
 export function formatKcal(kcal: number): string {
   return `${kcal.toLocaleString()} kcal`;
 }
