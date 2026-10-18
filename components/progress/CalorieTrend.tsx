@@ -36,12 +36,13 @@ export function CalorieTrend() {
 
   return (
     <DailyChart
-      caption="Calories per day, one week at a time: consumed above the line, burned below. Scroll left to go back up to 6 months. Today is so far."
+      caption="Calories per day, one week at a time: consumed above the line, burned below. Numbers inside the bars are kcal. Scroll left to go back up to 6 months. Today is so far."
       series={SERIES}
       rows={rows}
       dotLabel="Net"
       format={formatKcal}
       formatTick={compact}
+      segmentLabel={(kcal) => `${Math.round(kcal)}`}
       groupLabel="Calories by day. Use arrow keys to move between days, Page Up and Page Down to jump a week."
     />
   );

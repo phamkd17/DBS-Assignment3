@@ -112,12 +112,13 @@ export function DailyChart({ caption, series, rows, dotLabel, format, formatTick
       const style = side === "up" ? { top: zero - offset - h, height: Math.max(2, h - gap) } : { top: zero + offset + GAP, height: Math.max(2, h - GAP) };
       offset += h;
       const text = segmentLabel?.(r.values[s.key]);
-      // Only label inside when it fits with padding: ~5px per character + 6px, and 14px tall.
-      const fits = text !== undefined && style.height >= 14 && bar >= text.length * 5 + 6;
+      // Only label inside when it fits with padding. Longer numbers drop to 9px (~5px per digit).
+      const size = text && text.length >= 4 ? 9 : 10;
+      const fits = text !== undefined && style.height >= 14 && bar >= text.length * size * 0.56 + 3;
       return (
         <div key={s.key} className={`absolute inset-x-0 flex items-center justify-center ${s.fill} ${outer ? (side === "up" ? "rounded-t" : "rounded-b") : ""}`} style={style}>
           {fits && (
-            <span aria-hidden="true" className="font-ct-sans text-[10px] leading-none font-semibold text-ct-bg tabular-nums">
+            <span aria-hidden="true" className="font-ct-sans leading-none font-semibold text-ct-bg tabular-nums" style={{ fontSize: size }}>
               {text}
             </span>
           )}
