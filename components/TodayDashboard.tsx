@@ -14,7 +14,7 @@ import { WelcomeBack } from "./WelcomeBack";
 import { Card } from "./ui/Card";
 
 /**
- * Today: Start card on a first visit, Welcome back on a new day, This week, then one card per routine.
+ * Today: Start card on a first visit, Welcome back on a new day, This week, Calories, then Stretch and FE study.
  * Each card's title opens its detail page.
  */
 export function TodayDashboard() {
@@ -26,6 +26,12 @@ export function TodayDashboard() {
       <Card className="flex flex-col gap-4">
         <CardHeading title="This week" href="/progress" />
         <WeekProgress />
+      </Card>
+
+      <Card className="flex flex-col gap-5">
+        <CardHeading title="Calories" href="/calories" />
+        <NetCalories />
+        <CalorieLogger />
       </Card>
 
       <Card className="flex flex-col gap-4">
@@ -42,12 +48,6 @@ export function TodayDashboard() {
           <StudyMinutesToday />
         </div>
         <StudyLogger />
-      </Card>
-
-      <Card className="flex flex-col gap-5">
-        <CardHeading title="Calories" href="/calories" />
-        <NetCalories />
-        <CalorieLogger />
       </Card>
     </>
   );
