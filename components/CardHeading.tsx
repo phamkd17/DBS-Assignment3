@@ -6,14 +6,12 @@ type Props = {
   title: string;
   /** Detail page for this section; the title becomes a link to it. */
   href?: string;
-  /** Small inline text after the title (e.g. "42 min today"). */
-  aside?: ReactNode;
   /** A control at the right end of the row (e.g. a switch). */
   action?: ReactNode;
 };
 
 /** A card's heading row. Linked titles show a › so it's clear they open a page. */
-export function CardHeading({ title, href, aside, action }: Props) {
+export function CardHeading({ title, href, action }: Props) {
   return (
     <div className="flex items-center justify-between gap-4">
       <h2 className="font-ct-serif text-2xl italic text-ct-text">
@@ -27,7 +25,6 @@ export function CardHeading({ title, href, aside, action }: Props) {
         ) : (
           title
         )}
-        {aside}
       </h2>
       {action}
     </div>

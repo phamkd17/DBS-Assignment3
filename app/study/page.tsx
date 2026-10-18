@@ -10,7 +10,7 @@ export default function StudyPage() {
   return (
     <>
       <BackLink />
-      <PageHeader title="FE study" aside={<StudyMinutesToday />} action={<SubtractSwitch pref="studySubtract" />}>
+      <PageHeader title="FE study" action={<SubtractSwitch pref="studySubtract" />} subline={<StudyMinutesToday />}>
         Log each session: 15 min Bronze, 30 Silver, 60 Gold.
       </PageHeader>
       <Card className="flex flex-col gap-5">
