@@ -24,7 +24,10 @@ export function TodayDashboard() {
       <WelcomeBack />
 
       <Card className="flex flex-col gap-4">
-        <CardHeading title="Stretch" href="/stretch" aside={<StretchTimeToday />} action={<SubtractSwitch pref="stretchSubtract" />} />
+        <div className="flex flex-col gap-1">
+          <CardHeading title="Stretch" href="/stretch" action={<SubtractSwitch pref="stretchSubtract" />} />
+          <StretchTimeToday />
+        </div>
         <StretchLogger />
       </Card>
 

@@ -5,7 +5,7 @@ import { useRoutineData, type Region } from "@/lib/storage";
 import { formatDuration } from "@/lib/streaks";
 import { useNow } from "@/lib/use-now";
 
-/** Small inline totals of today's stretching, one per region. */
+/** Small line of today's stretching totals, one per region. Sits under the Stretch heading. */
 export function StretchTimeToday() {
   const data = useRoutineData();
   const now = useNow();
@@ -13,8 +13,8 @@ export function StretchTimeToday() {
   const day = toDayKey(now);
   const total = (region: Region) => data.stretches.filter((s) => s.date === day && s.region === region).reduce((sum, s) => sum + s.seconds, 0);
   return (
-    <span className="ml-3 align-middle font-ct-sans text-sm not-italic text-ct-muted">
+    <p className="font-ct-sans text-sm text-ct-muted">
       Shoulder {formatDuration(total("shoulder"))} · Lower body {formatDuration(total("lower"))} today
-    </span>
+    </p>
   );
 }

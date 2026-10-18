@@ -7,10 +7,12 @@ type Props = {
   aside?: ReactNode;
   /** A control at the right end of the title row (e.g. a switch). */
   action?: ReactNode;
+  /** A small line right under the title (e.g. today's totals). */
+  subline?: ReactNode;
   children?: ReactNode;
 };
 
-export function PageHeader({ title, aside, action, children }: Props) {
+export function PageHeader({ title, aside, action, subline, children }: Props) {
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-4">
@@ -20,6 +22,7 @@ export function PageHeader({ title, aside, action, children }: Props) {
         </h1>
         {action}
       </div>
+      {subline}
       {children && <p className="font-ct-sans text-[15px] text-ct-linen">{children}</p>}
     </header>
   );
