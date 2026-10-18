@@ -7,8 +7,6 @@ import { ChoiceGroup } from "./ui/ChoiceGroup";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field, FieldError } from "./ui/Field";
 import { Input } from "./ui/Input";
-import { Switch } from "./ui/Switch";
-import { label as labelStyle } from "./ui/styles";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
 import { addEntry, getData, removeEntry, savePrefs, useRoutineData, type Region } from "@/lib/storage";
@@ -39,7 +37,7 @@ export function StretchLogger() {
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
   // When on, amounts take time off that region for the day (stored as a negative entry).
-  // Saved, so it stays as you left it until you switch it off.
+  // Saved, so it stays as you left it until you switch it off. The switch itself is SubtractSwitch.
   const subtract = prefs?.stretchSubtract ?? false;
 
   /** When subtracting, you can't take off more than that region has on that day. */
@@ -107,18 +105,6 @@ export function StretchLogger() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-4">
-          <p className={labelStyle}>Quick log</p>
-          <Switch
-            label="Subtract"
-            labelFirst
-            checked={subtract}
-            onChange={(on) => {
-              savePrefs({ stretchSubtract: on });
-              setErrors({});
-            }}
-          />
-        </div>
         <div className="flex flex-wrap gap-2">
           {QUICK.map((q) => (
             <Chip key={q.region} onClick={() => quickLog(q.region, q.seconds)}>

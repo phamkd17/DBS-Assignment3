@@ -7,6 +7,7 @@ import { Card } from "./ui/Card";
 import { CalorieLogger } from "./CalorieLogger";
 import { NetCalories } from "./NetCalories";
 import { StretchLogger } from "./StretchLogger";
+import { SubtractSwitch } from "./SubtractSwitch";
 import { StudyLogger } from "./StudyLogger";
 import { StudyMinutesToday } from "./StudyMinutesToday";
 import { WeekProgress } from "./WeekProgress";
@@ -27,15 +28,21 @@ export function ComponentPreview() {
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="font-ct-serif text-2xl italic">Stretch</h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-ct-serif text-2xl italic">Stretch</h2>
+          <SubtractSwitch pref="stretchSubtract" />
+        </div>
         <StretchLogger />
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="font-ct-serif text-2xl italic">
-          FE study
-          <StudyMinutesToday />
-        </h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-ct-serif text-2xl italic">
+            FE study
+            <StudyMinutesToday />
+          </h2>
+          <SubtractSwitch pref="studySubtract" />
+        </div>
         <StudyLogger />
       </Card>
 

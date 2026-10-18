@@ -6,7 +6,6 @@ import { Chip } from "./ui/Chip";
 import { DayPicker, INITIAL_DAY, resolveDay, type DayValue } from "./ui/DayPicker";
 import { Field, FieldError } from "./ui/Field";
 import { Input, Select } from "./ui/Input";
-import { Switch } from "./ui/Switch";
 import { useToast } from "./ui/Toast";
 import { formatDay, today, type DayKey } from "@/lib/dates";
 import { FE_TOPICS, isTopicId, topicName, type TopicId } from "@/lib/fe-topics";
@@ -34,7 +33,6 @@ export function StudyLogger() {
   // When on, amounts take time off the selected topic for that day (stored as a negative entry).
   // Saved, so it stays as you left it until you switch it off.
   const subtract = prefs?.studySubtract ?? false;
-  const setSubtract = (on: boolean) => savePrefs({ studySubtract: on });
   const [custom, setCustom] = useState("");
   const [day, setDay] = useState<DayValue>(INITIAL_DAY);
   const [errors, setErrors] = useState<Errors>({});
@@ -112,21 +110,7 @@ export function StudyLogger() {
 
   return (
     <form ref={formRef} noValidate onSubmit={submit} className="flex flex-col gap-5">
-      <Field
-        label="Topic"
-        error={errors.topic}
-        labelAside={
-          <Switch
-            label="Subtract"
-            labelFirst
-            checked={subtract}
-            onChange={(on) => {
-              setSubtract(on);
-              setErrors({});
-            }}
-          />
-        }
-      >
+      <Field label="Topic" error={errors.topic}>
         {(a11y) => (
           <Select
             {...a11y}
