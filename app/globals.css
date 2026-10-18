@@ -24,11 +24,12 @@
   --color-ct-chart: #c58147; /* single-series marks */
   --color-ct-heat-1: #6b4e24; /* Bronze day (ordinal ramp, then Silver, then Gold = accent) */
   --color-ct-heat-2: #a2772f; /* Silver day */
-  /* Calorie breakdown in theme hues (saffron, claret, herb), stepped into the chart band and
-     validated on ct-surface for the stack's adjacent pairs; patterns are the second channel. */
+  /* Calorie breakdown, emphasis form: consumed (saffron) and active (red) are the hues that change;
+     resting burn is a steady baseline, so it takes the palette's quiet taupe (3.6:1 on ct-surface).
+     Saffron/red validated all-pairs on ct-surface; stripes are the second channel. */
   --color-ct-consumed: #bd8526;
-  --color-ct-resting: #b44a5e;
-  --color-ct-active: #7f9a4e;
+  --color-ct-resting: #8c7259;
+  --color-ct-active: #c63d4a;
   /* Stretch regions: saffron + claret, validated all-pairs on ct-surface */
   --color-ct-shoulder: #bd8526;
   --color-ct-lower: #b44a5e;
