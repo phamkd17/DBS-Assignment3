@@ -13,14 +13,16 @@ type Props<T extends string> = {
   value: T | null;
   onChange: (value: T) => void;
   error?: string;
+  /** Hide the legend visually (screen readers still announce it) when the options explain themselves. */
+  hideLegend?: boolean;
 };
 
 /** A one-of-many choice shown as pills. Native radios, so arrow keys and screen readers just work. */
-export function ChoiceGroup<T extends string>({ legend, name, options, value, onChange, error }: Props<T>) {
+export function ChoiceGroup<T extends string>({ legend, name, options, value, onChange, error, hideLegend = false }: Props<T>) {
   const errorId = useId();
   return (
     <fieldset className="flex flex-col gap-2" aria-describedby={error ? errorId : undefined}>
-      <legend className={`${labelStyle} mb-1 sm:mb-1.5`}>{legend}</legend>
+      <legend className={hideLegend ? "sr-only" : `${labelStyle} mb-1 sm:mb-1.5`}>{legend}</legend>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => (
           <label key={option.value} className="relative">

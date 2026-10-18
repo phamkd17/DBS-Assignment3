@@ -24,7 +24,7 @@ A personal daily-routine tracker for one person (Khang): shoulder + lower-body s
 - Calories: net = eaten − body burn so far − logged exercise. Body burn defaults to **2,052 kcal/day** (editable, `prefs.dailyBurn`) and accrues evenly through the day, starting from the first day with a calorie entry (no burn before that); past days count the full amount. Informational only: **no calorie streak or goal.**
 - A streak for today is "at risk," not broken, until the day ends.
 - Forms remember your last logged choices (study topic; custom stretch region, amount, unit; calorie Eaten/Burned) in `prefs`. The day always resets to Today.
-- Study and stretch: quick-add chips log instantly for today; Day only appears under Custom. Calories: typed number; Label and Day sit behind a "More ▾" toggle in the Type row.
+- Study and stretch: quick-add chips log instantly for today; Day only appears under Custom. Calories: typed number with the Add button beside it (moves below when More is open); Label and Day sit behind a "More ▾" toggle in the Type row, whose "Type" legend is visually hidden (still announced).
 - Entries can be logged for today or any past date (DayPicker: "Today" or "Pick a date" → Calendar component in app colors, max = today). No future dates.
 
 ## Design rules

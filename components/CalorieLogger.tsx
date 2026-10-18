@@ -72,6 +72,7 @@ export function CalorieLogger({ customOpen = false }: Props) {
       <div className="flex flex-wrap items-end gap-2">
         <ChoiceGroup
           legend="Type"
+          hideLegend
           name="kind"
           value={kind}
           onChange={setKind}
@@ -84,11 +85,21 @@ export function CalorieLogger({ customOpen = false }: Props) {
           More <span aria-hidden="true">{more ? "▴" : "▾"}</span>
         </Chip>
       </div>
-      <Field label="Calories" error={errors.kcal}>
-        {(a11y) => (
-          <Input {...a11y} name="kcal" inputMode="numeric" autoComplete="off" placeholder="e.g. 250" value={kcal} onChange={(e) => setKcal(e.target.value)} className="max-w-40" />
+      {/* With More closed, the submit button sits beside the one field (saves a row on phones). */}
+      <div className="flex items-start gap-3">
+        <div className="min-w-0 flex-1 sm:flex-none">
+          <Field label="Calories" error={errors.kcal}>
+            {(a11y) => (
+              <Input {...a11y} name="kcal" inputMode="numeric" autoComplete="off" placeholder="e.g. 250" value={kcal} onChange={(e) => setKcal(e.target.value)} className="sm:w-40" />
+            )}
+          </Field>
+        </div>
+        {!more && (
+          <Button type="submit" className="mt-5 shrink-0 sm:mt-[1.625rem]">
+            {kind === "eaten" ? "Add eaten" : "Add burned"}
+          </Button>
         )}
-      </Field>
+      </div>
 
       {more && (
         <div id="calorie-more" className="flex flex-col gap-5">
@@ -100,9 +111,11 @@ export function CalorieLogger({ customOpen = false }: Props) {
         </div>
       )}
 
-      <div>
-        <Button type="submit">{kind === "eaten" ? "Add eaten" : "Add burned"}</Button>
-      </div>
+      {more && (
+        <div>
+          <Button type="submit">{kind === "eaten" ? "Add eaten" : "Add burned"}</Button>
+        </div>
+      )}
     </form>
   );
 }
