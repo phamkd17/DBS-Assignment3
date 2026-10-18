@@ -80,7 +80,7 @@ export function CalorieLogger() {
       </div>
       <Field label="Calories" error={errors.kcal}>
         {(a11y) => (
-          <Input {...a11y} name="kcal" inputMode="numeric" autoComplete="off" placeholder="250" value={kcal} onChange={(e) => setKcal(e.target.value)} className="max-w-40" />
+          <Input {...a11y} name="kcal" inputMode="numeric" autoComplete="off" placeholder="e.g. 250" value={kcal} onChange={(e) => setKcal(e.target.value)} className="max-w-40" />
         )}
       </Field>
 

@@ -114,7 +114,7 @@ export function StretchLogger() {
                   name="amount"
                   inputMode="decimal"
                   autoComplete="off"
-                  placeholder={unit === "minutes" ? "1.5" : "90"}
+                  placeholder={unit === "minutes" ? "e.g. 1.5" : "e.g. 90"}
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="max-w-40"
